@@ -10,3 +10,5 @@ RUN apt-get -y install python-scipy python-opencv ccache gawk git python-pip pyt
 RUN pip install future pymavlink MAVProxy
 RUN echo "export PS1=\\\\\\\\w\\$" >> /etc/bash.bashrc
 RUN apt-get -y install xterm
+RUN mkdir -p /.tilecache/SRTM
+RUN chmod -R 777 /.tilecache
