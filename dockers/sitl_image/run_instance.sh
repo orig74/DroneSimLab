@@ -11,4 +11,4 @@ docker run -it --rm --name sitl_run \
 -u $UID \
 --net=host \
 sitl_image /bin/bash -c \
-"cd /ardupilot/ArduCopter/ && ../Tools/autotest/sim_vehicle.py -w -I $1 -m\"–streamrate 100\""
+"cd /ardupilot/ArduCopter/ && ../Tools/autotest/sim_vehicle.py -w -I $1"

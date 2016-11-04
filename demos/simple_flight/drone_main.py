@@ -19,8 +19,6 @@ print("Waiting for HEARTBEAT")
 mav1.wait_heartbeat()
 print("Heartbeat from APM (system %u component %u)" % (mav1.target_system, mav1.target_system))
 
-mav1.arducopter_arm()
-mav1.set_mode('LOITER')
 
 event = mavutil.periodic_event(0.3)
 freq=30
@@ -51,6 +49,23 @@ def get_position_struct(mav):
     return d
 
 def mission_thread():
+    for _ in range(30):
+        yield
+    mav1.param_set_send(b'ARMING_CHECK',0.0)
+    for _ in range(30):
+        yield
+    mav1.param_set_send(b'SIM_WIND_SPD',.1)
+    for _ in range(30):
+        yield
+    set_rcs(1500,1500,1100,1500)
+    for _ in range(30):
+        yield
+    mav1.arducopter_arm()
+    for _ in range(10):
+        yield
+    mav1.set_mode('LOITER')
+    for _ in range(10):
+        yield
     print('--0--')
     set_rcs(1500,1500,1550,1500)
     for i in range(freq*10):
@@ -78,6 +93,9 @@ direct_udp.bind(('127.0.0.1', 19988))
 
 
 udp_position=None
+
+##############################################
+
 while True:
     mav1.recv_msg()
     if event.trigger():
@@ -92,7 +110,7 @@ while True:
             pos=get_position_struct(mav1)
         else:
             pos=udp_position
-        #print('%.2f'%(time.time()-start),'X:%(posx).2f\tY:%(posy).2f\tZ:%(posz).2f\tYW:%(yaw).0f\tPI:%(pitch).1f\tRL:%(roll).1f'%pos)
+            #print('%.2f'%(time.time()-start),'X:%(posx).2f\tY:%(posy).2f\tZ:%(posz).2f\tYW:%(yaw).0f\tPI:%(pitch).1f\tRL:%(roll).1f'%pos)
         zmq_socket.send_multipart([topic_postition,pickle.dumps(pos,-1)])
         next(mthread)
     else: 
