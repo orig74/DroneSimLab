@@ -2,12 +2,12 @@
 from Wrappers import phandlers as ph
 import zmq,pickle,time,cv2
 import numpy as np
+import config
 
 context = zmq.Context()
 socket = context.socket(zmq.SUB)
-zmq_port = "5556"
-socket.connect('tcp://127.0.0.1:'+zmq_port)
-socket.setsockopt(zmq.SUBSCRIBE,b'position')
+socket.connect('tcp://%s:%d'%config.zmq_pub_unreal_proxy)
+socket.setsockopt(zmq.SUBSCRIBE,config.topic_sitl_position_report)
 start=time.time()
 
 def main_loop(gworld):

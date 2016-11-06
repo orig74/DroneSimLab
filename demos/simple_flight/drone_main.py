@@ -5,13 +5,13 @@ import zmq
 import sys
 import time
 import pickle
+import config
 
-zmq_port = "5556"
-topic_postition=b'position'
+topic_postition=config.topic_sitl_position_report
 
 context = zmq.Context()
 zmq_socket = context.socket(zmq.PUB)
-zmq_socket.bind("tcp://*:%s" % zmq_port)
+zmq_socket.bind("tcp://*:%d" % config.zmq_pub_unreal_proxy[1] )
 
 mav1 = mavutil.mavlink_connection('udp:127.0.0.1:14551')
 
