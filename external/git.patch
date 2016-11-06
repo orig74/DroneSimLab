@@ -1,0 +1,75 @@
+diff --git a/libraries/SITL/SIM_Aircraft.cpp b/libraries/SITL/SIM_Aircraft.cpp
+index 9808c34..5b64b17 100644
+--- a/libraries/SITL/SIM_Aircraft.cpp
++++ b/libraries/SITL/SIM_Aircraft.cpp
+@@ -53,6 +53,7 @@ Aircraft::Aircraft(const char *home_str, const char *frame_str) :
+     rate_hz(1200),
+     autotest_dir(NULL),
+     frame(frame_str),
++    udpdevice(true),
+ #ifdef __CYGWIN__
+     min_sleep_time(20000)
+ #else
+@@ -135,6 +136,9 @@ bool Aircraft::on_ground(const Vector3f &pos)
+ /*
+    update location from position
+ */
++
++float last_send=0;
++int sitl_position_port=0;
+ void Aircraft::update_position(void)
+ {
+     location = home;
+@@ -151,15 +155,27 @@ void Aircraft::update_position(void)
+     if (use_time_sync) {
+         sync_frame_time();
+     }
+-
++    //uint8_t data[]={1,2};
++    //udpdevice.write(data,2);
++    if (time_now_us-last_send>1/60.0)
++    {
++        char tmpstr[1024];
++        float r, p, y;
++        dcm.to_euler(&r, &p, &y);
++        sprintf(tmpstr,"%lf %lf %lf %lf %lf %lf\n",position.x, position.y, position.z, degrees(r),degrees(p),degrees(y));
++	if (sitl_position_port==0) sitl_position_port=atoi(getenv("SITL_POSITION_PORT"));
++        udpdevice.sendto(tmpstr,strlen(tmpstr),"127.0.0.1",sitl_position_port);
++        //udpdevice.sendto(tmpstr,strlen(tmpstr),"127.0.0.1",19988);
++        last_send=time_now_us;
++    }
+ #if 0
+     // logging of raw sitl data
+     Vector3f accel_ef = dcm * accel_body;
+     DataFlash_Class::instance()->Log_Write("SITL", "TimeUS,VN,VE,VD,AN,AE,AD,PN,PE,PD", "Qfffffffff",
+-                                           AP_HAL::micros64(),
+-                                           velocity_ef.x, velocity_ef.y, velocity_ef.z,
+-                                           accel_ef.x, accel_ef.y, accel_ef.z,
+-                                           position.x, position.y, position.z);
++            AP_HAL::micros64(),
++            velocity_ef.x, velocity_ef.y, velocity_ef.z,
++            accel_ef.x, accel_ef.y, accel_ef.z,
++            position.x, position.y, position.z);
+ #endif
+ }
+ 
+diff --git a/libraries/SITL/SIM_Aircraft.h b/libraries/SITL/SIM_Aircraft.h
+index cde2529..d29ddba 100644
+--- a/libraries/SITL/SIM_Aircraft.h
++++ b/libraries/SITL/SIM_Aircraft.h
+@@ -22,6 +22,7 @@
+ 
+ #include "SITL.h"
+ #include <AP_Terrain/AP_Terrain.h>
++#include <AP_HAL/utility/Socket.h>
+ 
+ namespace SITL {
+ 
+@@ -110,6 +111,7 @@ protected:
+     SITL *sitl;
+     Location home;
+     Location location;
++    SocketAPM udpdevice;
+ 
+     float ground_level;
+     float home_yaw;
