@@ -8,7 +8,7 @@ docker run -it --rm --name sitl_run \
 -v $1:/ardupilot  \
 -e USERNAME=docker \
 -e USER=docker \
--e SITL_POSITION_PORT=$( expr 19988 + 10 \* $1 ) \
+-e SITL_POSITION_PORT=$( expr 19988 + 10 \* $2 ) \
 -u $UID \
 --net=host \
 sitl_image /bin/bash -c \
