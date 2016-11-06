@@ -13,7 +13,7 @@ context = zmq.Context()
 zmq_socket = context.socket(zmq.PUB)
 zmq_socket.bind("tcp://*:%s" % zmq_port)
 
-mav1 = mavutil.mavlink_connection('udp:127.0.0.1:14561')
+mav1 = mavutil.mavlink_connection('udp:127.0.0.1:14551')
 
 print("Waiting for HEARTBEAT")
 mav1.wait_heartbeat()
@@ -95,6 +95,12 @@ direct_udp.bind(('127.0.0.1', 19988))
 udp_position=None
 
 ##############################################
+pcnt=5
+def print_cnt(*args,**kargs):
+    global pcnt
+    if pcnt>=0: 
+        print(*args,**kargs)
+    pcnt-=1
 
 while True:
     mav1.recv_msg()
@@ -108,8 +114,10 @@ while True:
     elif pub_position_event.trigger(): #30Hz
         if udp_position is None:
             pos=get_position_struct(mav1)
+            print_cnt('source form mavlink')
         else:
             pos=udp_position
+            print_cnt('source from udp patch')
             #print('%.2f'%(time.time()-start),'X:%(posx).2f\tY:%(posy).2f\tZ:%(posz).2f\tYW:%(yaw).0f\tPI:%(pitch).1f\tRL:%(roll).1f'%pos)
         zmq_socket.send_multipart([topic_postition,pickle.dumps(pos,-1)])
         next(mthread)

@@ -1,1 +1,3 @@
-external
+backup
+*.swp
+__pycache__
