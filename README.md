@@ -9,7 +9,7 @@ $ git clone https://github.com/ArduPilot/ardupilot.git
 I added a patch to the ardupilot SITL code to work directly with the SITL data to be able to update the drone state in real-time.  
 from  the Ardupilot dir run:  
 $ git apply ../DroneLab/external/ardupilot.patch  
-you shuld replace the ../DroneLab to the installation directory of Dronelab
+you should replace the ../DroneLab to the installation directory of Dronelab
 ###UE4Pyserver
 Folow instalation instractions of  [UE4Pyserver](https://github.com/orig74/UE4PyServer)  
 ### Building docker images for the SITL
