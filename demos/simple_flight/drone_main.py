@@ -10,8 +10,12 @@ import config
 topic_postition=config.topic_sitl_position_report
 
 context = zmq.Context()
-zmq_socket = context.socket(zmq.PUB)
-zmq_socket.bind("tcp://*:%d" % config.zmq_pub_unreal_proxy[1] )
+socket_pub = context.socket(zmq.PUB)
+socket_sub = context.socket(zmq.SUB)
+socket_pub.bind("tcp://*:%d" % config.zmq_pub_drone_main[1] )
+socket_sub.connect('tcp://%s:%d'%config.zmq_pub_unreal_proxy)
+
+socket_sub.setsockopt(zmq.SUBSCRIBE,config.topic_unreal_state)
 
 mav1 = mavutil.mavlink_connection('udp:127.0.0.1:14551')
 
@@ -49,20 +53,23 @@ def get_position_struct(mav):
     return d
 
 def mission_thread():
-    for _ in range(30):
-        yield
-    mav1.param_set_send(b'ARMING_CHECK',0.0)
-    for _ in range(30):
-        yield
-    mav1.param_set_send(b'SIM_WIND_SPD',.1)
-    for _ in range(30):
-        yield
-    set_rcs(1500,1500,1100,1500)
-    for _ in range(30):
-        yield
-    mav1.arducopter_arm()
-    for _ in range(10):
-        yield
+    if not mav1.motors_armed():
+        for _ in range(30):
+            yield
+        mav1.param_set_send(b'ARMING_CHECK',0.0)
+        for _ in range(30):
+            yield
+        mav1.param_set_send(b'SIM_WIND_SPD',.1)
+        for _ in range(30):
+            yield
+        set_rcs(1500,1500,1100,1500)
+        for _ in range(30):
+            yield
+        print('arming ....')
+        mav1.arducopter_arm()
+        for _ in range(10):
+            yield
+    mav1.motors_armed_wait()
     mav1.set_mode('LOITER')
     for _ in range(10):
         yield
@@ -102,15 +109,27 @@ def print_cnt(*args,**kargs):
         print(*args,**kargs)
     pcnt-=1
 
+unreal_state=None
 while True:
     mav1.recv_msg()
+    
+     
+    while(len(zmq.select([socket_sub],[],[],0)[0])>0):
+        topic, msg = socket_sub.recv_multipart()
+        if topic==config.topic_unreal_state:
+            print('got unreal engine state:',msg)
+            unreal_state=msg
+    if unreal_state==b'kill':
+        mthread=mission_thread()
+    #    break
+    
     if event.trigger():
         #print(mav1.messages['VFR_HUD'].alt)
         #print(mav1.messages.keys())
         #print(mav1.messages['HOME'])
         #print(mav1.messages['SIMSTATE'])
         
-        print('X:%(posx).1f\tY:%(posy).1f\tZ:%(posz).1f\tYW:%(yaw).0f\tPI:%(pitch).1f\tRL:%(roll).1f'%get_position_struct(mav1))
+        print('X:%(posx).1f\tY:%(posy).1f\tZ:%(posz).1f\tYW:%(yaw).0f\tPI:%(pitch).1f\tRL:%(roll).1f'%pos)
     elif pub_position_event.trigger(): #30Hz
         if udp_position is None:
             pos=get_position_struct(mav1)
@@ -119,13 +138,15 @@ while True:
             pos=udp_position
             print_cnt('source from udp patch')
             #print('%.2f'%(time.time()-start),'X:%(posx).2f\tY:%(posy).2f\tZ:%(posz).2f\tYW:%(yaw).0f\tPI:%(pitch).1f\tRL:%(roll).1f'%pos)
-        zmq_socket.send_multipart([topic_postition,pickle.dumps(pos,-1)])
-        next(mthread)
+        socket_pub.send_multipart([topic_postition,pickle.dumps(pos,-1)])
+        
+        if unreal_state==b'main_loop':
+            next(mthread)
+
     else: 
-        #time.sleep(0.01)
         if len(select.select([direct_udp],[],[],0)[0])>0:
             u=list(map(float,direct_udp.recv(1024).split()))
             
             udp_position={'posx':u[0],'posy':u[1],'posz':-u[2],'roll':u[3],'pitch':u[4],'yaw':u[5]}
-
+    time.sleep(0.001)
     

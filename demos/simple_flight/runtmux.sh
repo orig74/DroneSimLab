@@ -17,14 +17,14 @@ docker ps -all |grep sitl_image  | cut -d" " -f 1 | xargs docker stop $1
 docker ps -all |grep sitl_image  | cut -d" " -f 1 | xargs docker rm $1
 
 tmux new-session -d -s dronelab
-tmux send-keys "python drone_main.py"
+tmux send-keys "python drone_main.py" ENTER
 tmux split-window -h
 tmux send-keys "cd ../../dockers/sitl_image/ && ./run_instance.sh $ARDUPILOT_PATH 0" ENTER
 tmux split-window -v
 tmux send-keys "export DEMO_DIR=${PWD}" ENTER
 tmux send-keys "cd ${PROJECT_PATH}/Plugins/UE4PyServer/Source/PyServer" ENTER
 tmux send-keys "python config.py --entry_point=unreal_proxy --entry_path=\$DEMO_DIR" ENTER
-tmux send-keys "./run.sh" 
+tmux send-keys "./run.sh" ENTER 
 #tmux select-window -t 0
 tmux att
 
