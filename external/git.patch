@@ -1,5 +1,5 @@
 diff --git a/libraries/SITL/SIM_Aircraft.cpp b/libraries/SITL/SIM_Aircraft.cpp
-index 9808c34..8e6c4cf 100644
+index 9808c34..ebf8e29 100644
 --- a/libraries/SITL/SIM_Aircraft.cpp
 +++ b/libraries/SITL/SIM_Aircraft.cpp
 @@ -53,6 +53,7 @@ Aircraft::Aircraft(const char *home_str, const char *frame_str) :
@@ -53,17 +53,23 @@ index 9808c34..8e6c4cf 100644
  #endif
  }
  
-@@ -509,7 +525,14 @@ void Aircraft::update_dynamics(const Vector3f &rot_accel)
+@@ -509,7 +525,20 @@ void Aircraft::update_dynamics(const Vector3f &rot_accel)
  void Aircraft::update_wind(const struct sitl_input &input)
  {
      // wind vector in earth frame
 +    static float turb_direction=0;
++    static float turb_vert_speed=0;
 +    static float turb_speed=0;
 +    turb_direction=(turb_direction+2*rand());
-+    if (input.wind.turbulence>0) 
++    if (input.wind.turbulence>0)
++    { 
 +	turb_speed=(turb_speed+input.wind.turbulence*rand_normal(0,1))*0.9;
++	turb_vert_speed=(turb_vert_speed+input.wind.turbulence*rand_normal(0,1))*0.9;
++    }
++    else
++	turb_vert_speed=turb_speed=0;
      wind_ef = Vector3f(cosf(radians(input.wind.direction)), sinf(radians(input.wind.direction)), 0) * input.wind.speed;
-+    Vector3f wind_turb = Vector3f(cosf(radians(turb_direction)), sinf(radians(turb_direction)), 0) * turb_speed;
++    Vector3f wind_turb = Vector3f(cosf(radians(turb_direction))*turb_speed, sinf(radians(turb_direction))*turb_speed, turb_vert_speed);
 +    wind_ef = wind_ef+wind_turb;
  }
  
