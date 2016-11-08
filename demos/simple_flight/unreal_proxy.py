@@ -16,14 +16,14 @@ start=time.time()
 
 def main_loop(gworld):
     drone_actor=ph.FindActorByName(gworld,'Parrot_Drone_6',1)
-    if drone_actor is None:
+    #drone_camera_actor=ph.FindActorByName(gworld,'SceneCapture2Ddrone',1)
+    if drone_actor is None:# or drone_camera_actor is None:
         print('ERROR: could not find drone_actor')
         while 1:
             yield
     for _ in range(10): #need to send it a few time don't know why.
         socket_pub.send_multipart([config.topic_unreal_state,b'main_loop'])
         yield
-    
     drone_start_pos=np.array(ph.GetActorLocation(drone_actor))
     position=None
     while 1:
@@ -32,9 +32,10 @@ def main_loop(gworld):
             position=pickle.loads(msg)
         if position is not None:
             new_pos=drone_start_pos+np.array([position['posx'],position['posy'],position['posz']])*100 #turn to cm
-            #print('-->',time.time()-start,new_pos)
             ph.SetActorLocation(drone_actor,new_pos)
-            ph.SetActorRotation(drone_actor,(np.radians(position['roll']),np.radians(position['pitch']),np.radians(position['yaw'])))
+            ph.SetActorRotation(drone_actor,(position['roll'],position['pitch'],position['yaw']))
+            #incase of gimabl
+            #ph.SetActorRotation(drone_camera_actor,(-position['roll'],-position['pitch'],-position['yaw']))
             position=None
         yield
         img1=cv2.resize(ph.GetTextureImg(),(512,512),cv2.INTER_LINEAR)

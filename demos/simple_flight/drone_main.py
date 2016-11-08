@@ -30,7 +30,7 @@ pub_position_event = mavutil.periodic_event(freq)
 
 def set_rcs(rc1, rc2, rc3, rc4):
     global mav1
-    values = [ 65535 ] * 8
+    values = [ 1500 ] * 8
     values[0] = rc1
     values[1] = rc2
     values[2] = rc3
@@ -53,29 +53,38 @@ def get_position_struct(mav):
     return d
 
 def mission_thread():
+    print('---> send disarm')
+    mav1.arducopter_disarm()
+    for _ in range(30):
+        yield
+    mav1.param_fetch_all()
+    for _ in range(30):
+        yield
     if not mav1.motors_armed():
         for _ in range(30):
             yield
-        mav1.param_set_send(b'ARMING_CHECK',0.0)
+        mav1.param_set_send(b'SIM_WIND_SPD',0)
+        mav1.param_set_send(b'SIM_WIND_TURB',5)# dosen't do anything?
         for _ in range(30):
             yield
-        mav1.param_set_send(b'SIM_WIND_SPD',.1)
-        for _ in range(30):
-            yield
-        set_rcs(1500,1500,1100,1500)
-        for _ in range(30):
+        set_rcs(1500,1500,1000,1500)
+        for _ in range(10):
             yield
         print('arming ....')
+        mav1.set_mode('STABILIZE')
         mav1.arducopter_arm()
         for _ in range(10):
             yield
     mav1.motors_armed_wait()
+    for _ in range(10):
+        yield
     mav1.set_mode('LOITER')
     for _ in range(10):
         yield
     print('--0--')
-    set_rcs(1500,1500,1550,1500)
-    for i in range(freq*10):
+    set_rcs(1500,1500,1750,1500)
+    while mav1.messages['VFR_HUD'].alt<8:
+        #print('---------------  ',mav1.messages['VFR_HUD'].alt)
         yield
     print('--1--')
     set_rcs(1500,1550,1500,1500)
@@ -86,7 +95,7 @@ def mission_thread():
     for i in range(freq*10):
         yield
     print('--3--')
-    set_rcs(1500,1500,1450,1500)
+    set_rcs(1500,1500,1150,1500)
     while 1:
         yield
 
