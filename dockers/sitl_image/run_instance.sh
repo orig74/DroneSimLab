@@ -3,8 +3,8 @@
 #ARDU_PATH=`cd ../../ardupilot && pwd`
 #echo $ARDU_PATH
 #docker run -it --rm --name sitl_run -v $ARDU_PATH:/ardupilot -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=$DISPLAY sitl_image /bin/bash
-( docker ps | grep sitl_run ) && docker rm sitl_run
-docker run -it --rm --name sitl_run \
+docker ps -all |grep sitl_run$2 | awk -- '{ print $1 }' | xargs docker stop
+docker run -it --rm --name sitl_run$2 \
 -v $1:/ardupilot  \
 -e USERNAME=docker \
 -e USER=docker \
