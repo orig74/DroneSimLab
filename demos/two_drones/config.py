@@ -6,5 +6,6 @@ topic_sitl_position_report=b'position'
 
 zmq_pub_unreal_proxy=('127.0.0.1',5577)
 topic_unreal_state=b'unreal_state'
+topic_unreal_drone_rgb_camera=b'topic_unreal_drone_rgb_camera%d'
 
 n_drones=2

@@ -7,6 +7,9 @@ import time
 import pickle
 import config
 import sys
+import cv2
+
+show_cv=True
 
 drone_num=int(sys.argv[1])
 print('I am Drone ',drone_num)
@@ -20,6 +23,7 @@ socket_pub.bind("tcp://*:%d" % (config.zmq_pub_drone_main[1]+drone_num))
 socket_sub.connect('tcp://%s:%d'%config.zmq_pub_unreal_proxy)
 
 socket_sub.setsockopt(zmq.SUBSCRIBE,config.topic_unreal_state)
+socket_sub.setsockopt(zmq.SUBSCRIBE,config.topic_unreal_drone_rgb_camera%drone_num)
 
 mav1 = mavutil.mavlink_connection('udp:127.0.0.1:%d'%(14551+drone_num*10))
 
@@ -132,6 +136,11 @@ while True:
         if topic==config.topic_unreal_state:
             print('got unreal engine state:',msg)
             unreal_state=msg
+        if topic==(config.topic_unreal_drone_rgb_camera%drone_num):
+            if show_cv:
+                img=pickle.loads(msg)
+                cv2.imshow('Drone %d'%drone_num,img)
+                cv2.waitKey(1)
     if unreal_state==b'kill':
         mthread=mission_thread()
     #    break

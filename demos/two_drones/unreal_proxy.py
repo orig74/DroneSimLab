@@ -6,10 +6,14 @@ import config
 
 context = zmq.Context()
 
+show_cv=False
+pub_cv=True
+
 drone_subs=[]
 for ind in range(config.n_drones):
     socket_sub = context.socket(zmq.SUB)
-    socket_sub.connect('tcp://%s:%d'%config.zmq_pub_drone_main)
+    adr,port=config.zmq_pub_drone_main
+    socket_sub.connect('tcp://%s:%d'%(adr,port+ind))
     socket_sub.setsockopt(zmq.SUBSCRIBE,config.topic_sitl_position_report)
     drone_subs.append(socket_sub)
 
@@ -60,12 +64,16 @@ def main_loop(gworld):
         yield
         for drone_index in range(config.n_drones):
             img=cv2.resize(ph.GetTextureData(drone_textures[drone_index]),(256,256),cv2.INTER_LINEAR)
-            cv2.imshow('drone camera %d'%drone_index,img)
-            cv2.waitKey(1)
+            if pub_cv:
+                socket_pub.send_multipart([config.topic_unreal_drone_rgb_camera%drone_index,pickle.dumps(img,-1)])
+            if show_cv:
+                cv2.imshow('drone camera %d'%drone_index,img)
+                cv2.waitKey(1)
 
 def kill():
     print('done!')
     socket_pub.send_multipart([config.topic_unreal_state,b'kill'])
-    cv2.destroyAllWindows()
-    for _ in range(10):
-        cv2.waitKey(10)
+    if show_cv:
+        cv2.destroyAllWindows()
+        for _ in range(10):
+            cv2.waitKey(10)
