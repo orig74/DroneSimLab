@@ -8,11 +8,23 @@ import pickle
 import config
 import sys
 import cv2
+import os
+import shutil
+import hsv_track
 
 show_cv=True
 
 drone_num=int(sys.argv[1])
 print('I am Drone ',drone_num)
+#save_path='/tmp/drone_images%d'%drone_num
+save_path=None
+
+
+if save_path is not None:
+    #if os.path.isdir(save_path):
+    #    shutil.rmtree(save_path)
+    os.mkdir(save_path)
+
 
 topic_postition=config.topic_sitl_position_report
 
@@ -127,6 +139,7 @@ def print_cnt(*args,**kargs):
     pcnt-=1
 
 unreal_state=None
+img_cnt=0
 while True:
     mav1.recv_msg()
     
@@ -137,10 +150,13 @@ while True:
             print('got unreal engine state:',msg)
             unreal_state=msg
         if topic==(config.topic_unreal_drone_rgb_camera%drone_num):
+            img=pickle.loads(msg)
             if show_cv:
-                img=pickle.loads(msg)
-                cv2.imshow('Drone %d'%drone_num,img)
+                cv2.imshow('Drone %d'%drone_num,hsv_track.find_red(img))
                 cv2.waitKey(1)
+            if save_path is not None:
+                cv2.imwrite(save_path+'/img%06d.png'%img_cnt,img)
+            img_cnt+=1
     if unreal_state==b'kill':
         mthread=mission_thread()
     #    break
