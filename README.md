@@ -5,11 +5,11 @@ SITL ArduCopter with Unreal Engine 4
 ### DroneLab
 $ git clone https://github.com/orig74/DroneLab.git
 ### ardupilot
-$ git clone https://github.com/ArduPilot/ardupilot.git  
 I added a patch to the ardupilot SITL code to work directly with the SITL data to be able to update the drone state in real-time.  
-from  the Ardupilot dir run:  
-$ git apply ../DroneLab/external/ardupilot.patch  
-you should replace the ../DroneLab to the installation directory of Dronelab
+$ git clone git clone --recursive https://github.com/orig74/ardupilot.git 
+$ cd ardupilot
+$ git checkout unreal_integration
+
 ###UE4Pyserver
 Folow instalation instractions of  [UE4Pyserver](https://github.com/orig74/UE4PyServer)  
 ### Building docker images for the SITL
@@ -23,6 +23,6 @@ edit the runtmux.sh file to match your path installations, it's the lines at the
 
 ## Demo:  
 [demo](https://youtu.be/4dplKATTkMw)
-
+[demo](https://youtu.be/cEeUj4JF16A)
 ##Contact Me:  
 oga13@uclive.ac.nz  
