@@ -6,7 +6,8 @@ PROJECT_NAME=testprj6
 PROJECT_PATH=/local/learn/ur4/${PROJECT_NAME}
 PROJECT_FILE=${PROJECT_PATH}/${PROJECT_NAME}.uproject
 UE4PATH=/local/ori/GameEngines/UnrealEngine/Engine
-ARDUPILOT_PATH=/local/dronelabdata/ardupilot
+#ARDUPILOT_PATH=/local/dronelabdata/ardupilot
+ARDUPILOT_PATH=/local/gitforks/ardupilot
 
 
 

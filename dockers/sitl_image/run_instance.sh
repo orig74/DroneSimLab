@@ -4,6 +4,7 @@
 #echo $ARDU_PATH
 #docker run -it --rm --name sitl_run -v $ARDU_PATH:/ardupilot -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=$DISPLAY sitl_image /bin/bash
 docker ps -all |grep sitl_run$2 | awk -- '{ print $1 }' | xargs docker stop
+docker ps -all |grep sitl_run$2 | awk -- '{ print $1 }' | xargs docker rm 
 docker run -it --rm --name sitl_run$2 \
 -v $1:/ardupilot  \
 -e USERNAME=docker \

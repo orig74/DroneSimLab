@@ -63,8 +63,8 @@ def mission_thread():
     if not mav1.motors_armed():
         for _ in range(30):
             yield
-        mav1.param_set_send(b'SIM_WIND_SPD',0)
-        mav1.param_set_send(b'SIM_WIND_TURB',5)# dosen't do anything?
+        mav1.param_set_send(b'SIM_WIND_SPD',5)
+        mav1.param_set_send(b'SIM_WIND_TURB',10)
         for _ in range(30):
             yield
         set_rcs(1500,1500,1000,1500)
