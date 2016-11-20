@@ -1,3 +1,5 @@
 backup
+tmp
 *.swp
+.nfs*
 __pycache__
