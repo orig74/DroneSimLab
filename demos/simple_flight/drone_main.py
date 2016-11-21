@@ -64,7 +64,7 @@ def mission_thread():
         for _ in range(30):
             yield
         mav1.param_set_send(b'SIM_WIND_SPD',5)
-        mav1.param_set_send(b'SIM_WIND_TURB',10)
+        mav1.param_set_send(b'SIM_WIND_TURB',5)
         for _ in range(30):
             yield
         set_rcs(1500,1500,1000,1500)
