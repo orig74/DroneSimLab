@@ -23,7 +23,7 @@ $cd DroneLab/demos/simple_flight
 edit the runtmux.sh file to match your path installations, it's the lines at the beginning of the file containing the "/local" prefix
 
 ## Demo:  
-[demo](https://youtu.be/4dplKATTkMw)  
-[demo](https://youtu.be/cEeUj4JF16A)
+[Flying Drone](https://youtu.be/4dplKATTkMw)  
+[Two drones tracking](https://youtu.be/cEeUj4JF16A)
 ##Contact Me:  
 oga13@uclive.ac.nz  
