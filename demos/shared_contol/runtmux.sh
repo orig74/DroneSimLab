@@ -6,7 +6,8 @@ PROJECT_NAME=testprj6
 PROJECT_PATH=/local/learn/ur4/${PROJECT_NAME}
 PROJECT_FILE=${PROJECT_PATH}/${PROJECT_NAME}.uproject
 UE4PATH=/local/ori/GameEngines/UnrealEngine/Engine
-ARDUPILOT_PATH=/local/dronelabdata/ardupilot
+#ARDUPILOT_PATH=/local/dronelabdata/ardupilot
+ARDUPILOT_PATH=/local/gitforks/ardupilot
 
 
 
@@ -36,9 +37,9 @@ tmux send-keys "cd ../../dockers/sitl_image/ && ./run_instance.sh $ARDUPILOT_PAT
 tmux select-pane -t 0
 tmux split-window -v
 tmux select-pane -t 0
-tmux send-keys "python drone_mother.py" ENTER
+tmux send-keys "python drone_main.py 0" ENTER
 tmux select-pane -t 1
-tmux send-keys "python drone_son.py 1" ENTER 
+tmux send-keys "python drone_main.py 1" ENTER 
 
 #tmux send-keys "./run.sh" ENTER 
 #tmux select-window -t 0
