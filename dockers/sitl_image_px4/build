@@ -1,0 +1,5 @@
+#!/usr/bin/python
+import os
+name=os.path.basename(os.path.abspath('.'))
+os.system("docker build -t "+name+" .")
+
