@@ -47,10 +47,18 @@ def mission_thread():
     mav1.mav.command_long_send(mav1.target_system, mav1.target_component,
                                    mavutil.mavlink.MAV_CMD_NAV_TAKEOFF, 0,
                                    0, 0,1, 0, 47.3977419, 8.5455939, 500)
-    #yield
-    #mav1.set_mode('AUTO')
+    yield
+    values = [ 50 ] * 8
+    #values[1]=1700
+    mav1.mav.rc_channels_override_send(mav1.target_system, mav1.target_component, *values)
+    yield
     for _ in range(5):
         yield
+    print('-------- set mode')
+    mav1.set_mode('POSCTL')
+    for _ in range(5):
+        yield
+    #mav1.set_mode('POSCTL')
 
     mav1.mav.command_long_send(mav1.target_system, mav1.target_component,
                                    mavutil.mavlink.MAV_CMD_NAV_LAND, 0,
