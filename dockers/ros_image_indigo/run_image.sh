@@ -11,11 +11,12 @@ docker run -it --rm --name ros_indigo \
 -e USERNAME=docker \
 -e USER=docker \
 -e HOME=/home/docker \
+-v $HOME:/myhome \
 -v /local/dockerhome:/home/docker \
 -u $UID \
 --privileged \
---net host \
 ros_image_indigo "/bin/bash"
 
+#--net host \
 #make posix_sitl_default jmavsim
 
