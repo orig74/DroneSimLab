@@ -6,7 +6,7 @@ PROJECT_NAME=testprj6
 PROJECT_PATH=/local/learn/ur4/${PROJECT_NAME}
 PROJECT_FILE=${PROJECT_PATH}/${PROJECT_NAME}.uproject
 UE4PATH=/local/ori/GameEngines/UnrealEngine/Engine
-PX4_PATH=/local/dronelabdata/PX4
+#PX4_PATH=/local/dronelabdata/PX4
 BUILD_TOOL=Binaries/DotNET/UnrealBuildTool.exe
 DOCKER_IMAGE=ros_image_indigo
 #cleanning prev run
@@ -29,7 +29,7 @@ tmux send-keys 'tmux send-keys "sleep 3" ENTER' ENTER #need some delay dont know
 tmux send-keys 'tmux send-keys "roslaunch mavros px4.launch fcu_url:=\"udp://:14540@127.0.0.1:14557\"" ENTER' ENTER
 #tmux send-keys "cd /PX4/Firmware" ENTER
 tmux send-keys 'tmux select-pane -t 1' ENTER
-tmux send-keys 'tmux send-keys "cd /PX4/Firmware" ENTER' ENTER 
+tmux send-keys 'tmux send-keys "cd /workspace/DroneLab/PX4/Firmware" ENTER' ENTER 
 tmux send-keys 'tmux send-keys "make posix_sitl_default gazebo" ENTER' ENTER
 tmux send-keys 'tmux select-pane -t 0' ENTER
 tmux send-keys 'tmux send-keys "rosrun control_test offb2.py"' ENTER

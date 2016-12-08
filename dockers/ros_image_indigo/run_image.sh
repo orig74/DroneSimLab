@@ -1,11 +1,12 @@
 #!/bin/bash
 xhost + local:
 
-#ARDU_PATH=`cd ../../ardupilot && pwd`
-#echo $ARDU_PATH
-#docker run -it --rm --name sitl_run -v $ARDU_PATH:/ardupilot -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=$DISPLAY sitl_image /bin/bash
+#DRONE_LAB_DIR=`python -c "import os;print os.path.abspath(os.path.dirname('$0/../../../'))"`
+WORKSAPCE=~/projects
+
+
 docker run -it --rm --name ros_indigo \
--v /local/dronelabdata/PX4:/PX4  \
+-v $WORKSAPCE:/workspace  \
 -v /tmp/.X11-unix:/tmp/.X11-unix \
 -e DISPLAY=$DISPLAY \
 -e USERNAME=docker \
