@@ -40,12 +40,12 @@ RUN apt-get -y install protobuf-compiler
 RUN apt-get -y install vim terminator 
 RUN apt-get -y install ros-indigo-control-toolbox
 RUN apt-get -y install openssl libssl-dev
-RUN apt-get -y install wget tmux tmux-bash-completion
+RUN apt-get -y install wget tmux 
 RUN pip install ipdb rpdb 
 ENV QT_X11_NO_MITSHM 1
 ARG UID=360154
 RUN useradd -u $UID docker
 RUN echo "docker:docker" | chpasswd
-RUN echo "docker ALL=(ALL:ALL) ALL" >> /etc/sudoers 
+RUN echo "docker ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers 
 # Some QT-Apps/Gazebo don't not show controls without this
 #RUN echo "docker:*:360154:9500:docker:/home/docker:/bin/bash >> /etc/passwd-"

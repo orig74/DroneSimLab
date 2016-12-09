@@ -24,14 +24,19 @@ tmux send-keys "tmux split-window -h" ENTER
 tmux send-keys "tmux split-window -v" ENTER
 tmux send-keys "tmux send-keys \"roscore\" ENTER" ENTER
 tmux send-keys "tmux split-window -v" ENTER
-tmux send-keys "tmux send-keys \"source ~/catkin_ws/devel/setup.bash\" ENTER" ENTER
+tmux send-keys "tmux send-keys \"source /DroneLab/scripts/install_mavros.sh\" ENTER" ENTER
+tmux send-keys "tmux send-keys \"source /ros/catkin_mavros/devel/setup.bash\" ENTER" ENTER
 tmux send-keys 'tmux send-keys "sleep 3" ENTER' ENTER #need some delay dont know why
 tmux send-keys 'tmux send-keys "roslaunch mavros px4.launch fcu_url:=\"udp://:14540@127.0.0.1:14557\"" ENTER' ENTER
 #tmux send-keys "cd /PX4/Firmware" ENTER
 tmux send-keys 'tmux select-pane -t 1' ENTER
-tmux send-keys 'tmux send-keys "cd /workspace/DroneLab/PX4/Firmware" ENTER' ENTER 
+tmux send-keys 'tmux send-keys "cd /DroneLab/PX4/Firmware" ENTER' ENTER 
 tmux send-keys 'tmux send-keys "make posix_sitl_default gazebo" ENTER' ENTER
 tmux send-keys 'tmux select-pane -t 0' ENTER
+#tmux send-keys "tmux send-keys \"source /ros/catkin_ws/devel/setup.bash\" ENTER" ENTER
+tmux send-keys "tmux send-keys \"source /ros/catkin_mavros/devel/setup.bash\" ENTER" ENTER
+tmux send-keys 'tmux send-keys "ROS_PACKAGE_PATH=/ros/catkin_ws/src:$ROS_PACKAGE_PATH" ENTER' ENTER
+tmux send-keys 'tmux send-keys "cd /ros/catkin_ws && catkin_make" ENTER' ENTER
 tmux send-keys 'tmux send-keys "rosrun control_test offb2.py"' ENTER
 tmux send-keys "tmux att" ENTER
 #tmux send-keys "make posix_sitl_default jmavsim" 
