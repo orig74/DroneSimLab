@@ -3,4 +3,11 @@ tmp
 *.swp
 .nfs*
 ros/catkin_mavros
+dockers/docker_home/.gazebo
+dockers/docker_home/.config
+dockers/docker_home/.nv
+dockers/docker_home/.ros
+dockers/docker_home/.sdformat
+ros/catkin_ws/build
+ros/catkin_ws/devel
 __pycache__
