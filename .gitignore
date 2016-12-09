@@ -8,6 +8,9 @@ dockers/docker_home/.config
 dockers/docker_home/.nv
 dockers/docker_home/.ros
 dockers/docker_home/.sdformat
+dockers/docker_home/.bash_history
 ros/catkin_ws/build
 ros/catkin_ws/devel
+demos/common/_fdm.c
+ros/catkin_ws/.catkin_workspace
 __pycache__
