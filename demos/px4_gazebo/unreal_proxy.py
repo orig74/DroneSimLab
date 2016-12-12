@@ -1,8 +1,11 @@
 # vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4
-from Wrappers import phandlers as ph
-import zmq,pickle,time,cv2
-import numpy as np
+import zmq,pickle,time
 import config
+
+if __name__!="__main__":
+    from Wrappers import phandlers as ph
+    import numpy as np
+    import cv2
 
 context = zmq.Context()
 
@@ -12,8 +15,12 @@ pub_cv=True
 drone_subs=[]
 for ind in range(config.n_drones):
     socket_sub = context.socket(zmq.SUB)
-    adr,port=config.zmq_pub_drone_main
-    socket_sub.connect('tcp://%s:%d'%(adr,port+ind))
+    _,port=config.zmq_pub_drone_fdm
+    drone_ip='172.17.0.%d'%(ind+2) #172.17.0.1 for the docker host and 172.17.0.2 for first drone etc...
+    #drone_ip='127.0.0.%d'%(ind+1) #172.17.0.1 for the docker host and 172.17.0.2 for first drone etc...
+    addr='tcp://%s:%d'%(drone_ip,port)
+    print("connecting to",addr)
+    socket_sub.connect(addr)
     socket_sub.setsockopt(zmq.SUBSCRIBE,config.topic_sitl_position_report)
     drone_subs.append(socket_sub)
 
@@ -77,3 +84,14 @@ def kill():
         cv2.destroyAllWindows()
         for _ in range(10):
             cv2.waitKey(10)
+
+
+
+if __name__=="__main__":
+    while 1:
+        for drone_index in range(config.n_drones):
+            socket_sub=drone_subs[drone_index]
+            while len(zmq.select([socket_sub],[],[],0)[0])>0:
+                topic, msg = socket_sub.recv_multipart()
+                print("got ",topic)
+

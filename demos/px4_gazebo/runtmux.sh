@@ -39,6 +39,11 @@ tmux send-keys "tmux send-keys \"source /ros/catkin_mavros/devel/setup.bash\" EN
 tmux send-keys 'tmux send-keys "ROS_PACKAGE_PATH=/ros/catkin_ws/src:$ROS_PACKAGE_PATH" ENTER' ENTER
 tmux send-keys 'tmux send-keys "cd /ros/catkin_ws && catkin_make" ENTER' ENTER
 tmux send-keys 'tmux send-keys "rosrun control_test offb2.py"' ENTER
+tmux send-keys 'tmux split-window -v' ENTER
+tmux send-keys 'tmux send-keys "cd /DroneLab/demos/px4_gazebo/" ENTER' ENTER
+tmux send-keys 'tmux send-keys "python3 fdm_pub.py" ENTER' ENTER
+tmux send-keys 'tmux select-pane -t 0' ENTER
+
 tmux send-keys "tmux att" ENTER
 
 

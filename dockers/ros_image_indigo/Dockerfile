@@ -41,7 +41,9 @@ RUN apt-get -y install vim terminator
 RUN apt-get -y install ros-indigo-control-toolbox
 RUN apt-get -y install openssl libssl-dev
 RUN apt-get -y install wget tmux 
-RUN pip install ipdb rpdb 
+RUN pip install ipdb rpdb
+RUN apt-get -y install python3-pip 
+RUN pip3 install pyzmq
 ENV QT_X11_NO_MITSHM 1
 ARG UID=360154
 RUN useradd -u $UID docker
