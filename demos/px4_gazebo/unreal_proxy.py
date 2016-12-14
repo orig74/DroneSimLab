@@ -1,7 +1,6 @@
 # vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4
 import zmq,pickle,time
 import config
-
 if __name__!="__main__":
     from Wrappers import phandlers as ph
     import numpy as np
@@ -25,7 +24,7 @@ for ind in range(config.n_drones):
     drone_subs.append(socket_sub)
 
 socket_pub = context.socket(zmq.PUB)
-socket_pub.bind("tcp://*:%d" % config.zmq_pub_unreal_proxy[1] )
+socket_pub.bind("tcp://%s:%d" % config.zmq_pub_unreal_proxy )
 
 
 start=time.time()
@@ -70,9 +69,12 @@ def main_loop(gworld):
                 positions[drone_index]=None
         yield
         for drone_index in range(config.n_drones):
-            img=cv2.resize(ph.GetTextureData(drone_textures[drone_index]),(256,256),cv2.INTER_LINEAR)
+            #img=cv2.resize(ph.GetTextureData(drone_textures[drone_index]),(1024,1024),cv2.INTER_LINEAR)
+            img=ph.GetTextureData(drone_textures[drone_index])
             if pub_cv:
-                socket_pub.send_multipart([config.topic_unreal_drone_rgb_camera%drone_index,pickle.dumps(img,-1)])
+                print(time.time(),'---')
+                topic=config.topic_unreal_drone_rgb_camera%drone_index
+                socket_pub.send_multipart([topic,pickle.dumps(img,-1)])
             if show_cv:
                 cv2.imshow('drone camera %d'%drone_index,img)
                 cv2.waitKey(1)

@@ -41,6 +41,9 @@ tmux send-keys 'tmux send-keys "cd /ros/catkin_ws && catkin_make" ENTER' ENTER
 tmux send-keys 'tmux send-keys "rosrun control_test offb2.py"' ENTER
 tmux send-keys 'tmux split-window -v' ENTER
 tmux send-keys 'tmux send-keys "cd /DroneLab/demos/px4_gazebo/" ENTER' ENTER
+tmux send-keys 'tmux send-keys "python3 unreal_sensor_receiver.py" ENTER' ENTER
+tmux send-keys 'tmux split-window -v' ENTER
+tmux send-keys 'tmux send-keys "cd /DroneLab/demos/px4_gazebo/" ENTER' ENTER
 tmux send-keys 'tmux send-keys "python3 fdm_pub.py" ENTER' ENTER
 tmux send-keys 'tmux select-pane -t 0' ENTER
 
@@ -51,6 +54,7 @@ tmux new-window -n unreal
 tmux send-keys "export DEMO_DIR=${PWD}" ENTER
 tmux send-keys "cd ${PROJECT_PATH}/Plugins/UE4PyServer/Source/PyServer" ENTER
 tmux send-keys "python config.py --entry_point=unreal_proxy --entry_path=\$DEMO_DIR" ENTER
+tmux send-keys "./run.sh"
 
 
 #tmux send-keys "make posix_sitl_default jmavsim" 
@@ -59,6 +63,6 @@ tmux send-keys "python config.py --entry_point=unreal_proxy --entry_path=\$DEMO_
 #tmux send-keys "cd ${PROJECT_PATH}/Plugins/UE4PyServer/Source/PyServer" ENTER
 #tmux send-keys "python config.py --entry_point=unreal_proxy --entry_path=\$DEMO_DIR" ENTER
 #tmux send-keys "./run.sh" 
-#tmux select-window -t 0
+tmux select-window -t 0
 tmux att
 

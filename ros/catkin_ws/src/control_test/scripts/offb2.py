@@ -26,7 +26,7 @@ def listener():
     set_mode_cmd=rospy.ServiceProxy('mavros/set_mode',SetMode)
     arm_cmd=rospy.ServiceProxy('mavros/cmd/arming',CommandBool)
     newpos=PoseStamped()
-    newpos.pose.position.z=2.0#=Point(0,0,2)
+    newpos.pose.position.z=4.0#=Point(0,0,2)
     #set_mode_cmd('POSITION CONTROL','')
     #for _ in range(10):
     #    rate.sleep()
@@ -42,7 +42,7 @@ def listener():
     last_req=rospy.get_time()
     start_time=last_req;
     #print '---',rospy.get_time(),start_time
-    while rospy.get_time()-start_time<40:
+    while rospy.get_time()-start_time<50:
         if rospy.get_time()-last_req>5:
             if state.mode != mymode:
                 set_mode_cmd(0,mymode) 
@@ -51,10 +51,17 @@ def listener():
                 arm_cmd(True)
                 rospy.loginfo('arming...')
             last_req=rospy.get_time()
-        if rospy.get_time()-start_time<20:
+        dt=rospy.get_time()-start_time
+        if dt<20:
             local_pos_pub.publish(newpos);
-        else:
+        elif 20<dt<30 :
             local_posi_raw_pub.publish(newvel); 
+        elif 30<dt<40 :
+            newvel.velocity.x=-1.0
+            local_posi_raw_pub.publish(newvel); 
+        else:
+            newpos.pose.position.z=0
+            local_pos_pub.publish(newpos);
         rate.sleep()
        
 if __name__ == '__main__':

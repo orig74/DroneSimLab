@@ -44,10 +44,24 @@ RUN apt-get -y install wget tmux
 RUN pip install ipdb rpdb
 RUN apt-get -y install python3-pip 
 RUN pip3 install pyzmq
+############################## install opencv3 and numpy for python3
+RUN apt-get install -y libjpeg8-dev libtiff4-dev libjasper-dev libpng12-dev libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
+RUN apt-get install -y libgtk2.0-dev libatlas-base-dev gfortran 
+RUN apt-get install -y python3.4-dev
+RUN git clone https://github.com/Itseez/opencv.git
+RUN cd /opencv && git checkout 3.0.0
+RUN git clone https://github.com/Itseez/opencv_contrib.git
+RUN cd /opencv_contrib && git checkout 3.0.0
+RUN pip3 install numpy
+RUN cd /opencv && mkdir build
+RUN cd /opencv/build && cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local \
+  -D OPENCV_EXTRA_MODULES_PATH=/opencv_contrib/modules -D PYTHON3_PACKAGES_PATH=/usr/local/lib/python3.4/dist-packages .. && make -j4
+RUN cd /opencv/build && make install
+######################################################
+# Some QT-Apps/Gazebo don't not show controls without this
 ENV QT_X11_NO_MITSHM 1
 ARG UID=360154
 RUN useradd -u $UID docker
 RUN echo "docker:docker" | chpasswd
 RUN echo "docker ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers 
-# Some QT-Apps/Gazebo don't not show controls without this
 #RUN echo "docker:*:360154:9500:docker:/home/docker:/bin/bash >> /etc/passwd-"
