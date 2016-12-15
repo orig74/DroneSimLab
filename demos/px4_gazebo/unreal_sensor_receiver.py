@@ -5,15 +5,17 @@ import zmq
 import sys
 import asyncio
 import cv2,time
+import numpy as np
 
 context = zmq.Context()
 socket_sub = context.socket(zmq.SUB)
 addr="tcp://%s:%d" % (config.zmq_pub_unreal_proxy)
 socket_sub.connect(addr)
-topic=(config.topic_unreal_drone_rgb_camera.decode()%0).encode()
+topic=(config.topic_unreal_drone_rgb_camera.decode()%0).encode()#had to do encode decode for python version earlier then 3.5
 print('topic is',topic)
-socket_sub.setsockopt(zmq.SUBSCRIBE,topic) #had to do encode decode for python version earlier then 3.5
-#socket_sub.setsockopt(zmq.SUBSCRIBE,b'aaabbb') #had to do encode decode for python version earlier then 3.5
+socket_sub.setsockopt(zmq.SUBSCRIBE,topic)
+socket_sub.setsockopt(zmq.SUBSCRIBE,topic+b'down') 
+socket_sub.setsockopt(zmq.SUBSCRIBE,topic+b'depth') 
 
 msg=None
 def reader():
@@ -41,8 +43,15 @@ if 1 and __name__=="__main__":
     while 1:
         while len(zmq.select([socket_sub],[],[],0)[0])>0:
             topic, msg = socket_sub.recv_multipart()
+            topic=topic.decode()
             img=pickle.loads(msg)
-            cv2.imshow('drone camer rgb',cv2.resize(cv2.resize(img,(1024,1024)),(512,512)))
+            if 'depth' in topic:
+                cv2.imshow(topic,img)
+            elif 'depth' in topic:
+                gray_img=img
+                cv2.imshow(gray_img)
+            else:
+                cv2.imshow(topic,cv2.resize(cv2.resize(img,(1024,1024)),(512,512)))
             cv2.waitKey(1)
 
 

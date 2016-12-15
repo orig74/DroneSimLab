@@ -37,6 +37,11 @@ def main_loop(gworld):
     drone_textures=[]
     drone_textures.append(ph.GetTextureByName('/Game/TextureRenderTarget2D'))
     drone_textures.append(ph.GetTextureByName('/Game/TextureRenderTarget2D_2'))
+    drone_textures_down=[]
+    drone_textures_down.append(ph.GetTextureByName('/Game/TextureRenderTarget2D_Down'))
+    drone_textures_depth=[]
+    drone_textures_depth.append(ph.GetTextureByName('/Game/TextureRenderTarget2D_depth'))
+
     if not all(drone_textures):
         print("Error, Could not find all textures")
         while 1:
@@ -71,10 +76,15 @@ def main_loop(gworld):
         for drone_index in range(config.n_drones):
             #img=cv2.resize(ph.GetTextureData(drone_textures[drone_index]),(1024,1024),cv2.INTER_LINEAR)
             img=ph.GetTextureData(drone_textures[drone_index])
+            img_down=ph.GetTextureData(drone_textures_down[drone_index])
+            img_depth=ph.GetTextureData(drone_textures_depth[drone_index],channels=[2]) #depth data will be in red componnent
             if pub_cv:
-                print(time.time(),'---')
                 topic=config.topic_unreal_drone_rgb_camera%drone_index
                 socket_pub.send_multipart([topic,pickle.dumps(img,-1)])
+                topic=config.topic_unreal_drone_rgb_camera%drone_index+b'down'
+                socket_pub.send_multipart([topic,pickle.dumps(img_down,-1)])
+                topic=config.topic_unreal_drone_rgb_camera%drone_index+b'depth'
+                socket_pub.send_multipart([topic,pickle.dumps(img_depth,-1)])
             if show_cv:
                 cv2.imshow('drone camera %d'%drone_index,img)
                 cv2.waitKey(1)
