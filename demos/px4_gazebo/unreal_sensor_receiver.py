@@ -53,6 +53,7 @@ if 1 and __name__=="__main__":
             else:
                 cv2.imshow(topic,cv2.resize(cv2.resize(img,(1024,1024)),(512,512)))
             cv2.waitKey(1)
+        time.sleep(0.001)
 
 
 i#print(time.time(),"got ",topic)
