@@ -32,6 +32,7 @@ def listener():
     #    rate.sleep()
     newvel=PositionTarget()
     newvel.velocity.x=0.5
+    newvel.yaw=-90.0/180.0*3.142
     newvel.type_mask=newvel.FRAME_LOCAL_NED | newvel.IGNORE_AFX | newvel.IGNORE_AFY |newvel.IGNORE_AFZ
     newvel.type_mask=newvel.type_mask | newvel.IGNORE_PX | newvel.IGNORE_PY | newvel.IGNORE_PZ
     for _ in range(100):

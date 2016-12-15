@@ -5,6 +5,7 @@ import pickle
 import zmq
 import sys
 import asyncio
+import numpy as np
 
 context = zmq.Context()
 position_struct={}
@@ -26,6 +27,12 @@ def reader():
     fdm=map(float,data.strip().split())
     ps=position_struct
     ps['posx'],ps['posy'],ps['posz'],ps['roll'],ps['pitch'],ps['yaw']=fdm
+    #converting to unreal coordinates
+    
+    #convert to degrees
+    ps['roll']*=180.0/np.pi
+    ps['pitch']*=180.0/np.pi
+    ps['yaw']=ps['yaw']*180.0/np.pi
 
 @asyncio.coroutine
 def printer():
