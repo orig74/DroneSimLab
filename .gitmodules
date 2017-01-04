@@ -1,3 +1,6 @@
 [submodule "PX4/Firmware"]
 	path = PX4/Firmware
 	url = https://github.com/orig74/Firmware.git
+[submodule "dockers/unreal_engine_4/UnrealEngine"]
+	path = dockers/unreal_engine_4/UnrealEngine
+	url = https://github.com/EpicGames/UnrealEngine.git
