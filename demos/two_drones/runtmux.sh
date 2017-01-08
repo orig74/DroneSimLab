@@ -1,8 +1,5 @@
 #!/bin/bash
-LD_LIBRARY_PATH=/local/ori/GameEngines/UnrealEngine/Engine/Binaries/Linux/
-PATH="/local/ori/anaconda3/bin:$PATH"
-UE4PATH=/local/ori/GameEngines/UnrealEngine
-PROJECT_NAME=testprj6
+PROJECT_NAME=testprj7_14_4
 PROJECT_PATH=/local/learn/ur4/${PROJECT_NAME}
 PROJECT_FILE=${PROJECT_PATH}/${PROJECT_NAME}.uproject
 UE4PATH=/local/ori/GameEngines/UnrealEngine/Engine
