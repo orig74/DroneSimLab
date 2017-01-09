@@ -25,7 +25,6 @@ if save_path is not None:
     #    shutil.rmtree(save_path)
     os.mkdir(save_path)
 
-
 topic_postition=config.topic_sitl_position_report
 
 context = zmq.Context()
@@ -36,7 +35,6 @@ socket_sub.setsockopt(zmq.SUBSCRIBE,config.topic_unreal_state)
 socket_sub.setsockopt(zmq.SUBSCRIBE,config.topic_unreal_drone_rgb_camera%drone_num)
 
 mav1 = mavutil.mavlink_connection('udp:127.0.0.1:%d'%(14551+drone_num*10))
-
 print("Waiting for HEARTBEAT")
 mav1.wait_heartbeat()
 print("Heartbeat from APM (system %u component %u)" % (mav1.target_system, mav1.target_system))
@@ -54,9 +52,11 @@ def set_rcs(rc1, rc2, rc3, rc4):
     values[1] = rc2
     values[2] = rc3
     values[3] = rc4
-    mav1.mav.rc_channels_override_send(mav1.target_system, mav1.target_component, *values)
+    mav1.mav.rc_channels_override_send(mav1.target_component, *values)
 
 def get_position_struct(mav):
+    if not 'VFR_HUD' in mav1.messages:
+        return None
     d={}
     d['posz']=mav1.messages['VFR_HUD'].alt
     sm=mav1.messages['SIMSTATE']
@@ -126,7 +126,7 @@ def print_cnt(*args,**kargs):
 
 unreal_state=None
 img_cnt=0
-
+pos=None
 
 while True:
     mav1.recv_msg()
@@ -147,7 +147,7 @@ while True:
         mthread=mission_thread()
     #    break
     
-    if event.trigger():
+    if event.trigger() and pos is not None:
         print('X:%(posx).1f\tY:%(posy).1f\tZ:%(posz).1f\tYW:%(yaw).0f\tPI:%(pitch).1f\tRL:%(roll).1f'%pos)
 
     if event1hz.trigger():

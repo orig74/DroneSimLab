@@ -29,9 +29,7 @@ if save_path is not None:
 topic_postition=config.topic_sitl_position_report
 
 context = zmq.Context()
-socket_pub = context.socket(zmq.PUB)
 socket_sub = context.socket(zmq.SUB)
-socket_pub.bind("tcp://*:%d" % (config.zmq_pub_drone_main[1]+drone_num))
 socket_sub.connect('tcp://%s:%d'%config.zmq_pub_unreal_proxy)
 
 socket_sub.setsockopt(zmq.SUBSCRIBE,config.topic_unreal_state)
@@ -176,7 +174,6 @@ while True:
             pos=udp_position
             print_cnt('source from udp patch')
             #print('%.2f'%(time.time()-start),'X:%(posx).2f\tY:%(posy).2f\tZ:%(posz).2f\tYW:%(yaw).0f\tPI:%(pitch).1f\tRL:%(roll).1f'%pos)
-        socket_pub.send_multipart([topic_postition,pickle.dumps(pos,-1)])
         
         if unreal_state==b'main_loop':
             next(mthread)
