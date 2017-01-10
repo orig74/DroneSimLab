@@ -58,19 +58,23 @@ def main_loop(gworld):
         if positions_struct is not None: #meanning new message
             for drone_index in positions_struct:
                 drone_pos=positions_struct[drone_index]
-                if drone_start_positions_lon_lat[drone_index] is None:
-                    drone_start_positions_lon_lat[drone_index]=drone_pos.copy()
-                dx,dy=convertions.latlon_rad_dist_meters(
-                        drone_start_positions_lon_lat[drone_index]['lat'],drone_start_positions_lon_lat[drone_index]['lon'],
-                        drone_pos['lat'],drone_pos['lon'])
-                alt=(drone_pos['alt']-drone_start_positions_lon_lat[drone_index]['alt'])*100 #*100 convert to centimeters
+                if drone_pos['type']=='fdm':
+                    if drone_start_positions_lon_lat[drone_index] is None:
+                        drone_start_positions_lon_lat[drone_index]=drone_pos.copy()
+                    dx,dy=convertions.latlon_rad_dist_meters(
+                            drone_start_positions_lon_lat[drone_index]['lat'],drone_start_positions_lon_lat[drone_index]['lon'],
+                            drone_pos['lat'],drone_pos['lon'])
+                    alt=(drone_pos['alt']-drone_start_positions_lon_lat[drone_index]['alt'])*100 #*100 convert to centimeters
+                else:
+                    dx,dy,alt=drone_pos['posx'],drone_pos['posy'],drone_pos['posz']*100
+
                 alt+=drone_start_positions_unreal[drone_index][2]
                 dx=dx*100+drone_start_positions_unreal[drone_index][0]
                 dy=dy*100+drone_start_positions_unreal[drone_index][1]
                 #if iter_cnt==0:
                 #    import ipdb;ipdb.set_trace()
                 if (iter_cnt%10)==0:
-                    print('===>',dx,dy,alt)
+                    print('===>',dx,dy,alt,drone_index)
                 ph.SetActorLocation(drone_actors[drone_index],(dx,dy,alt))
                 ph.SetActorRotation(drone_actors[drone_index],(drone_pos['roll'],drone_pos['pitch'],drone_pos['yaw']))
             positions_struct=None

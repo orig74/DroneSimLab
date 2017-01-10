@@ -84,23 +84,33 @@ def mission_thread():
         yield
         set_rcs(1500,1500,1000,1500)
         yield
-        print('arming ....')
-        mav1.set_mode('STABILIZE')
-        mav1.arducopter_arm()
+        print('gps fix',mav1.messages['HOME'].fix_type)
         yield
-    mav1.motors_armed_wait()
+        print('arming ....')
+        mav1.set_mode('LOITER')
+        yield
+        while not mav1.motors_armed():
+            mav1.arducopter_arm()
+            yield
     yield
-    mav1.set_mode('LOITER')
-    yield
+    while mav1.flightmode!='LOITER':
+        print('waiting for loiter...',mav1.flightmode)
+        mav1.set_mode('LOITER')
+        yield
     print('--0--')
-    set_rcs(1500,1600,1750,1500)
-    while mav1.messages['VFR_HUD'].alt<15:
+    set_rcs(1500,1500,1700,1500)
+    while mav1.messages['VFR_HUD'].alt<5:
         yield
     print('--1--')
+    set_rcs(1500,1600,1500,1500)
     for i in range(5):
         yield
-    print('--2-')
-    set_rcs(1500,1500,1150,1500)
+    print('--2--')
+    set_rcs(1500,1400,1500,1500)
+    for i in range(5):
+        yield
+    print('--3-')
+    set_rcs(1500,1500,1300,1500)
     yield
     while 1:
         if mav1.motors_armed and mav1.messages['VFR_HUD'].alt<0.5:
@@ -153,7 +163,7 @@ while True:
     if event1hz.trigger():
         if unreal_state==b'main_loop':
             next(mthread) 
-        
+            print('mode',mav1.flightmode) 
     elif pub_position_event.trigger(): #30Hz
         if udp_position is None:
             pos=get_position_struct(mav1)

@@ -73,60 +73,52 @@ def get_position_struct(mav):
 def mission_thread():
     print('---> send disarm')
     mav1.arducopter_disarm()
-    for _ in range(30):
-        yield
+    yield
     mav1.param_fetch_all()
-    for _ in range(30):
-        yield
+    yield
     if not mav1.motors_armed():
-        for _ in range(30):
-            yield
-        mav1.param_set_send(b'SIM_WIND_SPD',0)
-        mav1.param_set_send(b'SIM_WIND_TURB',5)# dosen't do anything?
-        for _ in range(30):
-            yield
-        set_rcs(1500,1500,1000,1500)
-        for _ in range(10):
-            yield
-        print('arming ....')
-        mav1.set_mode('STABILIZE')
-        mav1.arducopter_arm()
-        for _ in range(10):
-            yield
-    mav1.motors_armed_wait()
-    for _ in range(10):
         yield
-    mav1.set_mode('LOITER')
-    for _ in range(10):
+        mav1.param_set_send(b'SIM_WIND_SPD',config.wind_speed)
+        mav1.param_set_send(b'SIM_WIND_TURB',config.wind_turbulence)
+        yield
+        set_rcs(1500,1500,1000,1500)
+        yield
+        print('gps fix',mav1.messages['HOME'].fix_type)
+        yield
+        print('arming ....')
+        mav1.set_mode('LOITER')
+        yield
+        while not mav1.motors_armed():
+            mav1.arducopter_arm()
+            yield
+    yield
+    while mav1.flightmode!='LOITER':
+        print('waiting for loiter...',mav1.flightmode)
+        mav1.set_mode('LOITER')
         yield
     print('--0--')
-    set_rcs(1500,1500,1750,1500)
-    while mav1.messages['VFR_HUD'].alt<8:
-        #print('---------------  ',mav1.messages['VFR_HUD'].alt)
+    set_rcs(1500,1500,1700,1500)
+    while mav1.messages['VFR_HUD'].alt<5:
         yield
     print('--1--')
-    set_rcs(1500,1550,1500,1500)
-    for i in range(freq*10):
+    set_rcs(1500,1600,1500,1500)
+    for i in range(5):
         yield
     print('--2--')
-    set_rcs(1500,1450,1500,1500)
-    for i in range(freq*10):
+    set_rcs(1500,1400,1500,1500)
+    for i in range(5):
         yield
-    print('--3--')
-    set_rcs(1500,1500,1150,1500)
+    print('--3-')
+    set_rcs(1500,1500,1300,1500)
+    yield
     while 1:
+        if mav1.motors_armed and mav1.messages['VFR_HUD'].alt<0.5:
+            mav1.arducopter_disarm()
         yield
 
 
 mthread=mission_thread()
 start=time.time()
-import socket,select
-direct_udp = socket.socket(socket.AF_INET, # Internet
-                     socket.SOCK_DGRAM) # UDP
-direct_udp.bind(('127.0.0.1', 19988+drone_num*10))
-
-
-udp_position=None
 
 ##############################################
 pcnt=5
@@ -167,21 +159,10 @@ while True:
         
         print('X:%(posx).1f\tY:%(posy).1f\tZ:%(posz).1f\tYW:%(yaw).0f\tPI:%(pitch).1f\tRL:%(roll).1f'%pos)
     elif pub_position_event.trigger(): #30Hz
-        if udp_position is None:
-            pos=get_position_struct(mav1)
-            print_cnt('source form mavlink')
-        else:
-            pos=udp_position
-            print_cnt('source from udp patch')
-            #print('%.2f'%(time.time()-start),'X:%(posx).2f\tY:%(posy).2f\tZ:%(posz).2f\tYW:%(yaw).0f\tPI:%(pitch).1f\tRL:%(roll).1f'%pos)
-        
+        pos=get_position_struct(mav1)
+        print_cnt('position source form mavlink')
         if unreal_state==b'main_loop':
             next(mthread)
 
-    else: 
-        if len(select.select([direct_udp],[],[],0)[0])>0:
-            u=list(map(float,direct_udp.recv(1024).split()))
-            
-            udp_position={'posx':u[0],'posy':u[1],'posz':-u[2],'roll':u[3],'pitch':u[4],'yaw':u[5]}
     time.sleep(0.001)
     
