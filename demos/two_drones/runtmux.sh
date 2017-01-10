@@ -4,7 +4,7 @@ PROJECT_PATH=/local/learn/ur4/${PROJECT_NAME}
 PROJECT_FILE=${PROJECT_PATH}/${PROJECT_NAME}.uproject
 UE4PATH=/local/ori/GameEngines/UnrealEngine/Engine
 ARDUPILOT_PATH=/local/dronelabdata/ardupilot
-
+DEMO_PATH=/DroneLab/demos/two_drones/
 
 
 BUILD_TOOL=Binaries/DotNET/UnrealBuildTool.exe
@@ -22,9 +22,9 @@ tmux new-session -d -s dronelab
 #tmux send-keys "python drone_main.py" ENTER
 tmux split-window -h
 tmux split-window -v
-tmux send-keys "export DEMO_DIR=${PWD}" ENTER
-tmux send-keys "cd ${PROJECT_PATH}/Plugins/UE4PyServer/Source/PyServer" ENTER
-tmux send-keys "python config.py --entry_point=unreal_proxy --entry_path=\$DEMO_DIR" ENTER
+tmux send-keys "cd ../../dockers/unreal_engine_4 && ./attach.sh" ENTER
+tmux send-keys "cd /project_files/${PROJECT_NAME}/Plugins/UE4PyServer/Source/PyServer" ENTER
+tmux send-keys "python config.py --entry_point=unreal_proxy --entry_path=$DEMO_PATH" ENTER
 tmux select-pane -t 0
 tmux split-window -v
 tmux select-pane -t 2

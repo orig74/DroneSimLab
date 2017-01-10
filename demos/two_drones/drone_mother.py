@@ -37,7 +37,7 @@ socket_sub.setsockopt(zmq.SUBSCRIBE,config.topic_unreal_drone_rgb_camera%drone_n
 mav1 = mavutil.mavlink_connection('udp:127.0.0.1:%d'%(14551+drone_num*10))
 print("Waiting for HEARTBEAT")
 mav1.wait_heartbeat()
-print("Heartbeat from APM (system %u component %u)" % (mav1.target_system, mav1.target_system))
+print("Heartbeat from APM (system %u component %u)" % (mav1.target_system, mav1.target_component))
 
 
 event = mavutil.periodic_event(0.3)
@@ -52,7 +52,7 @@ def set_rcs(rc1, rc2, rc3, rc4):
     values[1] = rc2
     values[2] = rc3
     values[3] = rc4
-    mav1.mav.rc_channels_override_send(mav1.target_component, *values)
+    mav1.mav.rc_channels_override_send(mav1.target_system, mav1.target_component, *values)
 
 def get_position_struct(mav):
     if not 'VFR_HUD' in mav1.messages:
@@ -133,7 +133,7 @@ while True:
     while(len(zmq.select([socket_sub],[],[],0)[0])>0):
         topic, msg = socket_sub.recv_multipart()
         if topic==config.topic_unreal_state:
-            print('got unreal engine state:',msg)
+            #print('got unreal engine state:',msg)
             unreal_state=msg
         if topic==(config.topic_unreal_drone_rgb_camera%drone_num):
             img=pickle.loads(msg)

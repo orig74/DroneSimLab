@@ -24,6 +24,7 @@ docker run -it --name unreal_engine \
 -e USER=docker \
 -e HOME=/home/docker \
 -u $UID \
+--net=host \
 --privileged \
 unreal_engine_4 "/bin/bash"
 

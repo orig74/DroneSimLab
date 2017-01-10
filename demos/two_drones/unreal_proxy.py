@@ -47,6 +47,7 @@ def main_loop(gworld):
         socket_pub.send_multipart([config.topic_unreal_state,b'main_loop'])
         yield
     drone_start_positions_unreal=[np.array(ph.GetActorLocation(drone_actor)) for drone_actor in drone_actors]
+    print('=======>',drone_start_positions_unreal)
     drone_start_positions_lon_lat=[None for _ in drone_actors]
 
     positions_struct=None
@@ -69,7 +70,7 @@ def main_loop(gworld):
                 #if iter_cnt==0:
                 #    import ipdb;ipdb.set_trace()
                 if (iter_cnt%10)==0:
-                    print('===>',dx,dy)
+                    print('===>',dx,dy,alt)
                 ph.SetActorLocation(drone_actors[drone_index],(dx,dy,alt))
                 ph.SetActorRotation(drone_actors[drone_index],(drone_pos['roll'],drone_pos['pitch'],drone_pos['yaw']))
             positions_struct=None
@@ -82,6 +83,8 @@ def main_loop(gworld):
                 cv2.imshow('drone camera %d'%drone_index,img)
                 cv2.waitKey(1)
         iter_cnt+=1
+        if iter_cnt%30:
+            socket_pub.send_multipart([config.topic_unreal_state,b'main_loop'])
 
 def kill():
     print('done!')
