@@ -35,8 +35,8 @@ def main_loop(gworld):
         print(p)
     print('-- textures --')
     drone_textures=[]
-    drone_textures.append(ph.GetTextureByName('/Game/TextureRenderTarget2D'))
-    drone_textures.append(ph.GetTextureByName('/Game/TextureRenderTarget2D_2'))
+    drone_textures.append(ph.GetTextureByName('/Game/TextureRenderTarget2D_0'))
+    drone_textures.append(ph.GetTextureByName('/Game/TextureRenderTarget2D_1'))
     drone_textures_down=[]
     drone_textures_down.append(ph.GetTextureByName('/Game/TextureRenderTarget2D_Down'))
     drone_textures_depth=[]
@@ -47,8 +47,8 @@ def main_loop(gworld):
         while 1:
             yield
     drone_actors=[]
-    drone_actors.append(ph.FindActorByName(gworld,'Parrot_Drone_6'))
-    drone_actors.append(ph.FindActorByName(gworld,'Parrot_Drone2'))
+    drone_actors.append(ph.FindActorByName(gworld,'Parrot_Drone_0'))
+    drone_actors.append(ph.FindActorByName(gworld,'Parrot_Drone_1'))
     if not all(drone_actors):
         print("Error, Could not find all drone actors")
         while 1:
