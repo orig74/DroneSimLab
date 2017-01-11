@@ -2,7 +2,7 @@
 SITL ArduCopter with Unreal Engine 4  
 
 ##building the DroneLab environment:
-please folow the [wiki](https://github.com/orig74/DroneLab/wiki)
+please follow the [wiki](https://github.com/orig74/DroneLab/wiki)
 
 ## Demo:  
 [Flying Drone](https://youtu.be/4dplKATTkMw)  
