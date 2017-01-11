@@ -1,0 +1,10 @@
+#!/usr/bin/python
+import os,re
+name=os.path.basename(os.path.abspath('.'))
+nvidia_version=re.search('\d+\.\d+',open('/proc/driver/nvidia/version').readlines()[0]).group()
+mgr=nvidia_version.split('.')[0]
+driver='nvidia-'+mgr
+print('building for nvidia driver '+driver)
+uid='%d'%os.getuid()
+os.system("docker build -t "+name+" --build-arg UID="+uid+" --build-arg GDRIVER="+driver+" .")
+
