@@ -1,6 +1,8 @@
 # vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4
 import zmq,pickle,time
+import struct
 import config
+
 if __name__!="__main__":
     from Wrappers import phandlers as ph
     import numpy as np
@@ -78,13 +80,18 @@ def main_loop(gworld):
             img=ph.GetTextureData(drone_textures[drone_index])
             img_down=ph.GetTextureData(drone_textures_down[drone_index])
             img_depth=ph.GetTextureData(drone_textures_depth[drone_index],channels=[2]) #depth data will be in red componnent
+            topics=[config.topic_unreal_drone_rgb_camera%drone_index,
+                    config.topic_unreal_drone_rgb_camera%drone_index+b'down',
+                    config.topic_unreal_drone_rgb_camera%drone_index+b'depth']
+            imgs=[  ph.GetTextureData(drone_textures[drone_index]),
+                    ph.GetTextureData(drone_textures_down[drone_index]),
+                    ph.GetTextureData(drone_textures_depth[drone_index],channels=[2])]
             if pub_cv:
-                topic=config.topic_unreal_drone_rgb_camera%drone_index
-                socket_pub.send_multipart([topic,pickle.dumps(img,-1)])
-                topic=config.topic_unreal_drone_rgb_camera%drone_index+b'down'
-                socket_pub.send_multipart([topic,pickle.dumps(img_down,-1)])
-                topic=config.topic_unreal_drone_rgb_camera%drone_index+b'depth'
-                socket_pub.send_multipart([topic,pickle.dumps(img_depth,-1)])
+                for topic,img in zip(topics,imgs):
+                    #socket_pub.send_multipart([topic,pickle.dumps(img,2)])
+                    #print('--->',img.shape)
+                    socket_pub.send_multipart([topic,struct.pack('lll',*img.shape),img.tostring()])
+
             if show_cv:
                 cv2.imshow('drone camera %d'%drone_index,img)
                 cv2.waitKey(1)

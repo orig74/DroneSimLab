@@ -57,8 +57,15 @@ RUN cd /opencv && mkdir build
 RUN cd /opencv/build && cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local \
   -D OPENCV_EXTRA_MODULES_PATH=/opencv_contrib/modules -D PYTHON3_PACKAGES_PATH=/usr/local/lib/python3.4/dist-packages .. && make -j4
 RUN cd /opencv/build && make install
-######################################################
+############sudo apt-get install ros-indigo-image-view##########################################
 # Some QT-Apps/Gazebo don't not show controls without this
+RUN apt-get install -y python-zmq
+RUN apt-get install -y python3-yaml
+RUN pip3 install rospkg
+RUN pip3 install catkin_pkg
+RUN apt-get -y update
+RUN apt-get -y install ros-indigo-image-view2
+RUN pip install msgpack-python
 ENV QT_X11_NO_MITSHM 1
 ARG UID=360154
 RUN useradd -u $UID docker

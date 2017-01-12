@@ -47,9 +47,6 @@ if 1 and __name__=="__main__":
             img=pickle.loads(msg)
             if 'depth' in topic:
                 cv2.imshow(topic,img)
-            elif 'depth' in topic:
-                gray_img=img
-                cv2.imshow(gray_img)
             else:
                 cv2.imshow(topic,cv2.resize(cv2.resize(img,(1024,1024)),(512,512)))
             cv2.waitKey(1)
