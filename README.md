@@ -1,8 +1,9 @@
 ## Wellcome To DroneLab
-SITL ArduCopter with Unreal Engine 4  
+Drone lab main perpose:  
+SITL ArduCopter and SITL PX4 combined with Unreal Engine 4  
 
 ##building the DroneLab environment:
-please folow the [wiki](https://github.com/orig74/DroneLab/wiki)
+please follow the [wiki](https://github.com/orig74/DroneLab/wiki)
 
 ## Demo:  
 [Flying Drone](https://youtu.be/4dplKATTkMw)  
