@@ -9,6 +9,13 @@ tmux kill-server
 docker ps -all |grep ros_image_indigo | awk -- '{ print $1 }' | xargs docker stop
 docker ps -all |grep ros_image_indigo | awk -- '{ print $1 }' | xargs docker rm 
 
+function set_catkin_env {
+tmux send-keys "tmux send-keys \"source /ros/catkin_mavros/devel/setup.bash\" ENTER" ENTER
+tmux send-keys 'tmux send-keys "ROS_PACKAGE_PATH=/ros/catkin_ws/src:$ROS_PACKAGE_PATH" ENTER' ENTER
+tmux send-keys 'tmux send-keys "cd /ros/catkin_ws && catkin_make" ENTER' ENTER
+
+}
+
 tmux new-session -d -s dronelab
 #tmux send-keys "python drone_main_mlink.py"
 tmux send-keys "cd ../../dockers/ros_image_indigo/ && ./run_image.sh " ENTER
@@ -29,13 +36,13 @@ tmux send-keys 'tmux send-keys "export SITL_POSITION_PORT=11341" ENTER' ENTER
 tmux send-keys 'tmux send-keys "make posix_sitl_default gazebo" ENTER' ENTER
 tmux send-keys 'tmux select-pane -t 0' ENTER
 #tmux send-keys "tmux send-keys \"source /ros/catkin_ws/devel/setup.bash\" ENTER" ENTER
-tmux send-keys "tmux send-keys \"source /ros/catkin_mavros/devel/setup.bash\" ENTER" ENTER
-tmux send-keys 'tmux send-keys "ROS_PACKAGE_PATH=/ros/catkin_ws/src:$ROS_PACKAGE_PATH" ENTER' ENTER
-tmux send-keys 'tmux send-keys "cd /ros/catkin_ws && catkin_make" ENTER' ENTER
+set_catkin_env
 tmux send-keys 'tmux send-keys "rosrun control_test offb2.py"' ENTER
 tmux send-keys 'tmux split-window -v' ENTER
-tmux send-keys 'tmux send-keys "cd /DroneLab/demos/px4_gazebo/" ENTER' ENTER
-tmux send-keys 'tmux send-keys "python3 unreal_sensor_receiver.py" ENTER' ENTER
+set_catkin_env
+tmux send-keys 'tmux send-keys "rosrun control_test ue4_bridge.py" ENTER' ENTER
+tmux send-keys 'tmux split-window -v' ENTER
+tmux send-keys 'tmux send-keys "rosrun image_view image_view image:=rgb_camera_0" ENTER' ENTER
 tmux send-keys 'tmux split-window -v' ENTER
 tmux send-keys 'tmux send-keys "cd /DroneLab/demos/px4_gazebo/" ENTER' ENTER
 tmux send-keys 'tmux send-keys "python3 fdm_pub.py" ENTER' ENTER

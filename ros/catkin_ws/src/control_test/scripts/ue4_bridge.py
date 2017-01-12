@@ -38,7 +38,7 @@ def listener():
             #rospy.loginfo(rospy.get_caller_id() + ' got topic %s', topic)
             topic=topic.decode()
             if topic not in publishers:
-                publishers[topic]=rospy.Publisher(topic,Image)
+                publishers[topic]=rospy.Publisher(topic,Image,queue_size=2)
             #import pdb;pdb.set_trace()
             shape=struct.unpack('lll',shape)
             img=np.fromstring(data,'uint8').reshape(shape)
