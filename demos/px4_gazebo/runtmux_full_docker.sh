@@ -37,7 +37,8 @@ tmux send-keys 'tmux send-keys "make posix_sitl_default gazebo" ENTER' ENTER
 tmux send-keys 'tmux select-pane -t 0' ENTER
 #tmux send-keys "tmux send-keys \"source /ros/catkin_ws/devel/setup.bash\" ENTER" ENTER
 set_catkin_env
-tmux send-keys 'tmux send-keys "rosrun control_test offb2.py"' ENTER
+tmux send-keys 'tmux send-keys "cd /DroneLab/demos/px4_gazebo/" ENTER' ENTER
+tmux send-keys 'tmux send-keys ./run_rosmain.sh' ENTER
 tmux send-keys 'tmux split-window -v' ENTER
 set_catkin_env
 tmux send-keys 'tmux send-keys "rosrun control_test ue4_bridge.py" ENTER' ENTER

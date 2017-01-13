@@ -31,7 +31,7 @@ def listener():
     #for _ in range(10):
     #    rate.sleep()
     newvel=PositionTarget()
-    newvel.velocity.x=0.5
+    newvel.velocity.x=-0.5
     newvel.yaw=-90.0/180.0*3.142
     newvel.type_mask=newvel.FRAME_LOCAL_NED | newvel.IGNORE_AFX | newvel.IGNORE_AFY |newvel.IGNORE_AFZ
     newvel.type_mask=newvel.type_mask | newvel.IGNORE_PX | newvel.IGNORE_PY | newvel.IGNORE_PZ
@@ -58,7 +58,7 @@ def listener():
         elif dt<40 :
             local_posi_raw_pub.publish(newvel); 
         elif dt<60 :
-            newvel.velocity.x=-0.5
+            newvel.velocity.x=0.5
             local_posi_raw_pub.publish(newvel); 
         else:
             newpos.pose.position.z=0

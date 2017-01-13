@@ -65,7 +65,8 @@ RUN pip3 install rospkg
 RUN pip3 install catkin_pkg
 RUN apt-get -y update
 RUN apt-get -y install ros-indigo-image-view2
-RUN pip install msgpack-python
+RUN apt-get -y install wmctrl xdotool
+#RUN pip install msgpack-python
 ENV QT_X11_NO_MITSHM 1
 ARG UID=360154
 RUN useradd -u $UID docker
