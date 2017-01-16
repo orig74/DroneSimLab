@@ -33,6 +33,10 @@ tmux send-keys 'tmux send-keys "roslaunch mavros px4.launch fcu_url:=\"udp://:14
 tmux send-keys 'tmux select-pane -t 1' ENTER
 tmux send-keys 'tmux send-keys "cd /DroneLab/PX4/Firmware" ENTER' ENTER 
 tmux send-keys 'tmux send-keys "export SITL_POSITION_PORT=11341" ENTER' ENTER 
+
+#remark the nexline to load gazebo gui client for debug prpose
+tmux send-keys 'tmux send-keys "export HEADLESS=True" ENTER' ENTER
+
 tmux send-keys 'tmux send-keys "make posix_sitl_default gazebo" ENTER' ENTER
 tmux send-keys 'tmux select-pane -t 0' ENTER
 #tmux send-keys "tmux send-keys \"source /ros/catkin_ws/devel/setup.bash\" ENTER" ENTER
