@@ -7,3 +7,6 @@
 [submodule "ardupilot"]
 	path = ardupilot
 	url = https://github.com/orig74/ardupilot
+[submodule "UE4PyhtonBridge"]
+	path = UE4PyhtonBridge
+	url = https://github.com/orig74/UE4PyhtonBridge
