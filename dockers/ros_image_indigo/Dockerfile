@@ -40,7 +40,7 @@ RUN apt-get -y install protobuf-compiler
 RUN apt-get -y install vim terminator 
 RUN apt-get -y install ros-indigo-control-toolbox
 RUN apt-get -y install openssl libssl-dev
-RUN apt-get -y install wget tmux 
+RUN apt-get -y install wget
 RUN pip install ipdb rpdb
 RUN apt-get -y install python3-pip 
 RUN pip3 install pyzmq
@@ -66,6 +66,12 @@ RUN pip3 install catkin_pkg
 RUN apt-get -y update
 RUN apt-get -y install ros-indigo-image-view2
 RUN apt-get -y install wmctrl xdotool
+#### tmux new version
+RUN apt-get -y install libevent1-dev libncurses5-dev
+ENV LC_CTYPE=C.UTF-8
+RUN cd /tmp && git clone https://github.com/tmux/tmux.git && cd tmux && git checkout tags/2.3
+RUN apt-get -y install automake
+RUN cd /tmp/tmux && sh ./autogen.sh && ./configure && make install
 #RUN pip install msgpack-python
 ENV QT_X11_NO_MITSHM 1
 ARG UID=360154
