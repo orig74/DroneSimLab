@@ -7,10 +7,10 @@ from cv_bridge import CvBridge, CvBridgeError
 from sensor_msgs.msg import Image
 import zmq
 import struct
-import cv2
+import cv2,os
 import numpy as np
 
-sys.path.append("/DroneLab/demos/px4_gazebo")
+sys.path.append(os.environ['UNREAL_PROXY_PATH'])
 import config
 
 context = zmq.Context()

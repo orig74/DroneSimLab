@@ -6,6 +6,7 @@ tmux split-window -h
 tmux split-window -v
 tmux send-keys "printf '\033]2;roscore\033\\'" ENTER 
 tmux send-keys roscore ENTER
+sleep 3
 tmux split-window -v
 tmux send-keys "printf '\033]2;mavros\033\\'" ENTER
 tmux send-keys "source /DroneLab/scripts/install_mavros.sh" ENTER
@@ -24,11 +25,12 @@ tmux send-keys "make posix_sitl_default gazebo" ENTER
 #tmux set -w pane-border-format "#{pane_index} gazebo"
 tmux select-pane -t 0
 tmux send-keys "printf '\033]2;catkin window\033\\'" ENTER
-tmux send-keys "source /DroneLab/scripts/set_catkin_enc.sh" ENTER
-tmux send-keys "cd /DroneLab/demos/px4_gazebo/" ENTER
+tmux send-keys "source /DroneLab/scripts/set_catkin_env.sh" ENTER
+tmux send-keys "$ROS_MAIN_SCRIPT" ENTER
+#tmux send-keys "cd /DroneLab/demos/px4_gazebo/" ENTER
 #tmux send-keys "./run_rosmain.sh" ENTER
 tmux split-window -v
-tmux send-keys "source /DroneLab/scripts/set_catkin_enc.sh" ENTER
+tmux send-keys "source /DroneLab/scripts/set_catkin_env.sh" ENTER
 tmux send-keys "printf '\033]2;catkin window\033\\'" ENTER
 #tmux send-keys "rosrun control_test ue4_bridge.py" ENTER
 tmux split-window -v
@@ -36,8 +38,8 @@ tmux send-keys "printf '\033]2;catkin window\033\\'" ENTER
 #tmux send-keys "rosrun image_view image_view image:=rgb_camera_0" ENTER
 tmux split-window -v
 tmux send-keys "printf '\033]2;fdm zmq publish to ue4\033\\'" ENTER
-tmux send-keys "cd /DroneLab/demos/px4_gazebo/" ENTER
-tmux send-keys "python3 fdm_pub.py" ENTER
+tmux send-keys "cd /DroneLab/scripts/" ENTER
+tmux send-keys "python3 fdm_pub_px4_gazebo.py --config_path=$UNREAL_PROXY_PATH" ENTER
 #tmux set -w pane-border-format "#{pane_index} sending fdm to unreal engine"
 tmux select-pane -t 0
 tmux set -g pane-border-format "#{pane_index} #T"

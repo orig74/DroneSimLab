@@ -1,11 +1,17 @@
 # vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4
-import config
 import socket
 import pickle
 import zmq
 import sys
 import asyncio
 import numpy as np
+import argparse,imp
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--config_path", help="config.py file path")
+args = parser.parse_args()
+
+config=imp.load_module("config",*imp.find_module('config',[args.config_path]))
 
 context = zmq.Context()
 position_struct={}
