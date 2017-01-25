@@ -1,5 +1,5 @@
 #!/bin/bash
-PROJECT_NAME=testprj7_14_4
+GAME_PATH=/project_files/testprj7_14_4/out/LinuxNoEditor
 DOCKER_IMAGE=ros_image_indigo
 DEMO_PATH=/DroneLab/demos/px4_gazebo/
 
@@ -8,6 +8,7 @@ tmux kill-server
 source ../../scripts/common.sh
 
 kill_images ros_image_indigo
+kill_images python3_dev
 tmux new-session -d -s dronelab
 
 tmux send-keys "cd ../../dockers/ros_image_indigo/ && ./run_image.sh " ENTER
@@ -17,9 +18,9 @@ tmux send-keys "source /DroneLab/scripts/run_tmux_ros_px4.sh" ENTER
 #run_inside_script "./run_rosmain.sh"
 
 tmux new-window -n unreal
-tmux send-keys "cd ../../dockers/unreal_engine_4 && ./attach.sh" ENTER
-tmux send-keys "cd /project_files/${PROJECT_NAME}" ENTER
-tmux send-keys "./run.sh"
+tmux send-keys "cd ../../dockers/python3_dev && ./run_image.sh" ENTER
+tmux send-keys "cd ${GAME_PATH}" ENTER
+tmux send-keys "./run.sh" ENTER
 
 tmux select-window -t 0
 tmux att
