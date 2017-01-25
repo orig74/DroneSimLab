@@ -20,7 +20,7 @@ tmux send-keys "source /DroneLab/scripts/run_tmux_ros_px4.sh" ENTER
 tmux new-window -n unreal
 tmux send-keys "cd ../../dockers/python3_dev && ./run_image.sh" ENTER
 tmux send-keys "cd ${GAME_PATH}" ENTER
-tmux send-keys "./run.sh" ENTER
+tmux send-keys "DISPLAY=:0.0 ./run.sh" ENTER
 
 tmux select-window -t 0
 tmux att
