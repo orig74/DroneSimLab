@@ -16,3 +16,4 @@ demos/common/_fdm.c
 ros/catkin_ws/.catkin_workspace
 *.pyc
 __pycache__
+baked_games
