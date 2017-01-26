@@ -4,7 +4,7 @@ SITL ArduCopter and SITL PX4 combined with Unreal Engine 4
 The Drone lab also supports ROS integration. The unreal video is published as ROS sensors.  
 
 ##building the DroneSimLab environment:
-please follow the [wiki](/orig74/DroneSimLab/wiki)
+please follow the [wiki](https://github.com/orig74/DroneSimLab/wiki)
 
 ## Demo:  
 [Flying Drone](https://youtu.be/4dplKATTkMw)  
