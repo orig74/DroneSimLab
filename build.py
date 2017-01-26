@@ -1,9 +1,17 @@
 #!/usr/bin/env python3
 # vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4
-import os
+import os,sys
+import argparse
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--skip_ue4_editor", help="skip install and build unreal engine editor",default=False,action='store_true')
+args = parser.parse_args()
+
+print('skip unreal engine option =',args.skip_ue4_editor)
 ###params 
-
+req_docker_images=['ros_image_indigo','python3_dev','sitl_image']
+if not args.skip_ue4_editor:
+    req_docker_images.append('unreal_engine_4')
 
 
 ## TODO: check prerequisits
@@ -15,6 +23,13 @@ games_path='https://studweb.cosc.canterbury.ac.nz/~oga13/ue4_games/'
 games_names=['game_demo']
 
 print("update submodules...")
+
+submodules=map(lambda x:x.split('=')[1].strip(),os.popen('grep path .gitmodules').readlines())
+for submodule in submodules:
+    if args.skip_ue4_editor and 'UnrealEngine' in submodule:
+        continue
+    print('updating submodule:', submodule)
+    assert(os.system("git submodule update --init --recursive "+submodule)==0)
 
 print("downloading baked games...")
 
@@ -34,15 +49,12 @@ for game_name in games_names:
 
 print("building docker images...")
 
-assert(os.system("docker images > /dev/null")==0)) #just to see if have the right preveliges
+assert(os.system("docker images > /dev/null")==0) #just to see if have the right preveliges
 current_docker_images=map(lambda x:x.strip(),os.popen('docker images |cut -d" " -f 1').readlines())
 
-#os.system('curl -o baked_games/game_demo.md5 '+games_path+game_demo.md5)
+for docker_image in req_docker_images:
+    if docker_image not in current_docker_images:
+        print('building image ',docker_image)
+        assert(os.system('cd dockers/'+docker_image+' && ./build')==0) 
 
-## TODO: check if game_demo.tgz exists and if md5 sum ok other wize download
-#os.system('curl -o baked_games/game_demo.md5 '+games_path+game_demo.md5)
-## TODO: check md5sum again
-
-## TODO: build docker images if neccessy
-
-
+print("done!")
