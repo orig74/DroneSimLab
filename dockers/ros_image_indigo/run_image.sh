@@ -25,7 +25,7 @@ docker run -it --rm --name ros_indigo \
 -e HOME=/home/docker \
 -u $UID \
 --privileged \
-ros_image_indigo "/bin/bash"
+ros_image_indigo "/bin/bash" $@
 
 #--net host \
 #make posix_sitl_default jmavsim

@@ -73,6 +73,8 @@ RUN cd /tmp && git clone https://github.com/tmux/tmux.git && cd tmux && git chec
 RUN apt-get -y install automake
 RUN cd /tmp/tmux && sh ./autogen.sh && ./configure && make install
 #RUN pip install msgpack-python
+
+RUN apt-get -y install ros-indigo-mavros ros-indigo-mavros-extras
 ENV QT_X11_NO_MITSHM 1
 ARG UID=360154
 RUN useradd -u $UID docker

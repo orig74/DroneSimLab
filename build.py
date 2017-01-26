@@ -57,4 +57,9 @@ for docker_image in req_docker_images:
         print('building image ',docker_image)
         assert(os.system('cd dockers/'+docker_image+' && ./build')==0) 
 
+print("install ros...")
+#if not os.path.isdir('ros/catkin_mavros'):
+#    os.mkdir('ros/catkin_mavros')
+assert(os.system('''cd dockers/ros_image_indigo && ./run_image.sh '-c "/DroneLab/scripts/make_catkin.sh"' ''')==0)
+
 print("done!")
