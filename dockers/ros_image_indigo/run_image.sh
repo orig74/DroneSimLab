@@ -7,8 +7,8 @@ echo "----------------"
 echo $DRONE_LAB_DIR
 
 ## 
-echo "if you get errors like docker: Error response from daemon: mkdir ....: permission denied."
-echo "try to 'chmod o+x thedir' and the ../"
+#echo "if you get errors like docker: Error response from daemon: mkdir ....: permission denied."
+#echo "try to 'chmod o+x thedir' and the ../"
 
 chmod o+x $DRONE_LAB_DIR
 chmod o+x $DRONE_LAB_DIR/dockers
