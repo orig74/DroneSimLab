@@ -1,5 +1,12 @@
 #!/bin/bash
-GAME_PATH=/project_files/testprj7_14_4/out/LinuxNoEditor
+
+#game defenitions
+GAME_PATH=/DroneLab/baked_games/game_demo/LinuxNoEditor/
+ENTRY_POINT=unreal_proxy
+ENTRY_PATH=../unreal_proxies/two_drones/
+PACKED_NAME=testprj7_14_4
+
+
 DOCKER_IMAGE=ros_image_indigo
 DEMO_PATH=/DroneLab/demos/px4_gazebo/
 
@@ -19,6 +26,8 @@ tmux send-keys "source /DroneLab/scripts/run_tmux_ros_px4.sh" ENTER
 
 tmux new-window -n unreal
 tmux send-keys "cd ../../dockers/python3_dev && ./run_image.sh" ENTER
+tmux send-keys "cd ${DEMO_PATH}" ENTER
+tmux send-keys "python3 ../../UE4PyhtonBridge/set_path.py --entry_point $ENTRY_POINT --entry_path $ENTRY_PATH --packed_game_name $PACKED_NAME --packed_game_path $GAME_PATH" ENTER
 tmux send-keys "cd ${GAME_PATH}" ENTER
 tmux send-keys "DISPLAY=:0.0 ./run.sh" ENTER
 
