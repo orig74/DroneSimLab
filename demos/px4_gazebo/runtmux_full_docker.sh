@@ -8,6 +8,7 @@ tmux kill-server
 source ../../scripts/common.sh
 
 kill_images ros_image_indigo
+kill_images python3_dev
 tmux new-session -d -s dronelab
 
 tmux send-keys "cd ../../dockers/ros_image_indigo/ && ./run_image.sh " ENTER

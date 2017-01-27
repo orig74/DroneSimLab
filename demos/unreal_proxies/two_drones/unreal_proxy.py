@@ -67,6 +67,7 @@ def main_loop(gworld):
             yield
     
     for _ in range(10): #need to send it a few time don't know why.
+        print('sending state main loop')
         socket_pub.send_multipart([config.topic_unreal_state,b'main_loop'])
         yield
     drone_start_positions=[np.array(ph.GetActorLocation(drone_actor)) for drone_actor in drone_actors]
@@ -78,6 +79,8 @@ def main_loop(gworld):
             while len(zmq.select([socket_sub],[],[],0)[0])>0:
                 topic, msg = socket_sub.recv_multipart()
                 positions[drone_index]=pickle.loads(msg)
+                print('-----',positions[drone_index])
+
             position=positions[drone_index] 
             if position is not None:
                 new_pos=drone_start_positions[drone_index]+np.array([position['posx'],position['posy'],position['posz']])*100 #turn to cm
@@ -87,20 +90,35 @@ def main_loop(gworld):
         yield
         for drone_index in range(config.n_drones):
             #img=cv2.resize(ph.GetTextureData(drone_textures[drone_index]),(1024,1024),cv2.INTER_LINEAR)
+            topics=[]
+            imgs=[]
+
             img=ph.GetTextureData(drone_textures[drone_index])
-            img_down=ph.GetTextureData(drone_textures_down[drone_index])
-            img_depth=ph.GetTextureData(drone_textures_depth[drone_index],channels=[2]) #depth data will be in red componnent
-            topics=[config.topic_unreal_drone_rgb_camera%drone_index,
-                    config.topic_unreal_drone_rgb_camera%drone_index+b'down',
-                    config.topic_unreal_drone_rgb_camera%drone_index+b'depth']
-            imgs=[  ph.GetTextureData(drone_textures[drone_index]),
-                    ph.GetTextureData(drone_textures_down[drone_index]),
-                    ph.GetTextureData(drone_textures_depth[drone_index],channels=[2])]
+            topics.append(config.topic_unreal_drone_rgb_camera%drone_index)
+            imgs.append(img)
+
+            if drone_index<len(drone_textures_down):
+                img_down=ph.GetTextureData(drone_textures_down[drone_index])
+                topics.append(config.topic_unreal_drone_rgb_camera%drone_index+b'down')
+                imgs.append(img_down)
+            
+            if drone_index<len(drone_textures_depth):
+                img_depth=ph.GetTextureData(drone_textures_depth[drone_index],channels=[2]) #depth data will be in red componnent
+                topics.append(config.topic_unreal_drone_rgb_camera%drone_index+b'depth')
+                imgs.append(img_depth)
+            
+            #topics=[config.topic_unreal_drone_rgb_camera%drone_index,
+            #        config.topic_unreal_drone_rgb_camera%drone_index+b'down',
+            #        config.topic_unreal_drone_rgb_camera%drone_index+b'depth']
+            #imgs=[  ph.GetTextureData(drone_textures[drone_index]),
+            #        ph.GetTextureData(drone_textures_down[drone_index]),
+            #        ph.GetTextureData(drone_textures_depth[drone_index],channels=[2])]
             if pub_cv:
                 for topic,img in zip(topics,imgs):
                     #socket_pub.send_multipart([topic,pickle.dumps(img,2)])
                     #print('--->',img.shape)
-                    socket_pub.send_multipart([topic,struct.pack('lll',*img.shape),img.tostring()])
+                    #socket_pub.send_multipart([topic,struct.pack('lll',*img.shape),img.tostring()])
+                    socket_pub.send_multipart([topic,pickle.dumps(img,-1)])
 
             if show_cv:
                 cv2.imshow('drone camera %d'%drone_index,img)

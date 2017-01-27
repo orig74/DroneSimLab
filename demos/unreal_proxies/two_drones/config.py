@@ -9,4 +9,4 @@ zmq_pub_unreal_proxy=('172.17.0.1',5577)
 topic_unreal_state=b'unreal_state'
 topic_unreal_drone_rgb_camera=b'rgb_camera_%d'
 
-n_drones=1
+n_drones=2
