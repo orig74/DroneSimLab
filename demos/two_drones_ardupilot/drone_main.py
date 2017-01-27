@@ -12,6 +12,7 @@ import shutil
 import hsv_track
 import sys
 import demo_config
+import struct
 show_cv=True
 
 sys.path.append(os.environ['UNREAL_PROXY_PATH'])
@@ -145,12 +146,17 @@ pos=None
 while True:
     mav1.recv_msg()
     while(len(zmq.select([socket_sub],[],[],0)[0])>0):
-        topic, msg = socket_sub.recv_multipart()
+        data= socket_sub.recv_multipart()
+        topic=data[0]
         if topic==config.topic_unreal_state:
             #print('got unreal engine state:',msg)
-            unreal_state=msg
+            unreal_state=data[1]
         if topic==(config.topic_unreal_drone_rgb_camera%drone_num):
-            img=cv2.resize(pickle.loads(msg),(512,512))
+            #img=pickle.loads(msg)
+            shape=struct.unpack('lll',data[1])
+            img=np.fromstring(data[2],'uint8').reshape(shape)
+            img=cv2.resize(img,(512,512))
+
             if show_cv:
                 cv2.imshow('Drone %d'%drone_num,hsv_track.find_red(img))
                 cv2.waitKey(1)

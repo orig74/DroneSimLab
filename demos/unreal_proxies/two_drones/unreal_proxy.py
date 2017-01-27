@@ -117,8 +117,8 @@ def main_loop(gworld):
                 for topic,img in zip(topics,imgs):
                     #socket_pub.send_multipart([topic,pickle.dumps(img,2)])
                     #print('--->',img.shape)
-                    #socket_pub.send_multipart([topic,struct.pack('lll',*img.shape),img.tostring()])
-                    socket_pub.send_multipart([topic,pickle.dumps(img,-1)])
+                    socket_pub.send_multipart([topic,struct.pack('lll',*img.shape),img.tostring()])
+                    #socket_pub.send_multipart([topic,pickle.dumps(img,-1)])
 
             if show_cv:
                 cv2.imshow('drone camera %d'%drone_index,img)
