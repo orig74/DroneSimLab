@@ -75,9 +75,14 @@ RUN cd /tmp/tmux && sh ./autogen.sh && ./configure && make install
 #RUN pip install msgpack-python
 
 RUN apt-get -y install ros-indigo-mavros ros-indigo-mavros-extras
+
+#to enable copy paste in tmux mouse on https://coderwall.com/p/4b0d0a/how-to-copy-and-paste-with-tmux-on-ubuntu
+RUN apt-get -y install xclip
+
 ENV QT_X11_NO_MITSHM 1
 ARG UID=360154
 RUN useradd -u $UID docker
 RUN echo "docker:docker" | chpasswd
 RUN echo "docker ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers 
 #RUN echo "docker:*:360154:9500:docker:/home/docker:/bin/bash >> /etc/passwd-"
+

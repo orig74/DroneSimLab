@@ -40,6 +40,10 @@ RUN PATH=/miniconda/bin conda install -c https://conda.binstar.org/menpo opencv3
 RUN apt-get -y install build-essential
 RUN PATH=/miniconda/bin:$PATH pip install pymavlink
 
+#https://coderwall.com/p/4b0d0a/how-to-copy-and-paste-with-tmux-on-ubuntu
+RUN apt-get -y install xclip
+
+
 ### normal user settings
 ARG UID
 RUN useradd -u $UID docker
