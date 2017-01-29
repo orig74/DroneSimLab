@@ -29,5 +29,6 @@ init_drone 1
 
 #tmux send-keys "./run.sh" ENTER 
 #tmux select-window -t 0
+tmux set -g mouse on
 tmux att
 

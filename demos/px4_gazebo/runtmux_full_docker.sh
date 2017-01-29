@@ -23,5 +23,6 @@ tmux send-keys "cd /project_files/${PROJECT_NAME}" ENTER
 tmux send-keys "./run.sh"
 
 tmux select-window -t 0
+tmux set -g mouse on
 tmux att
 

@@ -32,5 +32,6 @@ tmux send-keys "cd ${GAME_PATH}" ENTER
 tmux send-keys "DISPLAY=:0.0 ./run.sh" ENTER
 
 tmux select-window -t 0
+tmux set -g mouse on
 tmux att
 
