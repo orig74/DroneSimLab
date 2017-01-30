@@ -21,13 +21,13 @@ import config
 drone_num=int(os.environ['DRONE_NUM'])
 #drone_num=0
 print('I am mother ',drone_num)
-#save_path='/tmp/drone_images%d'%drone_num
-save_path=None
+save_path='/tmp/drone_images'
+#save_path=None
 
 
 if save_path is not None:
-    #if os.path.isdir(save_path):
-    #    shutil.rmtree(save_path)
+    if os.path.isdir(save_path):
+        shutil.rmtree(save_path)
     os.mkdir(save_path)
 
 topic_postition=config.topic_sitl_position_report
@@ -108,11 +108,11 @@ def mission_thread():
         yield
     print('--1--')
     set_rcs(1500,1600,1500,1500)
-    for i in range(5):
+    for i in range(25):
         yield
     print('--2--')
     set_rcs(1500,1400,1500,1500)
-    for i in range(5):
+    for i in range(25):
         yield
     print('--3-')
     set_rcs(1500,1500,1300,1500)
