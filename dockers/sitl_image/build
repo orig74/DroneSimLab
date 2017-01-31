@@ -2,5 +2,7 @@
 import os
 name=os.path.basename(os.path.abspath('.'))
 uid='%d'%os.getuid()
+cmd="docker build -t "+name+" --build-arg UID="+uid+" ."
+print('running: ',cmd)
 os.system("docker build -t "+name+" --build-arg UID="+uid+" .")
 

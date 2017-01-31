@@ -79,7 +79,7 @@ def main_loop(gworld):
             while len(zmq.select([socket_sub],[],[],0)[0])>0:
                 topic, msg = socket_sub.recv_multipart()
                 positions[drone_index]=pickle.loads(msg)
-                print('-----',positions[drone_index])
+                #print('-----',positions[drone_index])
 
             position=positions[drone_index] 
             if position is not None:
