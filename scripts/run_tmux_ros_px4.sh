@@ -39,7 +39,7 @@ tmux send-keys "rosrun image_view image_view image:=rgb_camera_0" ENTER
 tmux split-window -v
 tmux send-keys "printf '\033]2;fdm zmq publish to ue4\033\\'" ENTER
 tmux send-keys "cd /DroneLab/scripts/" ENTER
-tmux send-keys "python3 fdm_pub_px4_gazebo.py --config_path=$UNREAL_PROXY_PATH" ENTER
+tmux send-keys "PATH=/miniconda/bin python fdm_pub_px4_gazebo.py --config_path=$UNREAL_PROXY_PATH" ENTER
 #tmux set -w pane-border-format "#{pane_index} sending fdm to unreal engine"
 tmux select-pane -t 0
 tmux set -g pane-border-format "#{pane_index} #T"

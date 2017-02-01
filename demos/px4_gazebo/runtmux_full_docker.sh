@@ -7,7 +7,7 @@ DEMO_PATH=/DroneLab/demos/px4_gazebo/
 tmux kill-server
 source ../../scripts/common.sh
 
-kill_images ros_image_indigo
+kill_images ros_indigo
 kill_images python3_dev
 tmux new-session -d -s dronelab
 
