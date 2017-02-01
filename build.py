@@ -34,7 +34,7 @@ for submodule in submodules:
 print("downloading baked games...")
 
 for game_name in games_names:
-    md5=os.popen('curl '+games_path+'game_demo.md5').read().split()[0]
+    md5=os.popen('curl '+games_path+game_name+'.md5').read().split()[0]
     assert(len(md5)==32)
     game_local_dir='baked_games/'+game_name
     if not os.path.isdir(game_local_dir):
