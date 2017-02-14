@@ -1,0 +1,10 @@
+<launch>
+
+  <node pkg="image_view" name="image_view1" type="image_view">
+    <remap from="image"  to="rgb_camera_0" />
+  </node>
+  <node pkg="image_view" name="image_view2" type="image_view">
+    <remap from="image"  to="rgb_camera_0depth_range_mm" />
+  </node>
+
+</launch>

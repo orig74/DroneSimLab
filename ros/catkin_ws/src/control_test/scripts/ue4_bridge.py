@@ -20,8 +20,8 @@ zmq_sub.connect(addr)
 topic=(config.topic_unreal_drone_rgb_camera.decode()%0).encode()#had to do encode decode for python version earlier then 3.5
 print('topic is',topic)
 zmq_sub.setsockopt(zmq.SUBSCRIBE,topic)
-zmq_sub.setsockopt(zmq.SUBSCRIBE,topic+b'down') 
-zmq_sub.setsockopt(zmq.SUBSCRIBE,topic+b'depth') 
+zmq_sub.setsockopt(zmq.SUBSCRIBE,topic+b'down')
+zmq_sub.setsockopt(zmq.SUBSCRIBE,topic+b'depth')
 cvshow=False
 cvbridge=CvBridge()
 
@@ -37,21 +37,51 @@ def listener():
             topic, shape, data = zmq_sub.recv_multipart()
             #rospy.loginfo(rospy.get_caller_id() + ' got topic %s', topic)
             topic=topic.decode()
+            #rospy.loginfo('topic is..%s',topic)
             if topic not in publishers:
-                publishers[topic]=rospy.Publisher(topic,Image,queue_size=2)
+                if 'depth' not in topic:
+                    publishers[topic]=rospy.Publisher(topic,Image,queue_size=2)
+                else:
+                    publishers[topic+'_rgb8']=rospy.Publisher(topic+'_rgb8',Image,queue_size=2)
+                    publishers[topic+'_range_mm']=rospy.Publisher(topic+'_range_mm',Image,queue_size=2)
+
             #import pdb;pdb.set_trace()
             shape=struct.unpack('lll',shape)
-            img=np.fromstring(data,'uint8').reshape(shape)
             if 'depth' not in topic:
+                img=np.fromstring(data,'uint8').reshape(shape)
                 publishers[topic].publish(cvbridge.cv2_to_imgmsg(img,'bgr8'))
+            else:
+                #img is in the format of RGBA A store depth in cm and all in float16 format
+                img=np.fromstring(data,'float16').reshape(shape)
+                img_max_val = 5.0 #assuming I right
+                depth_camera_img_rgb = (img[:,:,[2,1,0]].clip(0,img_max_val)/img_max_val*255).astype('uint8')
+                publishers[topic+'_rgb8'].publish(cvbridge.cv2_to_imgmsg(depth_camera_img_rgb,'bgr8'))
+
+                #conversions to be compatible with intel realsense camera
+                depth_err_val=65504
+                depth_img_f16=img[:,:,3]
+                #max_distance=64#m
+                depth_img_f16[depth_img_f16==depth_err_val]=0
+                depth_final_mm=(depth_img_f16*10).astype('uint16') #cm to mm
+                publishers[topic+'_range_mm'].publish(cvbridge.cv2_to_imgmsg(depth_final_mm,'mono16'))
+
             if cvshow:
                 if 'depth' in topic:
-                    cv2.imshow(topic,img)
+                    clip_dist_cm=30*100
+                    aaa=img.max()
+                    inds2=img==aaa
+                    img=img.clip(0,clip_dist_cm)
+                    #img=np.fromstring(data,'uint8').reshape(shape)
+                    rospy.loginfo('maxmin %f %f'%(img.max(),img.min()))
+                    img=img.astype('float')/clip_dist_cm*255
+                    img[inds2]=255
+                    #import pdb;pdb.set_trace()
+                    cv2.imshow(topic,img.astype('uint8'))
                 else:
                     cv2.imshow(topic,cv2.resize(cv2.resize(img,(1024,1024)),(512,512)))
                 cv2.waitKey(1)
         rate.sleep()
 
-       
+
 if __name__ == '__main__':
     listener()

@@ -65,7 +65,7 @@ def main_loop(gworld):
         print("Error, Could not find all drone actors")
         while 1:
             yield
-    
+
     for _ in range(10): #need to send it a few time don't know why.
         print('sending state main loop')
         socket_pub.send_multipart([config.topic_unreal_state,b'main_loop'])
@@ -81,7 +81,7 @@ def main_loop(gworld):
                 positions[drone_index]=pickle.loads(msg)
                 #print('-----',positions[drone_index])
 
-            position=positions[drone_index] 
+            position=positions[drone_index]
             if position is not None:
                 new_pos=drone_start_positions[drone_index]+np.array([position['posx'],position['posy'],position['posz']])*100 #turn to cm
                 ph.SetActorLocation(drone_actor,new_pos)
@@ -101,12 +101,13 @@ def main_loop(gworld):
                 img_down=ph.GetTextureData(drone_textures_down[drone_index])
                 topics.append(config.topic_unreal_drone_rgb_camera%drone_index+b'down')
                 imgs.append(img_down)
-            
+
             if drone_index<len(drone_textures_depth):
-                img_depth=ph.GetTextureData(drone_textures_depth[drone_index],channels=[2]) #depth data will be in red componnent
+                img_depth=ph.GetTextureData16f(drone_textures_depth[drone_index],channels=[0,1,2,3]) #depth data will be in A componnent
+                #img_depth=ph.GetTextureData(drone_textures_depth[drone_index],channels=[2]) #depth data will be in red componnent
                 topics.append(config.topic_unreal_drone_rgb_camera%drone_index+b'depth')
                 imgs.append(img_depth)
-            
+
             #topics=[config.topic_unreal_drone_rgb_camera%drone_index,
             #        config.topic_unreal_drone_rgb_camera%drone_index+b'down',
             #        config.topic_unreal_drone_rgb_camera%drone_index+b'depth']
@@ -141,4 +142,3 @@ if __name__=="__main__":
             while len(zmq.select([socket_sub],[],[],0)[0])>0:
                 topic, msg = socket_sub.recv_multipart()
                 print("got ",topic)
-
