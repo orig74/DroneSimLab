@@ -32,7 +32,7 @@ tmux send-keys "$ROS_MAIN_SCRIPT" ENTER
 tmux split-window -v
 tmux send-keys "source /DroneLab/scripts/set_catkin_env.sh" ENTER
 tmux send-keys "printf '\033]2;catkin window\033\\'" ENTER
-tmux send-keys "rosrun control_test ue4_bridge.py" ENTER
+tmux send-keys "rosrun ue4_bridge ue4_bridge.py" ENTER
 tmux split-window -v
 tmux send-keys "printf '\033]2;catkin window\033\\'" ENTER
 #tmux send-keys "rosrun image_view image_view image:=rgb_camera_0" ENTER
