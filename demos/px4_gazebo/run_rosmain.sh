@@ -1,6 +1,4 @@
 #!/bin/bash
-tmux send-keys -t 1 "rosrun control_test ue4_bridge.py" ENTER
-#tmux send-keys -t 2 "rosrun image_view image_view image:=rgb_camera_0" ENTER
 sleep 3
 tmux send-keys -t 2 "cd /DroneLab/demos/px4_gazebo && roslaunch ./image_view.launch" ENTER
 sleep 1
