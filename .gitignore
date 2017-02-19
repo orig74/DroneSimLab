@@ -10,10 +10,7 @@ dockers/docker_home/.ros
 dockers/docker_home/.sdformat
 dockers/docker_home/.bash_history
 dockers/docker_home/.python_history
-ros/catkin_ws/build
-ros/catkin_ws/devel
 demos/common/_fdm.c
-ros/catkin_ws/.catkin_workspace
 *.pyc
 __pycache__
 baked_games
