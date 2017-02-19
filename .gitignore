@@ -1,5 +1,6 @@
 backup
 tmp
+shared
 *.swp
 .nfs*
 ros/catkin_mavros
