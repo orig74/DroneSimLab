@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 # vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4
-print('running on python3')
 import rospy,sys
 sys.path.append("/home/docker/catkin_ws/devel/lib/python3.4/dist-packages")
 from cv_bridge import CvBridge, CvBridgeError
 from sensor_msgs.msg import Image
+from sensor_msgs.msg import CameraInfo
+
+
 import zmq
 import struct
 import cv2,os
@@ -44,6 +46,7 @@ def listener():
                 else:
                     publishers[topic+'_rgb8']=rospy.Publisher(topic+'_rgb8',Image,queue_size=2)
                     publishers[topic+'_range_mm']=rospy.Publisher(topic+'_range_mm',Image,queue_size=2)
+                    publishers[topic+'_cam_info']=rospy.Publisher(topic+'_cam_info',CameraInfo,queue_size=2)
 
             #import pdb;pdb.set_trace()
             shape=struct.unpack('lll',shape)
@@ -52,10 +55,13 @@ def listener():
                 publishers[topic].publish(cvbridge.cv2_to_imgmsg(img,'bgr8'))
             else:
                 #img is in the format of RGBA A store depth in cm and all in float16 format
+                tstamp=rospy.get_rostime() 
                 img=np.fromstring(data,'float16').reshape(shape)
                 img_max_val = 5.0 #assuming I right
                 depth_camera_img_rgb = (img[:,:,[2,1,0]].clip(0,img_max_val)/img_max_val*255).astype('uint8')
-                publishers[topic+'_rgb8'].publish(cvbridge.cv2_to_imgmsg(depth_camera_img_rgb,'bgr8'))
+                img_rgb=cvbridge.cv2_to_imgmsg(depth_camera_img_rgb,'bgr8')
+                img_rgb.header.stamp=tstamp
+                publishers[topic+'_rgb8'].publish(img_rgb)
 
                 #conversions to be compatible with intel realsense camera
                 depth_err_val=65504
@@ -63,7 +69,30 @@ def listener():
                 #max_distance=64#m
                 depth_img_f16[depth_img_f16==depth_err_val]=0
                 depth_final_mm=(depth_img_f16*10).astype('uint16') #cm to mm
-                publishers[topic+'_range_mm'].publish(cvbridge.cv2_to_imgmsg(depth_final_mm,'mono16'))
+                img_depth=cvbridge.cv2_to_imgmsg(depth_final_mm,'mono16')
+                img_depth.header.stamp=tstamp
+                publishers[topic+'_range_mm'].publish(img_depth)
+                cam_info = CameraInfo()
+                cam_info.header.stamp=tstamp
+                cam_info.distortion_model='plumb_bob' 
+                cam_info.D=[0.0]*6
+
+                cam_info.K=[    160.0,  0.0,    160.0, 
+                                0.0,    160.0,  120.0,
+                                0.0,    0.0,    1.0]
+
+                cam_info.R=[1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
+
+                cam_info.P=[    160.0,  0.0,    160.0,  0,
+                                0.0,    160.0,  120.0,  0,
+                                0.0,    0.0,    1.0  ,  0]
+                cam_info.header.frame_id='camera_depth_optical_frame'
+                cam_info.height = 240
+                cam_info.width = 320
+
+                publishers[topic+'_cam_info'].publish(cam_info)
+
+
 
             if cvshow:
                 if 'depth' in topic:
