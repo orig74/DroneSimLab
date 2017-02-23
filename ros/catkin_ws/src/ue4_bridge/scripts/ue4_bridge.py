@@ -89,7 +89,9 @@ def listener():
                 cam_info.header.frame_id='camera_depth_optical_frame'
                 cam_info.height = 240
                 cam_info.width = 320
-
+                cam_info.roi.height = 240
+                cam_info.roi.width = 320
+                cam_info.roi.do_rectify = False
                 publishers[topic+'_cam_info'].publish(cam_info)
 
 

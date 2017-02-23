@@ -65,6 +65,19 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y $GDRIVER
 RUN update-locale LANG=C LANGUAGE=C LC_ALL=C LC_MESSAGES=POSIX
 ENV QT_X11_NO_MITSHM 1
 
+#additional ros libs
+RUN apt-get -y install ros-indigo-image-pipeline
+RUN apt-get -y install libglew-dev #nedded by Pangolin viewer
+RUN cd /tmp && git clone https://github.com/stevenlovegrove/Pangolin.git
+RUN cd /tmp/Pangolin && git checkout tags/v0.5 && mkdir build && cd build && cmake .. && make
+# git checkout tags/v0.5
+# .... build
+###### ORB_SLAM2
+RUN cd /tmp && git clone https://github.com/raulmur/ORB_SLAM2.git 
+RUN cd /tmp/ORB_SLAM2 && chmod +x build.sh 
+RUN cd /tmp/ORB_SLAM2 && ./build.sh
+
+
 #user setings
 ARG UID
 RUN useradd -u $UID docker
