@@ -40,6 +40,11 @@ tmux split-window -v
 tmux send-keys "printf '\033]2;fdm zmq publish to ue4\033\\'" ENTER
 tmux send-keys "cd /DroneLab/scripts/" ENTER
 tmux send-keys "PATH=/miniconda/bin python fdm_pub_px4_gazebo.py --config_path=$UNREAL_PROXY_PATH" ENTER
+
+tmux select-pane -t 5
+tmux split-window -v
+tmux send-keys "printf '\033]2;slam\033\\'" ENTER
+#
 #tmux set -w pane-border-format "#{pane_index} sending fdm to unreal engine"
 tmux select-pane -t 0
 tmux set -g pane-border-format "#{pane_index} #T"
