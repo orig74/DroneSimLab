@@ -60,10 +60,6 @@ ${PROJECT_SOURCE_DIR}/../../../lib/libORB_SLAM2.so
 )
 
 
-target_link_libraries(Stereo
-${LIBS}
-)
-
 # Node for RGB-D camera
 rosbuild_add_executable(RGBD
 src/ros_rgbd.cc
