@@ -9,7 +9,7 @@ args = parser.parse_args()
 
 print('skip unreal engine option =',args.skip_ue4_editor)
 ###params 
-req_docker_images=['ros_image_indigo','python3_dev','sitl_image']
+req_docker_images=['ros_image_indigo','ros_image_kinetic','python3_dev','sitl_image']
 if not args.skip_ue4_editor:
     req_docker_images.append('unreal_engine_4')
 
