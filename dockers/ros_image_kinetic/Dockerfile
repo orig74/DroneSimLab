@@ -84,6 +84,11 @@ RUN chmod 777 /tmp/ORB_SLAM2/build
 
 RUN apt-get install -y sudo
 RUN apt-get install -y libprotobuf-dev
+
+###python3 ros support
+RUN PATH=/miniconda/bin:$PATH pip install --upgrade pip
+RUN PATH=/miniconda/bin:$PATH pip install pyyaml rospkg catkin_pkg
+
 #user setings
 ARG UID
 RUN useradd -u $UID docker
