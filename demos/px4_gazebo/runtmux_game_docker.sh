@@ -13,7 +13,8 @@ ROS_MAIN_SCRIPT=/DroneLab/demos/px4_gazebo/run_rosmain.sh ;
 fi
 
 if [ -z "$ROS_VERSION" ]; then
-	ROS_VERSION=indigo
+	#ROS_VERSION=indigo
+	ROS_VERSION=kinetic
 fi
 
 DEMO_PATH=/DroneLab/demos/px4_gazebo/
@@ -28,7 +29,6 @@ kill_images python3_dev
 tmux new-session -d -s dronelab
 
 tmux send-keys "cd ../../dockers/ros_image_${ROS_VERSION}/ && ./run_image.sh " ENTER
-#tmux send-keys "cd ../../dockers/ros_image_kinetic/ && ./run_image.sh " ENTER
 tmux send-keys "export UNREAL_PROXY_PATH=/DroneLab/demos/unreal_proxies/two_drones" ENTER
 tmux send-keys "export ROS_MAIN_SCRIPT=$ROS_MAIN_SCRIPT" ENTER
 tmux send-keys "export CATKIN_WS_PATH=$CATKIN_WS_PATH" ENTER

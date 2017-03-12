@@ -74,9 +74,24 @@ RUN apt-get -y install libglew-dev #nedded by Pangolin viewer
 # .... build
 RUN cd /tmp && git clone https://github.com/stevenlovegrove/Pangolin.git
 RUN cd /tmp/Pangolin && git checkout tags/v0.5 && mkdir build && cd build && cmake .. && make
+
+
+############################## install opencv3 and numpy for python3
+RUN apt-get install -y libjpeg8-dev libtiff5-dev libjasper-dev libpng12-dev libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
+RUN apt-get install -y libgtk2.0-dev libatlas-base-dev gfortran 
+RUN git clone https://github.com/Itseez/opencv.git
+RUN cd /opencv && git checkout 3.2.0
+RUN git clone https://github.com/Itseez/opencv_contrib.git
+RUN cd /opencv_contrib && git checkout 3.2.0
+RUN cd /opencv && mkdir build
+RUN cd /opencv/build && cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local \
+  -D OPENCV_EXTRA_MODULES_PATH=/opencv_contrib/modules -D PYTHON3_PACKAGES_PATH=/usr/local/lib/python3.5/dist-packages .. && make -j6
+RUN cd /opencv/build && make install
+
+
 ###### ORB_SLAM2
 RUN cd /tmp && git clone https://github.com/raulmur/ORB_SLAM2.git 
-RUN apt-get install -y libopencv-dev
+#RUN apt-get install -y libopencv-dev
 RUN cd /tmp/ORB_SLAM2 && chmod +x build.sh 
 RUN cd /tmp/ORB_SLAM2 && chmod +x build_ros.sh 
 RUN cd /tmp/ORB_SLAM2 && ./build.sh

@@ -50,11 +50,11 @@ RUN apt-get -y update
 RUN apt-get -y install ros-indigo-desktop
 RUN apt-get -y install python-wstool python-rosinstall-generator python-catkin-tools
 #RUN bash -c "curl -ssL http://get.gazebosim.org | sh"
-#RUN apt-get -y install ros-indigo-gazebo7-ros-pkgs
 RUN echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list
 RUN wget http://packages.osrfoundation.org/gazebo.key -O - | apt-key add -
 RUN apt-get -y update
 RUN apt-get -y install gazebo7
+RUN apt-get -y install ros-indigo-gazebo7-ros-pkgs
 RUN apt-get -y install libgazebo7-dev
 
 
