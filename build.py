@@ -9,7 +9,7 @@ args = parser.parse_args()
 
 print('skip unreal engine option =',args.skip_ue4_editor)
 ###params 
-req_docker_images=['ros_image_indigo','python3_dev','sitl_image']
+req_docker_images=['ros_image_indigo','ros_image_kinetic','python3_dev','sitl_image']
 if not args.skip_ue4_editor:
     req_docker_images.append('unreal_engine_4')
 
@@ -52,10 +52,13 @@ print("building docker images...")
 assert(os.system("docker images > /dev/null")==0) #just to see if have the right preveliges
 current_docker_images=map(lambda x:x.strip(),os.popen('docker images |cut -d" " -f 1').readlines())
 
+if 'unreal_engine_4' in req_docker_images:
+    assert(os.system("cd dockers/unreal_engine_4 && ./prep_unreal")==0)
+
 for docker_image in req_docker_images:
     if docker_image not in current_docker_images:
         print('building image ',docker_image)
-        assert(os.system('cd dockers/'+docker_image+' && ./build')==0) 
+        assert(os.system('cd dockers/'+docker_image+' && ../build')==0) 
 
 print("install ros...")
 #if not os.path.isdir('ros/catkin_mavros'):

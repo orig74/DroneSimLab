@@ -32,7 +32,7 @@
 
 #include<opencv2/core/core.hpp>
 
-#include"../../../include/System.h"
+#include "/tmp/ORB_SLAM2/include/System.h"
 
 using namespace std;
 

@@ -12,6 +12,7 @@ tmux send-keys "printf '\033]2;mavros\033\\'" ENTER
 tmux send-keys "source /DroneLab/scripts/install_mavros.sh" ENTER
 tmux send-keys "source /ros/catkin_mavros/devel/setup.bash" ENTER
 tmux send-keys "sleep 3" ENTER #need some delay dont know why
+tmux send-keys "source ~/.bashrc" ENTER
 tmux send-keys "roslaunch mavros px4.launch fcu_url:=udp://:14540@127.0.0.1:14557" ENTER
 tmux select-pane -t 1
 tmux send-keys "printf '\033]2;gazebo\033\\'" ENTER

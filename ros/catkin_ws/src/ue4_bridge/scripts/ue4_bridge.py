@@ -61,6 +61,7 @@ def listener():
                 depth_camera_img_rgb = (img[:,:,[2,1,0]].clip(0,img_max_val)/img_max_val*255).astype('uint8')
                 img_rgb=cvbridge.cv2_to_imgmsg(depth_camera_img_rgb,'bgr8')
                 img_rgb.header.stamp=tstamp
+                img_rgb.header.frame_id='camera_rgb'
                 publishers[topic+'_rgb8'].publish(img_rgb)
 
                 #conversions to be compatible with intel realsense camera
@@ -71,6 +72,7 @@ def listener():
                 depth_final_mm=(depth_img_f16*10).astype('uint16') #cm to mm
                 img_depth=cvbridge.cv2_to_imgmsg(depth_final_mm,'mono16')
                 img_depth.header.stamp=tstamp
+                img_depth.header.frame_id='camera_depth'
                 publishers[topic+'_range_mm'].publish(img_depth)
                 cam_info = CameraInfo()
                 cam_info.header.stamp=tstamp

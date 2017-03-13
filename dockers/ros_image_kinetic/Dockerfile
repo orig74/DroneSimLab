@@ -1,5 +1,5 @@
 #Base docker image
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 RUN apt-get -y update
 RUN apt-get install -y software-properties-common
 RUN add-apt-repository ppa:george-edison55/cmake-3.x -y
@@ -43,30 +43,23 @@ RUN PATH=/miniconda/bin conda install -y pyzmq
 RUN PATH=/miniconda/bin conda install -y numpy
 
 
-######## ros indigo ######
-RUN echo "deb http://packages.ros.org/ros/ubuntu trusty main" > /etc/apt/sources.list.d/ros-latest.list
-RUN apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net --recv-key 0xB01FA116
+######## ros kinetic ######
+RUN echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list
+RUN apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116
+
+
 RUN apt-get -y update
-RUN apt-get -y install ros-indigo-desktop
+RUN apt-get -y install ros-kinetic-desktop-full
 RUN apt-get -y install python-wstool python-rosinstall-generator python-catkin-tools
 #RUN bash -c "curl -ssL http://get.gazebosim.org | sh"
-RUN echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list
-RUN wget http://packages.osrfoundation.org/gazebo.key -O - | apt-key add -
-RUN apt-get -y update
+#RUN apt-get -y install ros-kinetic-desktop-full
+#RUN apt-get -y install ros-kinetic-roslaunch
 RUN apt-get -y install gazebo7
-RUN apt-get -y install ros-indigo-gazebo7-ros-pkgs
 RUN apt-get -y install libgazebo7-dev
-
-
-
-
-
-
-RUN apt-get -y install ros-indigo-roslaunch
-RUN apt-get -y install ros-indigo-control-toolbox
+#RUN apt-get -y install ros-kinetic-control-toolbox
 #RUN apt-get -y install openssl libssl-dev
-RUN apt-get -y install ros-indigo-mavros ros-indigo-mavros-extras
-RUN apt-get -y install ros-indigo-image-view2
+RUN apt-get -y install ros-kinetic-mavros ros-kinetic-mavros-extras
+#RUN apt-get -y install ros-kinetic-image-view2
 
 #nvidia
 ARG GDRIVER
@@ -75,22 +68,41 @@ RUN update-locale LANG=C LANGUAGE=C LC_ALL=C LC_MESSAGES=POSIX
 ENV QT_X11_NO_MITSHM 1
 
 #additional ros libs
-RUN apt-get -y install ros-indigo-image-pipeline
+RUN apt-get -y install ros-kinetic-image-pipeline
 RUN apt-get -y install libglew-dev #nedded by Pangolin viewer
 # git checkout tags/v0.5
 # .... build
 RUN cd /tmp && git clone https://github.com/stevenlovegrove/Pangolin.git
 RUN cd /tmp/Pangolin && git checkout tags/v0.5 && mkdir build && cd build && cmake .. && make
+
+
+############################## install opencv3 and numpy for python3
+RUN apt-get install -y libjpeg8-dev libtiff5-dev libjasper-dev libpng12-dev libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
+RUN apt-get install -y libgtk2.0-dev libatlas-base-dev gfortran 
+RUN git clone https://github.com/Itseez/opencv.git
+RUN cd /opencv && git checkout 3.2.0
+RUN git clone https://github.com/Itseez/opencv_contrib.git
+RUN cd /opencv_contrib && git checkout 3.2.0
+RUN cd /opencv && mkdir build
+RUN cd /opencv/build && cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local \
+  -D OPENCV_EXTRA_MODULES_PATH=/opencv_contrib/modules -D PYTHON3_PACKAGES_PATH=/usr/local/lib/python3.5/dist-packages .. && make -j6
+RUN cd /opencv/build && make install
+
+
 ###### ORB_SLAM2
 RUN cd /tmp && git clone https://github.com/raulmur/ORB_SLAM2.git 
+#RUN apt-get install -y libopencv-dev
 RUN cd /tmp/ORB_SLAM2 && chmod +x build.sh 
 RUN cd /tmp/ORB_SLAM2 && chmod +x build_ros.sh 
 RUN cd /tmp/ORB_SLAM2 && ./build.sh
-#RUN cd /tmp/ORB_SLAM2 && /bin/bash -c "source /opt/ros/indigo/setup.bash && export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:/tmp/ORB_SLAM2/Examples/ROS && rosdep update && ./build_ros.sh"
-#RUN cd /tmp/ORB_SLAM2 && /bin/bash -c "export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:/tmp/ORB_SLAM2/Examples/ROS && ./build_ros.sh"
-
 RUN chmod 777 /tmp/ORB_SLAM2/build
 
+RUN apt-get install -y sudo
+RUN apt-get install -y libprotobuf-dev
+
+###python3 ros support
+RUN PATH=/miniconda/bin:$PATH pip install --upgrade pip
+RUN PATH=/miniconda/bin:$PATH pip install pyyaml rospkg catkin_pkg
 
 #user setings
 ARG UID
