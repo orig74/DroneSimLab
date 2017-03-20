@@ -68,11 +68,6 @@ RUN apt-get -y install ros-indigo-control-toolbox
 RUN apt-get -y install ros-indigo-mavros ros-indigo-mavros-extras
 RUN apt-get -y install ros-indigo-image-view2
 
-#nvidia
-ARG GDRIVER
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y $GDRIVER
-RUN update-locale LANG=C LANGUAGE=C LC_ALL=C LC_MESSAGES=POSIX
-ENV QT_X11_NO_MITSHM 1
 
 #additional ros libs
 RUN apt-get -y install ros-indigo-image-pipeline
@@ -86,10 +81,14 @@ RUN cd /tmp && git clone https://github.com/raulmur/ORB_SLAM2.git
 RUN cd /tmp/ORB_SLAM2 && chmod +x build.sh 
 RUN cd /tmp/ORB_SLAM2 && chmod +x build_ros.sh 
 RUN cd /tmp/ORB_SLAM2 && ./build.sh
-#RUN cd /tmp/ORB_SLAM2 && /bin/bash -c "source /opt/ros/indigo/setup.bash && export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:/tmp/ORB_SLAM2/Examples/ROS && rosdep update && ./build_ros.sh"
-#RUN cd /tmp/ORB_SLAM2 && /bin/bash -c "export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:/tmp/ORB_SLAM2/Examples/ROS && ./build_ros.sh"
-
 RUN chmod 777 /tmp/ORB_SLAM2/build
+
+######## nvidia part ######
+ARG GDRIVER
+COPY install_graphic_driver.sh /install_graphic_driver.sh
+RUN chmod +x /install_graphic_driver.sh
+RUN GDRIVER=$GDRIVER /install_graphic_driver.sh
+
 
 
 #user setings

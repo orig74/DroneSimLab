@@ -61,12 +61,6 @@ RUN apt-get -y install libgazebo7-dev
 RUN apt-get -y install ros-kinetic-mavros ros-kinetic-mavros-extras
 #RUN apt-get -y install ros-kinetic-image-view2
 
-#nvidia
-ARG GDRIVER
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y $GDRIVER
-RUN update-locale LANG=C LANGUAGE=C LC_ALL=C LC_MESSAGES=POSIX
-ENV QT_X11_NO_MITSHM 1
-
 #additional ros libs
 RUN apt-get -y install ros-kinetic-image-pipeline
 RUN apt-get -y install libglew-dev #nedded by Pangolin viewer
@@ -103,6 +97,13 @@ RUN apt-get install -y libprotobuf-dev
 ###python3 ros support
 RUN PATH=/miniconda/bin:$PATH pip install --upgrade pip
 RUN PATH=/miniconda/bin:$PATH pip install pyyaml rospkg catkin_pkg
+
+######## nvidia part ######
+ARG GDRIVER
+COPY install_graphic_driver.sh /install_graphic_driver.sh
+RUN chmod +x /install_graphic_driver.sh
+RUN GDRIVER=$GDRIVER /install_graphic_driver.sh
+
 
 #user setings
 ARG UID

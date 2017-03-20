@@ -1,5 +1,6 @@
 # Base docker image
 FROM ubuntu:16.04
+RUN pwd
 RUN apt-get -y update
 RUN apt-get -y install gawk git   
 RUN echo "export PS1=\\\\\\\\w\\$" >> /etc/bash.bashrc
@@ -17,14 +18,16 @@ RUN /bin/bash /miniconda.sh -b -p /miniconda
 RUN PATH=/miniconda/bin conda install -y pyzmq
 RUN PATH=/miniconda/bin conda install -c https://conda.binstar.org/menpo opencv3 
 RUN PATH=/miniconda/bin:$PATH pip install pymavlink
+RUN PATH=/miniconda/bin:$PATH pip install cffi 
 
+
+RUN apt-get install -y software-properties-common
 
 ######## nvidia part ######
 ARG GDRIVER
-RUN apt-get -y update
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y $GDRIVER
-RUN update-locale LANG=C LANGUAGE=C LC_ALL=C LC_MESSAGES=POSIX
-RUN PATH=/miniconda/bin:$PATH pip install cffi 
+COPY install_graphic_driver.sh /install_graphic_driver.sh
+RUN chmod +x /install_graphic_driver.sh 
+RUN GDRIVER=$GDRIVER /install_graphic_driver.sh
 
 ######## user settings ######
 ENV QT_X11_NO_MITSHM 1

@@ -34,9 +34,11 @@ RUN cd /local/UnrealEngine && ./Setup.sh && ./GenerateProjectFiles.sh && make
 
 ######## nvidia part ######
 USER root
+######## nvidia part ######
 ARG GDRIVER
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y $GDRIVER
-RUN update-locale LANG=C LANGUAGE=C LC_ALL=C LC_MESSAGES=POSIX
+COPY install_graphic_driver.sh /install_graphic_driver.sh
+RUN chmod +x /install_graphic_driver.sh
+RUN GDRIVER=$GDRIVER /install_graphic_driver.sh
 
 
 RUN echo "export PATH=/miniconda/bin:$PATH" >> /etc/bash.bashrc
