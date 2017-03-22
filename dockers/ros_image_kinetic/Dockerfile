@@ -34,14 +34,18 @@ RUN cd /tmp/tmux && sh ./autogen.sh && ./configure && make install
 
 #to enable copy paste in tmux mouse on https://coderwall.com/p/4b0d0a/how-to-copy-and-paste-with-tmux-on-ubuntu
 RUN apt-get -y install xclip
-
+ENV DEBIAN_FRONTEND=noninteractive
 #python3
-RUN apt-get -y install curl
-RUN curl -o /miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-4.2.12-Linux-x86_64.sh
-RUN /bin/bash /miniconda.sh -b -p /miniconda
-RUN PATH=/miniconda/bin conda install -y pyzmq
-RUN PATH=/miniconda/bin conda install -y numpy
-
+#RUN apt-get -y install curl
+#RUN curl -o /miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-4.2.12-Linux-x86_64.sh
+#RUN /bin/bash /miniconda.sh -b -p /miniconda
+#RUN PATH=/miniconda/bin conda install -y pyzmq
+#RUN PATH=/miniconda/bin conda install -y numpy
+RUN apt-get -y install python3-dev
+RUN apt-get -y install python3-pip
+RUN apt-get -y install python3-numpy
+RUN pip3 install --upgrade pip
+RUN pip3 install pyzmq
 
 ######## ros kinetic ######
 RUN echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list
@@ -95,8 +99,8 @@ RUN apt-get install -y sudo
 RUN apt-get install -y libprotobuf-dev
 
 ###python3 ros support
-RUN PATH=/miniconda/bin:$PATH pip install --upgrade pip
-RUN PATH=/miniconda/bin:$PATH pip install pyyaml rospkg catkin_pkg
+#RUN PATH=/miniconda/bin:$PATH pip install --upgrade pip
+RUN pip3 install pyyaml rospkg catkin_pkg
 
 ######## nvidia part ######
 ARG GDRIVER
