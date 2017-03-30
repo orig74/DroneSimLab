@@ -1,6 +1,6 @@
 #!/bin/bash
 PROJECT_NAME=testprj7_14_4
-DOCKER_IMAGE=ros_image_indigo
+#DOCKER_IMAGE=ros_image_kinetic
 DEMO_PATH=/DroneLab/demos/px4_gazebo/
 CATKIN_WS_PATH=/DroneLab/demos/px4_gazebo/demo_catkin_ws
 if [ -z "$CATKIN_WS_PATH"]; then
@@ -19,7 +19,8 @@ kill_images ros_indigo
 kill_images python3_dev
 tmux new-session -d -s dronelab
 
-tmux send-keys "cd ../../dockers/ros_image_indigo/ && ./run_image.sh " ENTER
+#tmux send-keys "cd ../../dockers/ros_image_indigo/ && ./run_image.sh " ENTER
+tmux send-keys "cd ../../dockers/ros_image_kinetic/ && ./run_image.sh " ENTER
 tmux send-keys "export UNREAL_PROXY_PATH=/DroneLab/demos/unreal_proxies/two_drones" ENTER
 tmux send-keys "export CATKIN_WS_PATH=$CATKIN_WS_PATH" ENTER
 tmux send-keys "export ROS_MAIN_SCRIPT=$ROS_MAIN_SCRIPT" ENTER

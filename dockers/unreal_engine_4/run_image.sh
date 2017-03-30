@@ -2,7 +2,12 @@
 xhost + local:
 
 DRONE_LAB_DIR=`python -c "import os;print(os.path.abspath(os.path.dirname('$0/../../../')))"`
-PROJECT_FILES_DIR=/local/learn/ur4
+
+if [ -z $PROJECT_FILES_DIR ]; then
+	echo "ERROR!!! No PROJECT_FILES_DIR variable found setting to /local/learn/ur4"
+	PROJECT_FILES_DIR=/local/learn/ur4
+fi
+
 #WORKSAPCE=~/projects
 echo "----------------"
 echo $DRONE_LAB_DIR
