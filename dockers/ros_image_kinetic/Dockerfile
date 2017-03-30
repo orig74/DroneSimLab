@@ -34,14 +34,18 @@ RUN cd /tmp/tmux && sh ./autogen.sh && ./configure && make install
 
 #to enable copy paste in tmux mouse on https://coderwall.com/p/4b0d0a/how-to-copy-and-paste-with-tmux-on-ubuntu
 RUN apt-get -y install xclip
-
+ENV DEBIAN_FRONTEND=noninteractive
 #python3
-RUN apt-get -y install curl
-RUN curl -o /miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-4.2.12-Linux-x86_64.sh
-RUN /bin/bash /miniconda.sh -b -p /miniconda
-RUN PATH=/miniconda/bin conda install -y pyzmq
-RUN PATH=/miniconda/bin conda install -y numpy
-
+#RUN apt-get -y install curl
+#RUN curl -o /miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-4.2.12-Linux-x86_64.sh
+#RUN /bin/bash /miniconda.sh -b -p /miniconda
+#RUN PATH=/miniconda/bin conda install -y pyzmq
+#RUN PATH=/miniconda/bin conda install -y numpy
+RUN apt-get -y install python3-dev
+RUN apt-get -y install python3-pip
+RUN apt-get -y install python3-numpy
+RUN pip3 install --upgrade pip
+RUN pip3 install pyzmq
 
 ######## ros kinetic ######
 RUN echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list
@@ -60,12 +64,6 @@ RUN apt-get -y install libgazebo7-dev
 #RUN apt-get -y install openssl libssl-dev
 RUN apt-get -y install ros-kinetic-mavros ros-kinetic-mavros-extras
 #RUN apt-get -y install ros-kinetic-image-view2
-
-#nvidia
-ARG GDRIVER
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y $GDRIVER
-RUN update-locale LANG=C LANGUAGE=C LC_ALL=C LC_MESSAGES=POSIX
-ENV QT_X11_NO_MITSHM 1
 
 #additional ros libs
 RUN apt-get -y install ros-kinetic-image-pipeline
@@ -101,8 +99,15 @@ RUN apt-get install -y sudo
 RUN apt-get install -y libprotobuf-dev
 
 ###python3 ros support
-RUN PATH=/miniconda/bin:$PATH pip install --upgrade pip
-RUN PATH=/miniconda/bin:$PATH pip install pyyaml rospkg catkin_pkg
+#RUN PATH=/miniconda/bin:$PATH pip install --upgrade pip
+RUN pip3 install pyyaml rospkg catkin_pkg
+
+######## nvidia part ######
+ARG GDRIVER
+COPY install_graphic_driver.sh /install_graphic_driver.sh
+RUN chmod +x /install_graphic_driver.sh
+RUN GDRIVER=$GDRIVER /install_graphic_driver.sh
+
 
 #user setings
 ARG UID

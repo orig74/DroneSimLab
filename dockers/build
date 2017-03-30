@@ -5,9 +5,12 @@ if name=='dockers':
     print('This script needs to run from the images directory using ../build')
     sys.exit(0)
 nvidia_version=re.search('\d+\.\d+',open('/proc/driver/nvidia/version').readlines()[0]).group()
-mgr=nvidia_version.split('.')[0]
-driver='nvidia-'+mgr
+#mgr=nvidia_version.split('.')[0]
+#driver='nvidia-'+mgr
+driver=nvidia_version
 print('building for nvidia driver '+driver)
 uid='%d'%os.getuid()
+os.system("cp ../install_graphic_driver.sh .")
 os.system("docker build -t "+name+" --build-arg UID="+uid+" --build-arg GDRIVER="+driver+" .")
+os.system("rm ./install_graphic_driver.sh")
 
