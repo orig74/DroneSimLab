@@ -1,8 +1,8 @@
 ## Wellcome To DroneSimLab
-Drone lab is a multi simulation which include multiple simulation engines:
-Software in the loop (SITL) from the ArduPilot project.
-Software in the loop (SITL) from the PX4 project.
-Unreal engine 4 provides imagery and depth sensor data.
+Drone lab is a multi simulation which include multiple simulation engines:  
+Software in the loop (SITL) from the ArduPilot project.  
+Software in the loop (SITL) from the PX4 project.  
+Unreal engine 4 provides imagery and depth sensor data.  
 
 The framework is flexible and enables adding more robot simulation engines as well as other sensor simulation engines (such as UE4).
 
