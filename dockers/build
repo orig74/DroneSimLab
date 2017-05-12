@@ -1,5 +1,10 @@
 #!/usr/bin/python
 import os,re,sys
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument('--nocache', default=False, action='store_true')
+args = parser.parse_args()
+
 name=os.path.basename(os.path.abspath('.'))
 if name=='dockers':
     print('This script needs to run from the images directory using ../build')
@@ -11,6 +16,10 @@ driver=nvidia_version
 print('building for nvidia driver '+driver)
 uid='%d'%os.getuid()
 os.system("cp ../install_graphic_driver.sh .")
-os.system("docker build -t "+name+" --build-arg UID="+uid+" --build-arg GDRIVER="+driver+" .")
+cmd="docker build "
+if args.nocache:
+    cmd+="--no-cache=true "
+cmd+="-t "+name+" --build-arg UID="+uid+" --build-arg GDRIVER="+driver+" ."
+os.system(cmd)
 os.system("rm ./install_graphic_driver.sh")
 
