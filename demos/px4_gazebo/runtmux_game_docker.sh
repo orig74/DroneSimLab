@@ -20,7 +20,7 @@ fi
 DEMO_PATH=/DroneLab/demos/px4_gazebo/
 
 #cleanning prev run
-tmux kill-server
+tmux kill-session -t dronelab
 source ../../scripts/common.sh
 
 kill_images ros_image_indigo

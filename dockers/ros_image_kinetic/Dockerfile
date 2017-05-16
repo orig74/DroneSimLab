@@ -1,5 +1,5 @@
 #Base docker image
-FROM ubuntu:16.04
+FROM ubuntu:xenial-20170417.1
 RUN apt-get -y update
 RUN apt-get install -y software-properties-common
 RUN add-apt-repository ppa:george-edison55/cmake-3.x -y
@@ -83,7 +83,7 @@ RUN git clone https://github.com/Itseez/opencv_contrib.git
 RUN cd /opencv_contrib && git checkout 3.2.0
 RUN cd /opencv && mkdir build
 RUN cd /opencv/build && cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local \
-  -D OPENCV_EXTRA_MODULES_PATH=/opencv_contrib/modules -D PYTHON3_PACKAGES_PATH=/usr/local/lib/python3.5/dist-packages .. && make -j6
+  -D OPENCV_EXTRA_MODULES_PATH=/opencv_contrib/modules -D WITH_IPP=OFF -D PYTHON3_PACKAGES_PATH=/usr/local/lib/python3.5/dist-packages .. && make -j6
 RUN cd /opencv/build && make install
 
 
