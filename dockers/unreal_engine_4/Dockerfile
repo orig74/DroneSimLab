@@ -13,7 +13,7 @@ RUN apt-get -y install vim
 RUN curl -o /miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-4.2.12-Linux-x86_64.sh
 RUN /bin/bash /miniconda.sh -b -p /miniconda
 RUN PATH=/miniconda/bin conda install -y pyzmq
-RUN PATH=/miniconda/bin conda install -c https://conda.binstar.org/menpo opencv3 
+RUN PATH=/miniconda/bin conda install -c menpo opencv3=3.2.0
 
 
 ######################################################
