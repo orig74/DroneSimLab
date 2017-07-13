@@ -27,6 +27,10 @@ RUN echo "docker ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers
 RUN mkdir /local
 COPY ./ure4.tgz /local/
 RUN chown -R docker:docker /local
+# NOTE: This is a hack because of a bug in mono: https://bugzilla.xamarin.com/show_bug.cgi?id=30360
+RUN apt-get install tzdata
+RUN unlink /etc/localtime
+RUN ln -s /usr/share/zoneinfo/Etc/GMT /etc/localtime
 USER docker
 RUN cd /local && tar xzf ure4.tgz
 RUN cd /local/UnrealEngine && ./Setup.sh && ./GenerateProjectFiles.sh && make
