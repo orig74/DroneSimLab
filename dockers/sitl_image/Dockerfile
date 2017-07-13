@@ -37,6 +37,3 @@ RUN useradd -u $UID docker
 RUN echo "docker:docker" | chpasswd
 RUN echo "root:root" | chpasswd
 RUN echo "docker ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers
-
-
-#

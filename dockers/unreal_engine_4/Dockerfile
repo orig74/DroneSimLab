@@ -15,7 +15,6 @@ RUN /bin/bash /miniconda.sh -b -p /miniconda
 RUN PATH=/miniconda/bin conda install -y pyzmq
 RUN PATH=/miniconda/bin conda install -c menpo opencv3=3.2.0
 
-
 ######################################################
 ENV QT_X11_NO_MITSHM 1
 ARG UID
@@ -42,4 +41,3 @@ RUN GDRIVER=$GDRIVER /install_graphic_driver.sh
 
 
 RUN echo "export PATH=/miniconda/bin:$PATH" >> /etc/bash.bashrc
-
