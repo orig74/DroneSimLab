@@ -16,5 +16,16 @@ Please follow the [wiki](https://github.com/orig74/DroneSimLab/wiki)
 [Flying Drone](https://youtu.be/4dplKATTkMw)  
 [Two drones tracking](https://youtu.be/cEeUj4JF16A)
 
+## Paper:
+    @article{ganoni2017framework,
+      title={A Framework for Visually Realistic Multi-robot Simulation in Natural Environment},
+      author={Ganoni, Ori and Mukundan, Ramakrishnan},
+      journal={arXiv preprint arXiv:1708.01938},
+      ISBN = {978-80-86943-44-2},
+      ISSN = {2464-4617},
+      year={2017},
+      publisher = {WSCG 2017}
+    }
+
 ## Contact:  
 oga13@uclive.ac.nz  
