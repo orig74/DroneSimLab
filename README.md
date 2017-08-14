@@ -24,6 +24,7 @@ Please follow the [wiki](https://github.com/orig74/DroneSimLab/wiki)
       ISBN = {978-80-86943-44-2},
       ISSN = {2464-4617},
       year={2017},
+      note={WSCG 2017 proceedings},
       publisher = {WSCG 2017}
     }
 
