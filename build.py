@@ -69,8 +69,8 @@ if 'unreal_engine_4' in req_docker_images:
 for docker_image in req_docker_images:
     if docker_image not in current_docker_images:
         print('building image ',docker_image)
-        run_shell('cd dockers/'+docker_image+' && ../build > /tmp/dbuild.log 2>&1',
-            'Error: failed bulding docker image '+docker_image+' please look at the log file /tmp/dbuild.log')
+        run_shell('cd dockers/'+docker_image+' && ../build > /tmp/dbuild-%s.log 2>&1' % docker_image,
+            'Error: failed bulding docker image '+docker_image+' please look at the log file /tmp/dbuild-*.log')
 
 print("install ros...")
 #if not os.path.isdir('ros/catkin_mavros'):
