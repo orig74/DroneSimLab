@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4
 import os,sys
-import argparse
+import argparse,time
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--skip_ue4_editor", help="skip install and build unreal engine editor",default=False,action='store_true')
@@ -60,7 +60,7 @@ print("building docker images...")
 
 run_shell("docker images > /dev/null",'Fail running docker images, do you have the right previlages?'
         '\ntry running:\ndocker images') 
-current_docker_images=map(lambda x:x.strip(),os.popen('docker images |cut -d" " -f 1').readlines())
+current_docker_images=[x.strip() for x in os.popen('docker images |cut -d" " -f 1 |grep -v none').readlines()]
 
 if 'unreal_engine_4' in req_docker_images:
     run_shell("cd dockers/unreal_engine_4 && ./prep_unreal",'Error: faild to prepare unreal for installation')
@@ -71,6 +71,17 @@ for docker_image in req_docker_images:
         print('building image ',docker_image)
         run_shell('cd dockers/'+docker_image+' && ../build > /tmp/dbuild-%s.log 2>&1' % docker_image,
             'Error: failed bulding docker image '+docker_image+' please look at the log file /tmp/dbuild-*.log')
+
+
+print('testing docker images instalation...')
+current_docker_images=[x.strip() for x in os.popen('docker images |cut -d" " -f 1 |grep -v none').readlines()]
+for docker_image in req_docker_images:
+    if docker_image not in current_docker_images:
+        print('Error building image',docker_image,
+                'Failed, please look at the log file /tmp/dbuild-%s.log'%docker_image) 
+        print('you can try build this image manualy by:')
+        print('cd dockers/%s && ../build --no-cache'%docker_image)
+        sys.exit(-1)
 
 print("install ros...")
 #if not os.path.isdir('ros/catkin_mavros'):
