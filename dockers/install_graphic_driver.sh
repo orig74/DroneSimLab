@@ -10,6 +10,7 @@ if [ "$DRIVER_NAME" == "" ] ; then
 fi
 if [ "$DRIVER_NAME" == "" ] ; then
 	echo "Error nvidia Driver $GDRIVER not found on guest machine" >&2
+	echo "Try install the latest nvidia driver (using ppa) on your host machine" >&2
 	exit -1
 fi
 DEBIAN_FRONTEND=noninteractive apt-get install -y $DRIVER_NAME
