@@ -39,6 +39,7 @@ RUN cd /local/UnrealEngine && ./Setup.sh && ./GenerateProjectFiles.sh && make
 USER root
 ######## nvidia part ######
 ARG GDRIVER
+RUN apt-get install -y software-properties-common
 COPY install_graphic_driver.sh /install_graphic_driver.sh
 RUN chmod +x /install_graphic_driver.sh
 RUN GDRIVER=$GDRIVER /install_graphic_driver.sh
