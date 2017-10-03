@@ -80,7 +80,7 @@ for docker_image in req_docker_images:
         print('Error building image',docker_image,
                 'Failed, please look at the log file /tmp/dbuild-%s.log'%docker_image) 
         print('you can try build this image manualy by:')
-        print('cd dockers/%s && ../build --no-cache'%docker_image)
+        print('cd dockers/%s && ../build --nocache'%docker_image)
         sys.exit(-1)
 
 print("install ros...")

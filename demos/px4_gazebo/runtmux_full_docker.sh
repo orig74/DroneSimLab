@@ -12,7 +12,7 @@ fi
 
 
 #cleanning prev run
-tmux kill-server
+tmux kill-session -t dronelab
 source ../../scripts/common.sh
 
 kill_images ros_indigo

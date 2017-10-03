@@ -21,6 +21,7 @@ tmux send-keys "rosrun ue4_bridge ue4_bridge.py" ENTER
 tmux split-window -v
 tmux send-keys "printf '\033]2;catkin window\033\\'" ENTER
 tmux send-keys "rosrun image_view image_view image:=rgb_camera_0" ENTER
+#tmux send-keys "rosrun image_view video_recorder image:=rgb_camera_0 ~fps=30" ENTER
 tmux split-window -v
 tmux send-keys "printf '\033]2;fdm zmq publish to ue4\033\\'" ENTER
 #tmux send-keys "cd ${DEMO_PATH}" ENTER

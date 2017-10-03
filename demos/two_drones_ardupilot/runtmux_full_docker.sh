@@ -2,7 +2,7 @@
 UNREAL_PROXY_PATH=/dronelab/demos/unreal_proxies/two_drones
 DEMO_PATH=/dronelab/demos/two_drones_ardupilot
 
-tmux kill-server
+tmux kill-session -t dronelab
 source ../../scripts/common.sh
 kill_images python_dev
 kill_images sitl_image

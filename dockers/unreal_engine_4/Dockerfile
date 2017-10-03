@@ -27,8 +27,11 @@ RUN echo "docker ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers
 RUN mkdir /local
 COPY ./ure4.tgz /local/
 RUN chown -R docker:docker /local
+RUN mkdir /home/docker
+RUN chown -R docker:docker /home/docker
 # NOTE: This is a hack because of a bug in mono: https://bugzilla.xamarin.com/show_bug.cgi?id=30360
-RUN apt-get install tzdata
+RUN apt-get -y install tzdata
+RUN apt-get -y install libxss-dev 
 RUN unlink /etc/localtime
 RUN ln -s /usr/share/zoneinfo/Etc/GMT /etc/localtime
 USER docker
@@ -43,6 +46,5 @@ RUN apt-get install -y software-properties-common
 COPY install_graphic_driver.sh /install_graphic_driver.sh
 RUN chmod +x /install_graphic_driver.sh
 RUN GDRIVER=$GDRIVER /install_graphic_driver.sh
-
 
 RUN echo "export PATH=/miniconda/bin:$PATH" >> /etc/bash.bashrc
