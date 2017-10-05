@@ -1,10 +1,16 @@
 #!/bin/bash
 
 #game defenitions
-GAME_PATH=/DroneLab/baked_games/game_demo/LinuxNoEditor/
+if [ -z "$GAME_PATH" ]; then
+	GAME_PATH=/DroneLab/baked_games/game_demo/LinuxNoEditor/
+fi
+
+if [ -z "$PACKED_NAME"] ;then
+	PACKED_NAME=testprj7_14_4
+fi
+
 ENTRY_POINT=unreal_proxy
 ENTRY_PATH=../unreal_proxies/two_drones/
-PACKED_NAME=testprj7_14_4
 if [ -z "$CATKIN_WS_PATH"]; then
 CATKIN_WS_PATH=/DroneLab/demos/px4_gazebo/demo_catkin_ws ;
 fi

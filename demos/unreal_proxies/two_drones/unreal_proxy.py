@@ -84,6 +84,7 @@ def main_loop(gworld):
             position=positions[drone_index]
             if position is not None:
                 new_pos=drone_start_positions[drone_index]+np.array([position['posx'],position['posy'],position['posz']])*100 #turn to cm
+                #print('-----',drone_index,new_pos)
                 ph.SetActorLocation(drone_actor,new_pos)
                 ph.SetActorRotation(drone_actor,(position['roll'],position['pitch'],position['yaw']))
                 positions[drone_index]=None
