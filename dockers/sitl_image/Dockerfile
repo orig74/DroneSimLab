@@ -37,3 +37,8 @@ RUN useradd -u $UID docker
 RUN echo "docker:docker" | chpasswd
 RUN echo "root:root" | chpasswd
 RUN echo "docker ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+### add this line to consume the GDRIVER since the build scripts gives the GDRIVER as an argument even
+### if it is not needed
+ARG GDRIVER
+RUN GDRIVER=$GDRIVER
