@@ -42,3 +42,7 @@ RUN echo "docker ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers
 ### if it is not needed
 ARG GDRIVER
 RUN GDRIVER=$GDRIVER
+
+### fix anaconda import cv2 issue
+### "ibpangocairo-1.0.so.0: undefined symbol: cairo_ft_font_options_substitute"
+RUN /miniconda/bin/conda update -y cairo
