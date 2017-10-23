@@ -37,8 +37,11 @@ for submodule in submodules:
     print('updating submodule:', submodule)
     run_shell("git submodule update --init --recursive "+submodule,
         'failed updataing submodules.. please check you connection')
-    
-
+    if submodule=='ardupilot':
+        print('updating ardupilot git relative paths')
+        #taken from https://stackoverflow.com/questions/10953953/ensuring-relative-git-paths
+        run_shell('''cd ardupilot && find -type f -name .git -exec bash -c 'f="{}" && cd $(dirname $f) &&  echo "gitdir: $(realpath --relative-to=. $(cut -d" " -f2 .git))" > .git' \;''',
+                'update git relative paths')
 
 print("downloading baked games...")
 
