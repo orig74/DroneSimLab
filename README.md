@@ -15,6 +15,7 @@ Please follow the [wiki](https://github.com/orig74/DroneSimLab/wiki)
 ## Demos:  
 [Flying Drone](https://youtu.be/4dplKATTkMw)  
 [Two drones tracking](https://youtu.be/cEeUj4JF16A)
+[Underwater](https://youtu.be/B2h4Dxa31F4)
 
 ## Paper:
     @article{ganoni2017framework,
