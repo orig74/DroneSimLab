@@ -63,6 +63,7 @@ RUN apt-get -y install libgazebo7-dev
 #RUN apt-get -y install ros-kinetic-control-toolbox
 #RUN apt-get -y install openssl libssl-dev
 RUN apt-get -y install ros-kinetic-mavros ros-kinetic-mavros-extras
+RUN /opt/ros/kinetic/lib/mavros/install_geographiclib_datasets.sh
 #RUN apt-get -y install ros-kinetic-image-view2
 
 #additional ros libs

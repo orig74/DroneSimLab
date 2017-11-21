@@ -5,6 +5,7 @@ import argparse,time
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--skip_ue4_editor", help="skip install and build unreal engine editor",default=False,action='store_true')
+parser.add_argument("--nocache", help="reinstalls everything",default=False,action='store_true')
 args = parser.parse_args()
 
 print('skip unreal engine option =',args.skip_ue4_editor)
@@ -70,9 +71,10 @@ if 'unreal_engine_4' in req_docker_images:
     
 
 for docker_image in req_docker_images:
-    if docker_image not in current_docker_images:
+    if args.nocache or docker_image not in current_docker_images:
         print('building image ',docker_image)
-        run_shell('cd dockers/'+docker_image+' && ../build > /tmp/dbuild-%s.log 2>&1' % docker_image,
+        nocache = '--nocache' if args.nocache else ''
+        run_shell('cd dockers/'+docker_image+' && ../build '+nocache+'> /tmp/dbuild-%s.log 2>&1' % docker_image,
             'Error: failed bulding docker image '+docker_image+' please look at the log file /tmp/dbuild-*.log')
 
 
