@@ -25,10 +25,16 @@ def reader():
     ########## init
     ps=position_struct
     ps['posx'],ps['posy'],ps['posz'],ps['roll'],ps['pitch'],ps['yaw']=[0]*6
-    ps['pitch']=90 
+    ps['pitch']=90
+    ps['posz']=2
+
+    for _ in range(100):
+        yield from asyncio.sleep(1/30.0) #30Hz
     ######### climb
-    for _ in range(300):
+    for _ in range(200):
         ps['posz']+=.01
+        yield from asyncio.sleep(1/30.0) #30Hz
+    for _ in range(100):
         yield from asyncio.sleep(1/30.0) #30Hz
     for _ in range(100):
         ps['posx']+=.01

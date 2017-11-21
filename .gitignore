@@ -15,3 +15,6 @@ demos/common/_fdm.c
 *.pyc
 __pycache__
 baked_games
+*.log
+core
+*.avi

@@ -108,6 +108,10 @@ COPY install_graphic_driver.sh /install_graphic_driver.sh
 RUN chmod +x /install_graphic_driver.sh
 RUN GDRIVER=$GDRIVER /install_graphic_driver.sh
 
+###added more ros libs
+RUN apt-get -y update
+RUN apt-get install -y python-rosinstall
+
 
 #user setings
 ARG UID

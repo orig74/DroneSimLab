@@ -25,7 +25,7 @@ tmux send-keys "rosrun image_view image_view image:=rgb_camera_0" ENTER
 tmux split-window -v
 tmux send-keys "printf '\033]2;fdm zmq publish to ue4\033\\'" ENTER
 #tmux send-keys "cd ${DEMO_PATH}" ENTER
-tmux send-keys "PATH=/miniconda/bin:\$PATH python3 fdm_pub.py --config_path=$UNREAL_PROXY_PATH" ENTER
+tmux send-keys "PATH=/miniconda/bin:\$PATH python3 fdm_pub2.py --config_path=$UNREAL_PROXY_PATH" ENTER
 tmux select-pane -t 5
 tmux split-window -v
 tmux send-keys "printf '\033]2;slam\033\\'" ENTER

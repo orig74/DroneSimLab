@@ -31,13 +31,14 @@ def callback(data):
 	data.orientation.y,
 	data.orientation.z,
 	data.orientation.w)
-    euler = tf.transformations.euler_from_quaternion(quaternion)
+    ps['posz']=-ps['posz']
+    euler = tf.transformations.euler_from_quaternion(quaternion,'sxyz')
     roll = euler[0]/np.pi*180
     pitch = euler[1]/np.pi*180
     yaw = euler[2]/np.pi*180
 
     ps['roll'],ps['pitch'],ps['yaw']=roll,pitch,yaw
-    ps['roll']+=90
+    #ps['roll']+=90 #for g500
 
 def printer():
     print('-->',position_struct)

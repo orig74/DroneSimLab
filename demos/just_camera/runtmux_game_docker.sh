@@ -4,7 +4,7 @@
 GAME_PATH=/DroneLab/baked_games/game_demo/LinuxNoEditor/
 ENTRY_POINT=unreal_proxy
 ENTRY_PATH=../unreal_proxies/two_drones/
-PACKED_NAME=testprj7_14_4
+PACKED_NAME= testprj7_14_4
 if [ -z "$CATKIN_WS_PATH"]; then
 CATKIN_WS_PATH=/DroneLab/demos/px4_gazebo/demo_catkin_ws ;
 fi
@@ -20,7 +20,7 @@ fi
 DEMO_PATH=/DroneLab/demos/just_camera/
 
 #cleanning prev run
-tmux kill-server
+tmux kill-session -t dronelab
 source ../../scripts/common.sh
 
 kill_images ros_image_indigo

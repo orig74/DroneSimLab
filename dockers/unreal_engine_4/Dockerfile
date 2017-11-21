@@ -31,6 +31,7 @@ RUN mkdir /home/docker
 RUN chown -R docker:docker /home/docker
 # NOTE: This is a hack because of a bug in mono: https://bugzilla.xamarin.com/show_bug.cgi?id=30360
 RUN apt-get -y install tzdata
+RUN apt-get -y update
 RUN apt-get -y install libxss-dev 
 RUN unlink /etc/localtime
 RUN ln -s /usr/share/zoneinfo/Etc/GMT /etc/localtime

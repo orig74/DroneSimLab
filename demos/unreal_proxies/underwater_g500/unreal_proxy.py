@@ -11,7 +11,8 @@ drone_texture_names=['/Game/TextureRenderTarget2D_0']
 #drone_textures_depth_names=['/Game/TextureRenderTarget2D_depth']
 drone_textures_depth_names=[]
 #needed actors
-drone_actors_names=['g500_robot']
+#drone_actors_names=['g500_robot']
+drone_actors_names=['FbxScene_openrov_0']
 
 
 context = zmq.Context()
