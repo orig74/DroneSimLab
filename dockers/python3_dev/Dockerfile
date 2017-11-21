@@ -13,10 +13,13 @@ RUN apt-get -y install wget tmux
 
 ######## python3 ##########
 RUN apt-get -y install curl
-RUN curl -o /miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-4.2.12-Linux-x86_64.sh
+#RUN curl -o /miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-4.2.12-Linux-x86_64.sh
+RUN curl -o /miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-4.3.30-Linux-x86_64.sh
 RUN /bin/bash /miniconda.sh -b -p /miniconda
 RUN PATH=/miniconda/bin conda install -y pyzmq
-RUN PATH=/miniconda/bin conda install -c menpo opencv3=3.2.0
+#RUN PATH=/miniconda/bin conda install -c menpo opencv=3.2.0
+RUN PATH=/miniconda/bin conda install -c menpo opencv
+
 RUN PATH=/miniconda/bin:$PATH pip install pymavlink
 RUN PATH=/miniconda/bin:$PATH pip install cffi 
 

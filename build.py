@@ -71,11 +71,11 @@ if 'unreal_engine_4' in req_docker_images:
     
 
 for docker_image in req_docker_images:
-    if args.nocache or docker_image not in current_docker_images:
-        print('building image ',docker_image)
-        nocache = '--nocache' if args.nocache else ''
-        run_shell('cd dockers/'+docker_image+' && ../build '+nocache+'> /tmp/dbuild-%s.log 2>&1' % docker_image,
-            'Error: failed bulding docker image '+docker_image+' please look at the log file /tmp/dbuild-*.log')
+    ##    if args.nocache or docker_image not in current_docker_images:
+    print('building image ',docker_image)
+    nocache = '--nocache' if args.nocache else ''
+    run_shell('cd dockers/'+docker_image+' && ../build '+nocache+'> /tmp/dbuild-%s.log 2>&1' % docker_image,
+        'Error: failed bulding docker image '+docker_image+' please look at the log file /tmp/dbuild-*.log')
 
 
 print('testing docker images instalation...')
@@ -91,7 +91,7 @@ for docker_image in req_docker_images:
 print("install ros...")
 #if not os.path.isdir('ros/catkin_mavros'):
 #    os.mkdir('ros/catkin_mavros')
-run_shell('''cd dockers/ros_image_kinetic && ./run_image.sh '-c "/DroneLab/scripts/make_catkin.sh"' ''',
-        'Error: faild installing ros')
+#run_shell('''cd dockers/ros_image_kinetic && ./run_image.sh '-c "/DroneLab/scripts/make_catkin.sh"' ''',
+#        'Error: faild installing ros')
 
 print("done!")
