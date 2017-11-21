@@ -18,3 +18,11 @@ baked_games
 *.log
 core
 *.avi
+.tilecache
+.uwsim
+.vim
+catkin_ws_uwsim
+mav.parm
+mav.tlog
+mav.tlog.raw
+pos.txt
