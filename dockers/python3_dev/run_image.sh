@@ -19,6 +19,7 @@ docker run -it \
 -v $DRONE_LAB_DIR/dockers/docker_home:/home/docker \
 -v /tmp/.X11-unix:/tmp/.X11-unix \
 -v $PROJECT_FILES_DIR:/project_files \
+-v `readlink -f ~`:/home/host \
 -e DISPLAY=$DISPLAY \
 -e USERNAME=docker \
 -e USER=docker \
