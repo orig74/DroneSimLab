@@ -113,6 +113,8 @@ RUN GDRIVER=$GDRIVER /install_graphic_driver.sh
 RUN apt-get -y update
 RUN apt-get install -y python-rosinstall
 
+### add python dynamics
+RUN pip2 install pydy
 
 #user setings
 ARG UID
