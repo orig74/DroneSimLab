@@ -20,7 +20,7 @@ if not args.skip_ue4_editor:
 
 #git update sub modules
 
-games_path='https://studweb.cosc.canterbury.ac.nz/~oga13/ue4_games/'
+games_path='https://www.csse.canterbury.ac.nz/dronesimlab/ue4_games/'
 games_names=['game_demo']
 
 def run_shell(cmd,failmsg):
@@ -47,13 +47,13 @@ for submodule in submodules:
 print("downloading baked games...")
 
 for game_name in games_names:
-    md5=os.popen('curl '+games_path+game_name+'.md5').read().split()[0]
+    md5=os.popen('curl -k '+games_path+game_name+'.md5').read().split()[0]
     assert(len(md5)==32)
     game_local_dir='baked_games/'+game_name
     if not os.path.isdir(game_local_dir):
         os.makedirs(game_local_dir)
     if not os.path.isfile(game_local_dir+'/done'):
-        cmd="curl -o "+game_local_dir+'/'+game_name+'.tgz '+games_path+'/'+game_name+'.tgz'
+        cmd="curl -k -o "+game_local_dir+'/'+game_name+'.tgz '+games_path+'/'+game_name+'.tgz'
         print('Downloading command:',cmd) 
         run_shell(cmd,'Failed downloading game '+game_name)
         run_shell("cd "+game_local_dir+" && tar xzf "+game_name+'.tgz','fail extracting game')
