@@ -18,6 +18,7 @@ docker run -it --rm --name ros_kinetic \
 -v $DRONE_LAB_DIR:/DroneLab  \
 -v $DRONE_LAB_DIR/dockers/docker_home:/home/docker \
 -v $DRONE_LAB_DIR/ros/catkin_ws:/ros/catkin_ws \
+-v `readlink -f ~`:/home/host \
 -v /tmp/.X11-unix:/tmp/.X11-unix \
 -e DISPLAY=$DISPLAY \
 -e USERNAME=docker \

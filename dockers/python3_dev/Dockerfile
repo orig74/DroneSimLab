@@ -26,6 +26,11 @@ RUN PATH=/miniconda/bin:$PATH pip install cffi
 
 RUN apt-get install -y software-properties-common
 
+RUN add-apt-repository -y ppa:ubuntu-toolchain-r/test
+RUN apt-get -y update
+RUN apt-get -y install gcc-4.9
+RUN apt-get -y upgrade libstdc++6
+
 ######## nvidia part ######
 ARG GDRIVER
 COPY install_graphic_driver.sh /install_graphic_driver.sh
