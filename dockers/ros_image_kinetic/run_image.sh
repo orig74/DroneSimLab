@@ -14,7 +14,7 @@ chmod o+x $DRONE_LAB_DIR
 chmod o+x $DRONE_LAB_DIR/dockers
 ##
 # removed -v $DRONE_LAB_DIR/ros/catkin_mavros:/ros/catkin_mavros \
-docker run -it --rm --name ros_indigo \
+docker run -it --rm --name ros_kinetic \
 -v $DRONE_LAB_DIR:/DroneLab  \
 -v $DRONE_LAB_DIR/dockers/docker_home:/home/docker \
 -v $DRONE_LAB_DIR/ros/catkin_ws:/ros/catkin_ws \
