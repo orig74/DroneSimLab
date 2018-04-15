@@ -5,22 +5,20 @@ import config
 from Wrappers import phandlers as ph
 import numpy as np
 import cv2
-import pickle,os
 
 #needed texture objects in the unreal project
-drone_texture_names=['/Game/TextureRenderTarget2D_2']
+drone_texture_names=['/Game/TextureRenderTarget2D_0']
+#drone_textures_depth_names=['/Game/TextureRenderTarget2D_depth']
+drone_textures_depth_names=[]
 #needed actors
-drone_actors_names=['CameraBoat0']
-#reference_actor_name='Sphere15'
-reference_actor_name='CameraBoat0'
-#reference_actor_name='CameraActor_0'
+#drone_actors_names=['g500_robot']
+drone_actors_names=['cares_rov3_0']
+
+
 context = zmq.Context()
 
 show_cv=False
-pub_cv=False
-dump_name='/DroneLab/tmp/vidtelem.pkl'
-#dump_name=''
-file_dump=None
+pub_cv=True
 
 drone_subs=[]
 
@@ -42,18 +40,16 @@ socket_pub.bind("tcp://%s:%d" % config.zmq_pub_unreal_proxy )
 start=time.time()
 
 def main_loop(gworld):
-    global file_dump
-    if dump_name:
-        print('openning dump file dump name is ',dump_name)
-        file_dump=open(dump_name,'wb')
-        os.chmod(dump_name,0o777)
-    print('-- actors 1--')
-    for p in ph.GetActorsNames(gworld,100*1024):
+    print('-- actors list --',gworld)
+    for p in ph.GetActorsNames(gworld,1024*1000):
         print(p)
     print('-- textures --')
     drone_textures=[]
     for tn in drone_texture_names:
         drone_textures.append(ph.GetTextureByName(tn))
+    drone_textures_depth=[]
+    for tn in drone_textures_depth_names:
+        drone_textures_depth.append(ph.GetTextureByName(tn))
 
     if not all(drone_textures):
         print("Error, Could not find all textures")
@@ -62,7 +58,7 @@ def main_loop(gworld):
     drone_actors=[]
     for drn in drone_actors_names:
         drone_actors.append(ph.FindActorByName(gworld,drn))
-    reference_actor=ph.FindActorByName(gworld,reference_actor_name)
+
     if not all(drone_actors):
         print("Error, Could not find all drone actors")
         while 1:
@@ -74,8 +70,6 @@ def main_loop(gworld):
         yield
     drone_start_positions=[np.array(ph.GetActorLocation(drone_actor)) for drone_actor in drone_actors]
     positions=[None for _ in range(config.n_drones)]
-    reference_start = np.array(ph.GetActorLocation(reference_actor))
-    reference_rotation = np.array(ph.GetActorRotation(reference_actor))
     while 1:
         for drone_index in range(config.n_drones):
             socket_sub=drone_subs[drone_index]
@@ -85,22 +79,13 @@ def main_loop(gworld):
                 positions[drone_index]=pickle.loads(msg)
                 #print('-----',positions[drone_index])
 
-            #position=positions[drone_index]
-            #if position is not None:
-            #    new_pos=drone_start_positions[drone_index]+np.array([position['posx'],position['posy'],position['posz']])*100 #turn to cm
-            #    #print('-----',drone_index,new_pos)
-            #    ph.SetActorLocation(drone_actor,new_pos)
-            #    ph.SetActorRotation(drone_actor,(position['roll'],position['pitch'],position['yaw']))
-            #    positions[drone_index]=None
-            #new_pos=reference_start-ph.GetActorLocation(reference_actor)+drone_start_positions[drone_index]
-            #reference_rotation = reference_rotation*0.9+np.array(ph.GetActorRotation(reference_actor))*0.1
-            #ph.SetActorRotation(drone_actor,reference_rotation)
-           # ph.SetActorLocation(drone_actor,new_pos)
-            reference_rotation = ph.GetActorRotation(reference_actor)
-            reference_location = ph.GetActorLocation(reference_actor)
-#            print('-----',reference_location,reference_rotation)
-            
-
+            position=positions[drone_index]
+            if position is not None:
+                new_pos=drone_start_positions[drone_index]+np.array([position['posx'],position['posy'],position['posz']])*100 #turn to cm
+                #print('-----',drone_index,position)
+                ph.SetActorLocation(drone_actor,new_pos)
+                ph.SetActorRotation(drone_actor,(position['roll'],position['pitch'],position['yaw']))
+                positions[drone_index]=None
         yield
         for drone_index in range(config.n_drones):
             #img=cv2.resize(ph.GetTextureData(drone_textures[drone_index]),(1024,1024),cv2.INTER_LINEAR)
@@ -108,35 +93,29 @@ def main_loop(gworld):
             imgs=[]
 
             img=ph.GetTextureData(drone_textures[drone_index])
-            #print('--==--',img.shape)
             topics.append(config.topic_unreal_drone_rgb_camera%drone_index)
             imgs.append(img)
+            
 
-            #topics=[config.topic_unreal_drone_rgb_camera%drone_index,
-            #        config.topic_unreal_drone_rgb_camera%drone_index+b'down',
-            #        config.topic_unreal_drone_rgb_camera%drone_index+b'depth']
-            #imgs=[  ph.GetTextureData(drone_textures[drone_index]),
-            #        ph.GetTextureData(drone_textures_down[drone_index]),
-            #        ph.GetTextureData(drone_textures_depth[drone_index],channels=[2])]
+            #if drone_index<len(drone_textures_depth):
+            #    img_depth=ph.GetTextureData16f(drone_textures_depth[drone_index],channels=[0,1,2,3]) #depth data will be in A componnent
+                #img_depth=ph.GetTextureData(drone_textures_depth[drone_index],channels=[2]) #depth data will be in red componnent
+            #    topics.append(config.topic_unreal_drone_rgb_camera%drone_index+b'depth')
+            #    imgs.append(img_depth)
+
             if pub_cv:
                 for topic,img in zip(topics,imgs):
                     #socket_pub.send_multipart([topic,pickle.dumps(img,2)])
-                    #print('--->',img.shape)
+                    #print('--->',img[:].max(),img[:].min())
                     socket_pub.send_multipart([topic,struct.pack('lll',*img.shape),img.tostring()])
                     #socket_pub.send_multipart([topic,pickle.dumps(img,-1)])
 
             if show_cv:
-                #img=cv2.blur(cv2.resize(img,(512,512)),(3,3))
                 cv2.imshow('drone camera %d'%drone_index,img)
                 cv2.waitKey(1)
 
-            if file_dump is not None:
-                pickle.dump((img,reference_rotation,reference_location),file_dump,-1)
-
 def kill():
     print('done!')
-    if file_dump is not None:
-        file_dump.close()
     socket_pub.send_multipart([config.topic_unreal_state,b'kill'])
     if show_cv:
         cv2.destroyAllWindows()
