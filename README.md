@@ -31,4 +31,4 @@ Please follow the [wiki](https://github.com/orig74/DroneSimLab/wiki)
 ## Contact:  
 oga13@uclive.ac.nz  
 
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DRQZLNA24SSN4)
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=66)
