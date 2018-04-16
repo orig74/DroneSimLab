@@ -37,7 +37,7 @@ def callback(data):
     #pitch = euler[1]/np.pi*180
     pitch = euler[0]/np.pi*180
     roll = euler[1]/np.pi*180
-    yaw = euler[2]/np.pi*180
+    yaw = -euler[2]/np.pi*180-90
 
     ps['roll'],ps['pitch'],ps['yaw']=roll,pitch,yaw
     
