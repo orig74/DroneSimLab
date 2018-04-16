@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ../DroneSimLab/scripts/common.sh
+source ../../scripts/common.sh
 
 kill_images ros_image_indigo
 kill_images ros_image_kinetic

@@ -12,7 +12,7 @@ drone_texture_names=['/Game/TextureRenderTarget2D_0']
 drone_textures_depth_names=[]
 #needed actors
 #drone_actors_names=['g500_robot']
-drone_actors_names=['cares_rov3_0']
+drone_actors_names=['FbxScene_openrov_1']
 
 
 context = zmq.Context()
@@ -44,6 +44,7 @@ def main_loop(gworld):
     for p in ph.GetActorsNames(gworld,1024*1000):
         print(p)
     print('-- textures --')
+    print('-- starting openrov simulation --')
     drone_textures=[]
     for tn in drone_texture_names:
         drone_textures.append(ph.GetTextureByName(tn))

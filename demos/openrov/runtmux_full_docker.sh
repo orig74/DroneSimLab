@@ -1,9 +1,9 @@
 #!/bin/bash
 PROJECT_NAME=Oceantest1
 #DOCKER_IMAGE=ros_image_kinetic
-DEMO_PATH=/home/host/underwaterrov
+DEMO_PATH=/DroneLab/demos/openrov
 
-DRONESIMLAB_PATH=../DroneSimLab
+DRONESIMLAB_PATH=../../
 #CATKIN_WS_PATH=/home/docker/catkin_ws_uwsim
 
 #cleanning prev run
@@ -16,10 +16,10 @@ tmux new-session -d -s dronelab
 
 #tmux send-keys "cd ../../dockers/ros_image_indigo/ && ./run_image.sh " ENTER
 tmux send-keys "cd $DRONESIMLAB_PATH/dockers/ros_image_kinetic/ && ./run_image.sh" ENTER
-tmux send-keys "export UNREAL_PROXY_PATH=/home/host/underwaterrov/unreal_proxy/" ENTER
+tmux send-keys "export UNREAL_PROXY_PATH=$DEMO_PATH/unreal_proxy/" ENTER
 tmux send-keys "export DEMO_PATH=$DEMO_PATH" ENTER
 tmux send-keys "cd $DEMO_PATH" ENTER
-tmux send-keys "source run_tmux_parag.sh" ENTER
+tmux send-keys "source run_tmux_openrov.sh" ENTER
 
 
 

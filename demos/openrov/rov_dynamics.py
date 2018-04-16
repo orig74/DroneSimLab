@@ -25,17 +25,37 @@ right_hand_side = generate_ode_function(forcing_vector, coordinates,
 
 #MKS units
 #constants = [Wx,Wh,T1,T2,Bh,Bw,m_b,v_b,mu,g]+I
-numerical_constants = np.array([
-                            0.03,  # T1 [m]
-                            0.03,  # T2 [m]
-                            0.1,  # T3 [m]
-                            0.15,  # T4 [m]
-                            0.03,  # T5 [m]
-                            0.03,  # T6 [m]
+#parag rov
+#numerical_constants = np.array([
+#                            0.03,  # T1 [m]
+#                            0.03,  # T2 [m]
+#                            0.1,  # T3 [m]
+#                            0.15,  # T4 [m]
+#                            0.03,  # T5 [m]
+#                            0.03,  # T6 [m]
+#                            0.08,  # Bh [m]
+#                            0.01,  # Bw [m]
+#                            1.0,  # m_b [kg]
+#                            0.001 ,  # v_b [M^3]
+#                            0.3,  # mu
+#                            0.2,  # mu_r
+#                            9.8,  # g MKS
+#                            0.5,  # Ixx [kg*m^2]
+#                            0.5,  # Iyy [kg*m^2]
+#                            0.5,  # Izz [kg*m^2]
+#                               ]
+#) 
+
+#openrov
+numerical_constants = np.array([ #openrov
+                            0.1,  # Wx [m]
+                            0.15,  # Wh [m]
+                            0.1,  # T1 [m]
+                            0.05,  # T2 [m]
                             0.08,  # Bh [m]
                             0.01,  # Bw [m]
-                            1.0,  # m_b [kg]
-                            0.001 ,  # v_b [M^3]
+                            1.0 * 3,  # m_b [kg]
+                            0.001 * 3  ,  # v_b [M^3]
                             0.3,  # mu
                             0.2,  # mu_r
                             9.8,  # g MKS
@@ -44,6 +64,7 @@ numerical_constants = np.array([
                             0.5,  # Izz [kg*m^2]
                                ]
                             ) 
+
 thruster_filt_coef=0.2
 
 
@@ -82,10 +103,10 @@ if 1 and  __name__=='__main__':
     fps=30
     r = rospy.Rate(fps)
     xx = np.zeros(12)
-    thrusters=[0,0,0,0]
+    thrusters=[0,0,0,0] ### can be also only 3 thrusters depending on type of ROV
     thrusters_filt=np.array(thrusters)
     rospy.Subscriber('/thrusters',Float64MultiArray, updateThrusters)
-    pub_pose= rospy.Publisher('parag_rov', Pose)
+    pub_pose= rospy.Publisher('open_rov', Pose)
     cnt=0
     while not rospy.is_shutdown():
         #now=rospy.Time.now()
