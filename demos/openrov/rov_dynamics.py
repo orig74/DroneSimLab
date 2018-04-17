@@ -56,7 +56,7 @@ numerical_constants = np.array([ #openrov
                             0.01,  # Bw [m]
                             1.0 * 3,  # m_b [kg]
                             0.001 * 3  ,  # v_b [M^3]
-                            0.3,  # mu
+                            5.9,  # mu
                             0.2,  # mu_r
                             9.8,  # g MKS
                             0.5,  # Ixx [kg*m^2]

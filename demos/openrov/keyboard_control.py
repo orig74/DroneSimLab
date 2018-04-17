@@ -15,7 +15,7 @@ fcntl.fcntl(fd, fcntl.F_SETFL, oldflags | os.O_NONBLOCK)
 pub = rospy.Publisher('/thrusters', Float64MultiArray)
 
 rospy.init_node('keyboard_control')
-factor=10
+factor=40
 try:
     while not rospy.is_shutdown():
         thrusters=[0,0,0,0]
