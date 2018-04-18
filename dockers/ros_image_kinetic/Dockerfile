@@ -4,7 +4,7 @@ RUN apt-get -y update
 RUN apt-get install -y software-properties-common
 RUN add-apt-repository ppa:george-edison55/cmake-3.x -y
 RUN apt-get -y update
-RUN apt-get -y install python-scipy gawk git python-pip  
+RUN apt-get -y install gawk git python-pip  
 RUN echo "export PS1=\\\\\\\\w\\$" >> /etc/bash.bashrc
 RUN apt-get -y install xterm
 RUN pip install --upgrade pip
@@ -114,6 +114,9 @@ RUN apt-get -y update
 RUN apt-get install -y python-rosinstall
 
 ### add python dynamics
+RUN apt-get install -y  python-testresources
+#RUN apt-get install -y python-scipy
+#RUN pip2 install scipy
 RUN pip2 install pydy
 
 #user setings
