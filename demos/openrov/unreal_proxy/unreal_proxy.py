@@ -7,7 +7,9 @@ import numpy as np
 import cv2
 
 #needed texture objects in the unreal project
-drone_texture_names=['/Game/TextureRenderTarget2D_0']
+#drone_texture_names=['/Game/TextureRenderTarget2D_0']
+drone_texture_names=['/Game/openrovcamera']
+
 #drone_textures_depth_names=['/Game/TextureRenderTarget2D_depth']
 drone_textures_depth_names=[]
 #needed actors

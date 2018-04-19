@@ -2,6 +2,9 @@
 from std_msgs.msg import Float64MultiArray
 import termios, fcntl, sys, os
 import rospy
+sys.path.append('./unreal_proxy')
+import config
+import zmq,pickle
 
 fd = sys.stdin.fileno()
 oldterm = termios.tcgetattr(fd)
@@ -12,13 +15,27 @@ termios.tcsetattr(fd, termios.TCSANOW, newattr)
 oldflags = fcntl.fcntl(fd, fcntl.F_GETFL)
 fcntl.fcntl(fd, fcntl.F_SETFL, oldflags | os.O_NONBLOCK)
 
+
+context = zmq.Context()
+socket = context.socket(zmq.PAIR)
+socket.bind("tcp://*:%d" % config.zmq_remote_thrasters[1])
+
 pub = rospy.Publisher('/thrusters', Float64MultiArray)
 
 rospy.init_node('keyboard_control')
 factor=40
 try:
+    thrusters=[0,0,0,0]
     while not rospy.is_shutdown():
-        thrusters=[0,0,0,0]
+        while len(zmq.select([socket],[],[],0)[0])>0:
+            msg=socket.recv()
+            thrusters=[i*factor for i in pickle.loads(msg)]
+            if len(thrusters)<4:
+                thrusters.append(thrusters[-1])
+            #revers thruster 3&4
+            thrusters[3]=-thrusters[3]
+            thrusters[2]=-thrusters[2]
+            print('thruster',thrusters)    
         msg = Float64MultiArray()
         try:
             c = sys.stdin.read(1)
@@ -45,7 +62,7 @@ try:
 
         msg.data = thrusters
         pub.publish(msg)
-        rospy.sleep(0.1)
+        rospy.sleep(0.05)
 finally:
     termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
 
