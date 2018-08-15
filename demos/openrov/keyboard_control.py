@@ -24,11 +24,13 @@ pub = rospy.Publisher('/thrusters', Float64MultiArray)
 
 rospy.init_node('keyboard_control')
 factor=40
+first_key = False # for starting the simulation after having key pressed
 try:
     thrusters=[0,0,0,0]
     while not rospy.is_shutdown():
         while len(zmq.select([socket],[],[],0)[0])>0:
             msg=socket.recv()
+            first_key = True
             thrusters=[i*factor for i in pickle.loads(msg)]
             if len(thrusters)<4:
                 thrusters.append(thrusters[-1])
@@ -56,12 +58,14 @@ try:
             if c=='v': #idle
                 thrusters=[0,0,0,0]
             if c!='':
+                first_key = True
                 print('%c'%c)
         except IOError:
             pass
 
         msg.data = thrusters
-        pub.publish(msg)
+        if first_key:
+            pub.publish(msg)
         rospy.sleep(0.05)
 finally:
     termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)

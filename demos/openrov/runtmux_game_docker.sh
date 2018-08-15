@@ -1,7 +1,8 @@
 #!/bin/bash
 
 #game defenitions
-GAME_PATH=/project_files/Ocean1_packed/LinuxNoEditor/
+GAME_PATH=/DroneLab/baked_games/Ocean1_packed/LinuxNoEditor/
+#GAME_PATH=/project_files/Ocean1_packed/LinuxNoEditor/
 
 PACKED_NAME=Oceantest1
 

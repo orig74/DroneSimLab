@@ -54,8 +54,8 @@ numerical_constants = np.array([ #openrov
                             0.05,  # T2 [m]
                             0.08,  # Bh [m]
                             0.01,  # Bw [m]
-                            1.0 * 3,  # m_b [kg]
-                            0.001 * 3  ,  # v_b [M^3]
+                            2.65,  # m_b [kg]
+                            0.001 * 2.66  ,  # v_b [M^3] slightly more boyent then havy
                             5.9,  # mu
                             0.2,  # mu_r
                             9.8,  # g MKS
@@ -66,7 +66,7 @@ numerical_constants = np.array([ #openrov
                             ) 
 
 thruster_filt_coef=0.2
-
+thruster_control_to_force_ratio=0.3
 
 def test_dynamics():
     x0 = np.zeros(12)
@@ -82,7 +82,7 @@ def updateThrusters(data):
     global thrusters
     thrusters=data.data 
 
-def pub_position_struct(xx,pub_pos,cnt):
+def pub_position_struct(xx,pub_pose,cnt):
     pose = Pose()
     pose.position.x,pose.position.y,pose.position.z=xx[:3]
 
@@ -103,19 +103,42 @@ if 1 and  __name__=='__main__':
     fps=30
     r = rospy.Rate(fps)
     xx = np.zeros(12)
-    thrusters=[0,0,0,0] ### can be also only 3 thrusters depending on type of ROV
-    thrusters_filt=np.array(thrusters)
+    #thrusters=[0,0,0,0] ### can be also only 3 thrusters depending on type of ROV
+    thrusters = None
+    thrusters_filt=np.zeros(4)
     rospy.Subscriber('/thrusters',Float64MultiArray, updateThrusters)
     pub_pose= rospy.Publisher('open_rov', Pose)
     cnt=0
     while not rospy.is_shutdown():
         #now=rospy.Time.now()
-        thrusters_filt = thrusters_filt*(1-thruster_filt_coef) + thruster_filt_coef*np.array(thrusters)
-        sim_time=cnt*1.0/fps
-        x_dot=right_hand_side(xx, sim_time, thrusters_filt, numerical_constants)
-        xx=xx+x_dot*1.0/fps
-        pub_position_struct(xx,pub_pose,cnt)
+        if thrusters is not None: #whait for input to start the simulation
+            thrusters_force=thruster_control_to_force_ratio*np.array(thrusters)
+            thrusters_filt = thrusters_filt*(1-thruster_filt_coef) + thruster_filt_coef*thrusters_force
+            sim_time=cnt*1.0/fps
+            x_dot=right_hand_side(xx, sim_time, thrusters_filt, numerical_constants)
+            xx=xx+x_dot*1.0/fps
+            pub_position_struct(xx,pub_pose,cnt)
+        if cnt%30==0:
+            print('---',cnt,':',xx)
         r.sleep()
         cnt+=1
 
+if 0 and __name__=='__main__':
+    rospy.init_node("rov_dynamics")
+    refpoint = [  8.11856463e-01,   2.01675307e+00,  -2.22135131e+00,
+            -3.65542704e-04,  -1.21102869e-01,   8.05301680e+00,
+            -5.49220666e-05,   1.20856560e-04,   1.28878739e-01,
+            -2.37508712e-03,   1.11925048e-02,   4.66256052e-06]
 
+    refpoint[0]-=2
+    refpoint[2]-=1
+    fps=30
+    r = rospy.Rate(fps)
+    pub_pose= rospy.Publisher('open_rov', Pose)
+    cnt=0
+
+    while not rospy.is_shutdown():
+        pub_position_struct(refpoint,pub_pose,cnt)
+        
+        cnt+=1
+        r.sleep()
