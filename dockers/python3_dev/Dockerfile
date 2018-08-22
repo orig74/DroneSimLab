@@ -1,7 +1,8 @@
 # Base docker image
 FROM ubuntu:16.04
-RUN pwd
+#RUN pwd
 RUN apt-get -y update
+RUN apt-get -y upgrade
 RUN apt-get -y install gawk git   
 RUN echo "export PS1=\\\\\\\\w\\$" >> /etc/bash.bashrc
 RUN apt-get -y install xterm
@@ -12,17 +13,6 @@ RUN apt-get -y install vim
 RUN apt-get -y install wget tmux 
 
 ######## python3 ##########
-RUN apt-get -y install curl
-#RUN curl -o /miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-4.2.12-Linux-x86_64.sh
-RUN curl -o /miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-4.3.30-Linux-x86_64.sh
-RUN /bin/bash /miniconda.sh -b -p /miniconda
-RUN PATH=/miniconda/bin conda install -y pyzmq
-#RUN PATH=/miniconda/bin conda install -c menpo opencv=3.2.0
-RUN PATH=/miniconda/bin conda install -c menpo opencv
-
-RUN PATH=/miniconda/bin:$PATH pip install pymavlink
-RUN PATH=/miniconda/bin:$PATH pip install cffi 
-
 
 RUN apt-get install -y software-properties-common
 
@@ -40,7 +30,37 @@ RUN GDRIVER=$GDRIVER /install_graphic_driver.sh
 ######## user settings ######
 ENV QT_X11_NO_MITSHM 1
 ARG UID
+RUN apt-get install sudo
 RUN useradd -u $UID docker
 RUN echo "docker:docker" | chpasswd
 RUN echo "root:root" | chpasswd
 RUN echo "docker ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers 
+
+
+#### for ardusub ######
+RUN apt-get -y install python-pip
+RUN pip install mavproxy
+
+###  gstreamer ######
+RUN apt-get -y update
+RUN apt-get install -y libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-doc gstreamer1.0-tools
+
+RUN apt-get install -y libgtk2.0-dev pkg-config
+
+
+#RUN curl -o /miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-4.2.12-Linux-x86_64.sh
+#RUN curl -o /miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-4.3.30-Linux-x86_64.sh
+RUN curl -o  /miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-4.5.4-Linux-x86_64.sh
+
+RUN /bin/bash /miniconda.sh -b -p /miniconda
+RUN PATH=/miniconda/bin conda install -y pyzmq
+#RUN PATH=/miniconda/bin conda install -c menpo opencv=3.2.0
+#RUN PATH=/miniconda/bin conda install -c menpo opencv
+RUN PATH=/miniconda/bin:$PATH pip install --upgrade pip
+RUN PATH=/miniconda/bin:$PATH pip install pymavlink
+RUN PATH=/miniconda/bin:$PATH pip install cffi 
+RUN PATH=/miniconda/bin:$PATH pip install opencv-python
+RUN PATH=/miniconda/bin:$PATH pip install opencv-contrib-python
+
+
+
