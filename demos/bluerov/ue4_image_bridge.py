@@ -22,7 +22,7 @@ zmq_sub.setsockopt(zmq.SUBSCRIBE,topicl)
 zmq_sub.setsockopt(zmq.SUBSCRIBE,topicr)
 #zmq_sub.setsockopt(zmq.SUBSCRIBE,topic+b'down') 
 #zmq_sub.setsockopt(zmq.SUBSCRIBE,topic+b'depth') 
-cvshow=1
+cvshow=0
 #cvshow=False
 gst=1
 test=0
@@ -53,11 +53,14 @@ def listener():
     cnt=0
     while 1:
         while len(zmq.select([zmq_sub],[],[],0.001)[0])>0:
-            topic, shape, data = zmq_sub.recv_multipart()
+            topic, info, data = zmq_sub.recv_multipart()
             #topic=topic.decode()
-            shape=struct.unpack('lll',shape)
+            info=struct.unpack('llll',info)
+            shape=info[:3]
+            frame_cnt=info[3]
+            img=np.fromstring(data,'uint8').reshape(shape)
+            rgb=img[...,::-1]
             if cvshow:
-                img=np.fromstring(data,'uint8').reshape(shape)
                 #if 'depth' in topic:
                 #    cv2.imshow(topic,img)
                 #else:
@@ -66,7 +69,7 @@ def listener():
                 cv2.imshow(topic.decode(),img)
                 cv2.waitKey(1)
             if topic==topicm and gst:
-                stdin.write(data)
+                stdin.write(rgb.tostring())
             ### test
         time.sleep(0.010)
         if cnt%20==0:

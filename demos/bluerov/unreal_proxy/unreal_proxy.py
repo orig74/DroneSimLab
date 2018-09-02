@@ -41,7 +41,9 @@ socket_pub.bind("tcp://%s:%d" % config.zmq_pub_unreal_proxy )
 
 start=time.time()
 
+
 def main_loop(gworld):
+    frame_cnt = 0
     print('-- actors list --',gworld)
     for p in ph.GetActorsNames(gworld,1024*1000):
         print(p)
@@ -96,8 +98,8 @@ def main_loop(gworld):
         imgs=[]
 
         img=ph.GetTextureData(drone_textures[0])
-        imgl=ph.GetTextureData(drone_textures[1])
-        imgr=ph.GetTextureData(drone_textures[2])
+        imgr=ph.GetTextureData(drone_textures[1])
+        imgl=ph.GetTextureData(drone_textures[2])
         topics.append(config.topic_unreal_drone_rgb_camera%0)
         topics.append(config.topic_unreal_drone_rgb_camera%0+b'l')
         topics.append(config.topic_unreal_drone_rgb_camera%0+b'r')
@@ -114,12 +116,15 @@ def main_loop(gworld):
             for topic,img in zip(topics,imgs):
                 #socket_pub.send_multipart([topic,pickle.dumps(img,2)])
                 #print('--->',img[:].max(),img[:].min())
-                socket_pub.send_multipart([topic,struct.pack('lll',*img.shape),img.tostring()])
+                #rgb=img[...,::-1]
+                socket_pub.send_multipart([topic,struct.pack('llll',*img.shape,frame_cnt),img.tostring()])
                 #socket_pub.send_multipart([topic,pickle.dumps(img,-1)])
 
         if show_cv:
             cv2.imshow('drone camera %d'%drone_index,img)
             cv2.waitKey(1)
+
+        frame_cnt += 1
 
 def kill():
     print('done!')
