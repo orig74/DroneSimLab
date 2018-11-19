@@ -1,5 +1,5 @@
 # vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4
-import zmq,pickle,time
+import zmq,pickle,time,os
 import struct
 import config
 from Wrappers import phandlers as ph
@@ -23,6 +23,11 @@ show_cv=False
 pub_cv=True
 
 drone_subs=[]
+
+if 'CAMERA_RIG_PITCH' in os.environ and os.environ['CAMERA_RIG_PITCH']:
+    pitch=float(os.environ['CAMERA_RIG_PITCH'])
+else:
+    pitch=0
 
 
 ############### need to be updated for mu;tiple drones
@@ -68,6 +73,26 @@ def main_loop(gworld):
         print("Error, Could not find all drone actors")
         while 1:
             yield
+    
+    #change cameras angle
+    for cam_name in ['SceneCaptureBROV1left','SceneCaptureBROV1right']: 
+        #ca=ph.FindActorByName(gworld,'SceneCaptureBROV1left')
+        ca=ph.FindActorByName(gworld,cam_name)
+        #ph.SetActorRotation(ca,(1,-1,1)) #left
+        #ph.SetActorRotation(ca,(1,-1,89)) #forward
+        #ph.SetActorRotation(ca,(1,-89,89)) #down (pitch -90)
+        #pitch range >=1  <=89
+        #pitch=45
+        #pitch=1
+        ph.SetActorRotation(ca,(1,-pitch,89))
+
+        yield
+        #ph.SetActorRotation(caml,(1,1,89)) #facing down
+        print('camera ' +cam_name + ' rotation ---',ph.GetActorRotation(ca))
+
+    #print('--- ',caml)
+
+
 
     for _ in range(10): #need to send it a few time don't know why.
         print('sending state main loop')

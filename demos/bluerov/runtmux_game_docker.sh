@@ -31,7 +31,7 @@ tmux send-keys "cd ../../dockers/python3_dev && ./run_image.sh" ENTER
 #tmux send-keys "export UNREAL_PROXY_PATH=$UNREAL_PROXY_PATH" ENTER
 tmux send-keys "export DEMO_PATH=$DEMO_PATH" ENTER
 tmux send-keys "export SITL_POSITION_PORT=$1" ENTER
-tmux send-keys "cd /DroneLab/ardupilot/ArduSub && ../Tools/autotest/sim_vehicle.py --out=udp:0.0.0.0:14550" ENTER
+tmux send-keys "cd /DroneLab/ardupilot/ArduSub && ../Tools/autotest/sim_vehicle.py --out=udp:0.0.0.0:14550 -L OSRF0" ENTER
 }
 
 function pub_fdm {
@@ -59,7 +59,7 @@ tmux send-keys "export PATH=/miniconda/bin:\$PATH" ENTER
 tmux send-keys "cd ${DEMO_PATH}" ENTER
 tmux send-keys "python /DroneLab/UE4PyhtonBridge/set_path.py --entry_point $ENTRY_POINT --entry_path $ENTRY_PATH --packed_game_name $PACKED_NAME --packed_game_path $GAME_PATH" ENTER
 tmux send-keys "cd ${GAME_PATH}" ENTER
-tmux send-keys "DISPLAY=:0.0 ./run.sh" ENTER
+tmux send-keys "CAMERA_RIG_PITCH=$CAMERA_RIG_PITCH DISPLAY=:0.0 ./run.sh" ENTER
 }
 #cleanning prev run
 
