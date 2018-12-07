@@ -29,6 +29,10 @@ if 'CAMERA_RIG_PITCH' in os.environ and os.environ['CAMERA_RIG_PITCH']:
 else:
     pitch=0
 
+if 'INITIAL_DRONE_POS' in os.environ and os.environ['INITIAL_DRONE_POS']:
+    initial_pos = list(map(float,os.environ['INITIAL_DRONE_POS'].split(',')))
+else:
+    initial_pos = None
 
 ############### need to be updated for mu;tiple drones
 socket_sub = context.socket(zmq.SUB)
@@ -50,8 +54,15 @@ start=time.time()
 def main_loop(gworld):
     frame_cnt = 0
     print('-- actors list --',gworld)
+    i=0
     for p in ph.GetActorsNames(gworld,1024*1000):
-        print(p)
+        p_wc = p[1::2]
+        a = ph.FindActorByName(gworld,p_wc)
+        print(i,p,ph.GetActorLocation(a) if a else a)#,'pos',ph.GetActorLocation(a))
+        if 0:
+            import pdb;pdb.set_trace()
+        i+=1
+        #print(p,'pos',ph.GetActorLocation(a))
     print('-- textures --')
     print('-- starting openrov simulation --')
     drone_textures=[]
@@ -98,7 +109,7 @@ def main_loop(gworld):
         print('sending state main loop')
         socket_pub.send_multipart([config.topic_unreal_state,b'main_loop'])
         yield
-    drone_start_positions=[np.array(ph.GetActorLocation(drone_actor)) for drone_actor in drone_actors]
+    drone_start_positions=[np.array(ph.GetActorLocation(drone_actor) if initial_pos is None else initial_pos) for drone_actor in drone_actors]
     positions=[None for _ in range(config.n_drones)]
     while 1:
         for drone_index in range(config.n_drones):
