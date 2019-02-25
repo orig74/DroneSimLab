@@ -109,6 +109,7 @@ def main_loop(gworld):
         print('sending state main loop')
         socket_pub.send_multipart([config.topic_unreal_state,b'main_loop'])
         yield
+    print('initial_pos is ',initial_pos)
     drone_start_positions=[np.array(ph.GetActorLocation(drone_actor) if initial_pos is None else initial_pos) for drone_actor in drone_actors]
     positions=[None for _ in range(config.n_drones)]
     while 1:

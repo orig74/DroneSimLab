@@ -54,12 +54,12 @@ tmux send-keys "cd $DEMO_PATH && python ue4_image_bridge.py" ENTER
 
 
 function run_game {
-tmux send-keys "cd $DRONESIMLAB_PATH/dockers/python3_dev && ./run_image.sh" ENTER
+tmux send-keys "cd $DRONESIMLAB_PATH/dockers/python3_dev && PROJECT_FILES_DIR=$PROJECT_FILES_DIR ./run_image.sh" ENTER
 tmux send-keys "export PATH=/miniconda/bin:\$PATH" ENTER
 tmux send-keys "cd ${DEMO_PATH}" ENTER
 tmux send-keys "python /DroneLab/UE4PyhtonBridge/set_path.py --entry_point $ENTRY_POINT --entry_path $ENTRY_PATH --packed_game_name $PACKED_NAME --packed_game_path $GAME_PATH" ENTER
 tmux send-keys "cd ${GAME_PATH}" ENTER
-tmux send-keys "CAMERA_RIG_PITCH=$CAMERA_RIG_PITCH DISPLAY=:0.0 ./run.sh" ENTER
+tmux send-keys "INITIAL_DRONE_POS=$INITIAL_DRONE_POS CAMERA_RIG_PITCH=$CAMERA_RIG_PITCH DISPLAY=:0.0 ./run.sh" ENTER
 }
 #cleanning prev run
 
