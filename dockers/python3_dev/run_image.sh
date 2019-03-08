@@ -2,7 +2,8 @@
 xhost + local:
 
 DRONE_LAB_DIR=`python -c "import os;print(os.path.abspath(os.path.dirname('$0/../../../')))"`
-PROJECT_FILES_DIR=/local/learn/ur4
+PROJECT_FILES_DIR="${PROJECT_FILES_DIR:=/local/learn/ur4}"
+echo $PROJECT_FILES_DIR
 #WORKSAPCE=~/projects
 echo "----------------"
 echo $DRONE_LAB_DIR
