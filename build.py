@@ -36,7 +36,7 @@ for submodule in submodules:
     if args.skip_ue4_editor and 'UnrealEngine' in submodule:
         continue
     print('updating submodule:', submodule)
-    run_shell("git submodule update --init --recursive "+submodule,
+    run_shell("git submodule update --init --recursive --progress "+submodule,
         'failed updataing submodules.. please check you connection')
     if submodule=='ardupilot':
         print('updating ardupilot git relative paths')

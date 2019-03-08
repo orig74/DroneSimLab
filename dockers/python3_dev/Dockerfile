@@ -1,5 +1,5 @@
 # Base docker image
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 RUN pwd
 RUN apt-get -y update
 RUN apt-get -y install gawk git   
@@ -28,7 +28,8 @@ RUN apt-get install -y software-properties-common
 
 RUN add-apt-repository -y ppa:ubuntu-toolchain-r/test
 RUN apt-get -y update
-RUN apt-get -y install gcc-4.9
+#RUN apt-get -y install gcc-8
+#RUN apt-cache search gcc-
 RUN apt-get -y upgrade libstdc++6
 
 ######## nvidia part ######

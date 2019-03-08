@@ -105,9 +105,9 @@ RUN pip3 install pyyaml rospkg catkin_pkg
 
 ######## nvidia part ######
 ARG GDRIVER
-COPY install_graphic_driver.sh /install_graphic_driver.sh
-RUN chmod +x /install_graphic_driver.sh
-RUN GDRIVER=$GDRIVER /install_graphic_driver.sh
+#COPY install_graphic_driver.sh /install_graphic_driver.sh
+#RUN chmod +x /install_graphic_driver.sh
+#RUN GDRIVER=$GDRIVER /install_graphic_driver.sh
 
 ###added more ros libs
 RUN apt-get -y update
