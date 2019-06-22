@@ -21,7 +21,7 @@ if not args.skip_ue4_editor:
 #git update sub modules
 
 games_path='https://www.csse.canterbury.ac.nz/dronesimlab/ue4_games/'
-games_names=['game_demo']
+games_names=['game_demo','Ocean1_packed']
 
 def run_shell(cmd,failmsg):
     ret=os.system(cmd)

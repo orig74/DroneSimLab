@@ -53,8 +53,8 @@ RUN apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C3
 
 
 RUN apt-get -y update
-RUN apt-get -y install ros-kinetic-desktop-full
-RUN apt-get -y install python-wstool python-rosinstall-generator python-catkin-tools
+RUN apt-get -y --allow-unauthenticated install ros-kinetic-desktop-full
+RUN apt-get -y --allow-unauthenticated install python-wstool python-rosinstall-generator python-catkin-tools
 #RUN bash -c "curl -ssL http://get.gazebosim.org | sh"
 #RUN apt-get -y install ros-kinetic-desktop-full
 #RUN apt-get -y install ros-kinetic-roslaunch
@@ -62,7 +62,7 @@ RUN apt-get -y install gazebo7
 RUN apt-get -y install libgazebo7-dev
 #RUN apt-get -y install ros-kinetic-control-toolbox
 #RUN apt-get -y install openssl libssl-dev
-RUN apt-get -y install ros-kinetic-mavros ros-kinetic-mavros-extras
+RUN apt-get -y --allow-unauthenticated install ros-kinetic-mavros ros-kinetic-mavros-extras
 RUN /opt/ros/kinetic/lib/mavros/install_geographiclib_datasets.sh
 #RUN apt-get -y install ros-kinetic-image-view2
 
@@ -111,7 +111,7 @@ ARG GDRIVER
 
 ###added more ros libs
 RUN apt-get -y update
-RUN apt-get install -y python-rosinstall
+RUN apt-get install -y  --allow-unauthenticated python-rosinstall
 
 ### add python dynamics
 RUN apt-get install -y  python-testresources

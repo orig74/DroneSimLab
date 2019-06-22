@@ -30,17 +30,25 @@ RUN chown -R docker:docker /local
 RUN mkdir /home/docker
 RUN chown -R docker:docker /home/docker
 # NOTE: This is a hack because of a bug in mono: https://bugzilla.xamarin.com/show_bug.cgi?id=30360
-RUN apt-get -y install tzdata
+RUN ln -s /usr/share/zoneinfo/Etc/GMT /etc/localtime
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install tzdata
+RUN dpkg-reconfigure tzdata 
 RUN apt-get -y update
 RUN apt-get -y install libxss-dev 
 RUN unlink /etc/localtime
-RUN ln -s /usr/share/zoneinfo/Etc/GMT /etc/localtime
+RUN unlink /usr/share/zoneinfo/localtime
 USER docker
 RUN cd /local && tar xzf ure4.tgz
-RUN cd /local/UnrealEngine && ./Setup.sh && ./GenerateProjectFiles.sh && make
+#RUN cd /local/UnrealEngine && ./Setup.sh && ./GenerateProjectFiles.sh && make
+RUN cd /local/UnrealEngine && ./Setup.sh 
+RUN cd /local/UnrealEngine && ./GenerateProjectFiles.sh
+RUN sudo ln -s /usr/include/locale.h /usr/include/xlocale.h
+RUN cd /local/UnrealEngine && make
 
 ######## nvidia part ######
 USER root
+RUN apt-get -y install libnss3 
+RUN apt-get -y install libasound2
 ######## nvidia part ######
 ARG GDRIVER
 RUN apt-get -y update
