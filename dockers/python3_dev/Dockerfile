@@ -62,6 +62,8 @@ RUN PATH=/miniconda/bin:$PATH pip install pymavlink
 RUN PATH=/miniconda/bin:$PATH pip install cffi 
 RUN PATH=/miniconda/bin:$PATH pip install opencv-python
 RUN PATH=/miniconda/bin:$PATH pip install opencv-contrib-python
+RUN PATH=/miniconda/bin:$PATH pip install dill
+RUN PATH=/miniconda/bin:$PATH pip install pygame
 
 
 
