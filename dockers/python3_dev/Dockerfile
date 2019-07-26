@@ -64,6 +64,7 @@ RUN PATH=/miniconda/bin:$PATH pip install opencv-python
 RUN PATH=/miniconda/bin:$PATH pip install opencv-contrib-python
 RUN PATH=/miniconda/bin:$PATH pip install dill
 RUN PATH=/miniconda/bin:$PATH pip install pygame
+RUN PATH=/miniconda/bin:$PATH pip install scipy
 
 
 
