@@ -25,6 +25,8 @@ docker run -it --rm --name ros_kinetic \
 -e USER=docker \
 -e HOME=/home/docker \
 -u $UID \
+-p 10000-10100:10000-10100/udp \
+-p 10200-10300:10200-10300 \
 --privileged \
 ros_image_kinetic "/bin/bash" $@
 
