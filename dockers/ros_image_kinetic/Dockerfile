@@ -86,15 +86,15 @@ RUN cd /opencv && mkdir build
 RUN cd /opencv/build && cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local \
   -D OPENCV_EXTRA_MODULES_PATH=/opencv_contrib/modules -D WITH_IPP=OFF -D PYTHON3_PACKAGES_PATH=/usr/local/lib/python3.5/dist-packages .. && make -j6
 RUN cd /opencv/build && make install
-
+RUN apt-get -y update
 
 ###### ORB_SLAM2
-RUN cd /tmp && git clone https://github.com/raulmur/ORB_SLAM2.git 
+#RUN cd /tmp && git clone https://github.com/raulmur/ORB_SLAM2.git 
 #RUN apt-get install -y libopencv-dev
-RUN cd /tmp/ORB_SLAM2 && chmod +x build.sh 
-RUN cd /tmp/ORB_SLAM2 && chmod +x build_ros.sh 
-RUN cd /tmp/ORB_SLAM2 && ./build.sh
-RUN chmod 777 /tmp/ORB_SLAM2/build
+#RUN cd /tmp/ORB_SLAM2 && chmod +x build.sh 
+#RUN cd /tmp/ORB_SLAM2 && chmod +x build_ros.sh 
+#RUN cd /tmp/ORB_SLAM2 && ./build.sh
+#RUN chmod 777 /tmp/ORB_SLAM2/build
 
 RUN apt-get install -y sudo
 RUN apt-get install -y libprotobuf-dev
@@ -103,6 +103,9 @@ RUN apt-get install -y libprotobuf-dev
 #RUN PATH=/miniconda/bin:$PATH pip install --upgrade pip
 RUN pip3 install pyyaml rospkg catkin_pkg
 
+
+#RUN sudo -H pip install jinja2
+RUN sudo apt-get install -y python-jinja2
 ######## nvidia part ######
 ARG GDRIVER
 #COPY install_graphic_driver.sh /install_graphic_driver.sh
@@ -110,11 +113,11 @@ ARG GDRIVER
 #RUN GDRIVER=$GDRIVER /install_graphic_driver.sh
 
 ###added more ros libs
-RUN apt-get -y update
-RUN apt-get install -y  --allow-unauthenticated python-rosinstall
+#RUN apt-get -y update
+#RUN apt-get install -y  --allow-unauthenticated python-rosinstall
 
 ### add python dynamics
-RUN apt-get install -y  python-testresources
+#RUN apt-get install -y  python-testresources
 #RUN apt-get install -y python-scipy
 #RUN pip2 install scipy
 #RUN pip2 install pydy

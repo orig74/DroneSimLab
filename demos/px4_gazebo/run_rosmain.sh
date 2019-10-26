@@ -14,7 +14,7 @@ ORB_PATH_EXPR="ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:$ORB_SLAM_DEMO_PATH"
 tmux send-keys -t 6 "$ORB_PATH_EXPR ./build_ros.sh && $ORB_PATH_EXPR rosrun $SLAM_CMD " ENTER 
 #tmux send-keys -t 6 "$ORB_PATH_EXPR rosrun $SLAM_CMD" ENTER
 
-rosrun control_test offb2.py
+rosrun control_test offb4.py
 xdotool windowactivate --sync `xdotool search --name "Unreal.*" | head -n 1` key --delay 1000 Escape
 
 #export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:/DroneLab/demos/px4_gazebo/orb_slam_ros

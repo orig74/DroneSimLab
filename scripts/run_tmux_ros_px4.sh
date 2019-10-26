@@ -23,7 +23,9 @@ tmux send-keys "export SITL_POSITION_PORT=11341" ENTER
 #remark the nexline to load gazebo gui client for debug prpose
 tmux send-keys "export HEADLESS=True" ENTER
 
-tmux send-keys "make posix_sitl_default gazebo" ENTER
+#tmux send-keys "make posix_sitl_default gazebo" ENTER
+#tmux send-keys "make px4_sitl gazebo_iris_opt_flow" ENTER
+tmux send-keys "make px4_sitl gazebo" ENTER
 #tmux set -w pane-border-format "#{pane_index} gazebo"
 tmux select-pane -t 0
 tmux send-keys "printf '\033]2;catkin window\033\\'" ENTER
