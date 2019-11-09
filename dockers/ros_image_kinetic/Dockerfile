@@ -120,9 +120,12 @@ ARG GDRIVER
 #RUN apt-get install -y  python-testresources
 #RUN apt-get install -y python-scipy
 #RUN pip2 install scipy
-#RUN pip2 install pydy
 RUN curl -o run.sh https://raw.githubusercontent.com/PX4/Devguide/v1.9.0/build_scripts/ubuntu_sim.sh && chmod +x ./run.sh && ./run.sh
 #user setings
+
+RUN pip2 install pydy
+
+
 ARG UID
 RUN useradd -u $UID docker
 RUN echo "docker:docker" | chpasswd
