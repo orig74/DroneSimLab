@@ -48,6 +48,8 @@ RUN apt-get install -y libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-
 
 RUN apt-get install -y libgtk2.0-dev pkg-config
 
+### this fixes missing sdl-config dependencies during pygame install
+RUN apt-get install -y libsdl1.2-dev libsdl-image1.2-dev libsdl-ttf2.0-dev libsdl-mixer1.2-dev libportmidi-dev
 
 #RUN curl -o /miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-4.2.12-Linux-x86_64.sh
 #RUN curl -o /miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-4.3.30-Linux-x86_64.sh
