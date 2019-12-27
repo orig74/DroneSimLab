@@ -56,5 +56,7 @@ RUN apt-get install -y software-properties-common
 COPY install_graphic_driver.sh /install_graphic_driver.sh
 RUN chmod +x /install_graphic_driver.sh
 RUN GDRIVER=$GDRIVER /install_graphic_driver.sh
+USER root
+RUN apt-get -y install vulkan-utils
 
 RUN echo "export PATH=/miniconda/bin:$PATH" >> /etc/bash.bashrc
