@@ -69,7 +69,7 @@ RUN apt-get install -y libsdl1.2-dev libsdl-image1.2-dev libsdl-ttf2.0-dev libsd
 #RUN PATH=/miniconda/bin:$PATH pip install scipy
 
 RUN apt-get -y install python3.7-dev python3-pip
-RUN rm /usr/bin/python && ln -s /usr/bin/python3.7 /usr/bin/python
+#RUN rm /usr/bin/python && ln -s /usr/bin/python3.7 /usr/bin/python
 RUN python3.7 -m pip install pip
 RUN python3.7 -m pip install pyzmq cffi opencv-python opencv-contrib-python dill pygame scipy
 RUN python3.7 -m pip install pymavlink
