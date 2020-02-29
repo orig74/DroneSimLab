@@ -53,20 +53,27 @@ RUN apt-get install -y libsdl1.2-dev libsdl-image1.2-dev libsdl-ttf2.0-dev libsd
 
 #RUN curl -o /miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-4.2.12-Linux-x86_64.sh
 #RUN curl -o /miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-4.3.30-Linux-x86_64.sh
-RUN curl -o  /miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-4.5.4-Linux-x86_64.sh
+#RUN curl -o  /miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-4.5.4-Linux-x86_64.sh
 
-RUN /bin/bash /miniconda.sh -b -p /miniconda
-RUN PATH=/miniconda/bin conda install -y pyzmq
+#RUN /bin/bash /miniconda.sh -b -p /miniconda
+#RUN PATH=/miniconda/bin conda install -y python=3.7
+#RUN PATH=/miniconda/bin conda install -y pyzmq
 #RUN PATH=/miniconda/bin conda install -c menpo opencv=3.2.0
-#RUN PATH=/miniconda/bin conda install -c menpo opencv
-RUN PATH=/miniconda/bin:$PATH pip install --upgrade pip
-RUN PATH=/miniconda/bin:$PATH pip install pymavlink
-RUN PATH=/miniconda/bin:$PATH pip install cffi 
-RUN PATH=/miniconda/bin:$PATH pip install opencv-python
-RUN PATH=/miniconda/bin:$PATH pip install opencv-contrib-python
-RUN PATH=/miniconda/bin:$PATH pip install dill
-RUN PATH=/miniconda/bin:$PATH pip install pygame
-RUN PATH=/miniconda/bin:$PATH pip install scipy
+#RUN PATH=/miniconda/bin:$PATH pip install --upgrade pip
+#RUN PATH=/miniconda/bin:$PATH pip install pymavlink
+#RUN PATH=/miniconda/bin:$PATH pip install cffi 
+#RUN PATH=/miniconda/bin:$PATH pip install opencv-python
+#RUN PATH=/miniconda/bin:$PATH pip install opencv-contrib-python
+#RUN PATH=/miniconda/bin:$PATH pip install dill
+#RUN PATH=/miniconda/bin:$PATH pip install pygame
+#RUN PATH=/miniconda/bin:$PATH pip install scipy
 
-
-
+RUN apt-get -y install python3.7-dev python3-pip
+RUN rm /usr/bin/python && ln -s /usr/bin/python3.7 /usr/bin/python
+RUN python3.7 -m pip install pip
+RUN python3.7 -m pip install pyzmq cffi opencv-python opencv-contrib-python dill pygame scipy
+RUN python3.7 -m pip install pymavlink
+#RUN pip install -y pyzmq opencv-python pymavlink cffi opencv-contrib-python dill pygame scipy
+#for compatability:
+RUN mkdir -p /miniconda/bin && ln -s /usr/bin/python3.7 /miniconda/bin/python
+RUN rm -rf /usr/bin/python3 && ln -s /usr/bin/python3.7 /usr/bin/python3 
