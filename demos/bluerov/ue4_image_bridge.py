@@ -18,11 +18,11 @@ topicl=config.topic_unreal_drone_rgb_camera%0+b'l'
 topicr=config.topic_unreal_drone_rgb_camera%0+b'r'
 print('topicm is',topicm)
 zmq_sub.setsockopt(zmq.SUBSCRIBE,topicm)
-zmq_sub.setsockopt(zmq.SUBSCRIBE,topicl)
-zmq_sub.setsockopt(zmq.SUBSCRIBE,topicr)
+#zmq_sub.setsockopt(zmq.SUBSCRIBE,topicl)
+#zmq_sub.setsockopt(zmq.SUBSCRIBE,topicr)
 #zmq_sub.setsockopt(zmq.SUBSCRIBE,topic+b'down') 
 #zmq_sub.setsockopt(zmq.SUBSCRIBE,topic+b'depth') 
-cvshow=0
+cvshow=1
 #cvshow=False
 gst=1
 test=0
@@ -38,7 +38,8 @@ cmd="gst-launch-1.0 {}! x264enc tune=zerolatency  bitrate=2500 ! rtph264pay ! ud
 #gstsrc='filesrc location=/dev/stdin ! videoparse width=1920 height=1080 framerate=24/1 format=15 ! videoconvert '
 
 #sx,sy=1920,1080
-sx,sy=1280,720
+#sx,sy=1280,720
+sx,sy=960,600
 #gstsrc = 'filesrc location=/dev/stdin ! videoparse width={} height={} framerate=30/1 format=15 ! autovideoconvert '.format(sx,sy) #! autovideosink'
 gstsrc = 'fdsrc ! videoparse width={} height={} framerate=30/1 format=15 ! videoconvert ! video/x-raw, format=I420'.format(sx,sy) #! autovideosink'
 
@@ -51,6 +52,7 @@ if gst:
 print('start...')
 def listener():
     cnt=0
+    rgb=None
     while 1:
         while len(zmq.select([zmq_sub],[],[],0.001)[0])>0:
             topic, info, data = zmq_sub.recv_multipart()
@@ -59,7 +61,7 @@ def listener():
             shape=info[:3]
             frame_cnt=info[3]
             img=np.fromstring(data,'uint8').reshape(shape)
-            rgb=img[...,::-1]
+            rgb=img[...,::-1].copy()
             if cvshow:
                 #if 'depth' in topic:
                 #    cv2.imshow(topic,img)
@@ -68,12 +70,12 @@ def listener():
                 img_shrk = img[::2,::2]
                 cv2.imshow(topic.decode(),img)
                 cv2.waitKey(1)
-            if topic==topicm and gst:
+            if topic==topicl and gst:#topicm and gst:
                 stdin.write(rgb.tostring())
             ### test
         time.sleep(0.010)
-        if cnt%20==0:
-            print('send...',cnt)
+        if cnt%20==0 and rgb is not None:
+            print('send...',cnt,rgb.shape)
         if test:
             time.sleep(0.020)
             stdin.write(b'23\xff'*(sx*sy))
