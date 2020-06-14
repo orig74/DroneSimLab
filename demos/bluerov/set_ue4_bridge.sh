@@ -1,5 +1,5 @@
 #!/bin/bash
-DRONESIMLAB_PATH=/DroneLab
+DRONESIMLAB_PATH=$HOME/projects/DroneSimLab
 ENTRY_POINT=unreal_proxy
 ENTRY_PATH=unreal_proxy/
 PROJECT_PATH=/project_files/Oceantest1/

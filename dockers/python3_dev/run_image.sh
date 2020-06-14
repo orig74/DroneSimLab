@@ -15,21 +15,19 @@ echo $DRONE_LAB_DIR
 chmod o+x $DRONE_LAB_DIR
 chmod o+x $DRONE_LAB_DIR/dockers
 ##
-docker run -it \
--v $DRONE_LAB_DIR:/DroneLab  \
--v $DRONE_LAB_DIR/dockers/docker_home:/home/docker \
--v /tmp/.X11-unix:/tmp/.X11-unix \
--v $PROJECT_FILES_DIR:/project_files \
--v `readlink -f ~`:/home/host \
--e DISPLAY=$DISPLAY \
--e USERNAME=docker \
--e USER=docker \
--e HOME=/home/docker \
--u $UID \
---net=host \
---privileged \
-python3_dev "/bin/bash"
+#-v $DRONE_LAB_DIR/dockers/docker_home:/home/docker \
+docker run --rm -it \
+  --gpus all \
+  --ipc=host \
+  --user="$(id -u):$(id -g)" \
+  -v /tmp/.X11-unix:/tmp/.X11-unix \
+  -e DISPLAY=$DISPLAY \
+  --volume="$HOME:/home/host" \
+  -e NVIDIA_VISIBLE_DEVICES=0 \
+  --privileged \
+  -v $DRONE_LAB_DIR:/DroneLab  \
+  -v $PROJECT_FILES_DIR:/project_files \
+  --net=host \
+  python3_dev "/bin/bash"
 
-#--net host \
-#make posix_sitl_default jmavsim
 
