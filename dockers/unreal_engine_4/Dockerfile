@@ -79,4 +79,8 @@ RUN cd /local/UnrealEngine && ./GenerateProjectFiles.sh
 #RUN sudo ln -s /usr/include/locale.h /usr/include/xlocale.h
 RUN cd /local/UnrealEngine && make
 
-
+USER root
+RUN apt-get install -y tmux
+RUN wget -o out.deb https://go.microsoft.com/fwlink/?LinkID=760868
+RUN apt-get install -y elfutils
+#RUN apt-get install -y ./out.deb

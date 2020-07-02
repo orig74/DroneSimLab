@@ -81,6 +81,7 @@ RUN pip install opencv-contrib-python
 RUN pip install dill
 RUN pip install pygame
 RUN pip install scipy
+RUN pip install matplotlib
 
 
 
