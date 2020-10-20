@@ -2,12 +2,13 @@
 #FROM nvidia/vulkan:1.1.121-cuda-10.1-alpha
 ########################### for vulkan support taken from https://github.com/NVIDIA/nvidia-docker/issues/631 
 ########################### edowson commented on Jul 14, 2019
-FROM nvidia/cuda:10.1-base-ubuntu18.04
-
-ENV NVIDIA_DRIVER_CAPABILITIES compute,graphics,utility
-
+#FROM nvidia/cuda:10.1-base-ubuntu18.04
+FROM nvidia/cuda:11.0-base
+ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends wget
-
+ENV NVIDIA_DRIVER_CAPABILITIES compute,graphics,utility
+#ENV TZ=Europe/Kiev
+#RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # Install Vulkan SDK
 RUN wget -qO - http://packages.lunarg.com/lunarg-signing-key-pub.asc | apt-key add - && \
 wget -qO /etc/apt/sources.list.d/lunarg-vulkan-1.1.121-bionic.list http://packages.lunarg.com/vulkan/1.1.121/lunarg-vulkan-1.1.121-bionic.list && \
@@ -28,6 +29,8 @@ RUN apt-get update && apt-get install -y \
 	unzip \
 	vim \
  && rm -rf /var/lib/apt/lists/*
+
+
 
 ######################################################
 ENV QT_X11_NO_MITSHM 1

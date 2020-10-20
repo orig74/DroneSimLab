@@ -19,9 +19,8 @@ echo $DRONE_LAB_DIR
 chmod o+x $DRONE_LAB_DIR
 chmod o+x $DRONE_LAB_DIR/dockers
 ##
-docker run -it --name unreal_engine \
+docker run -it --gpus all --name unreal_engine \
 -v $DRONE_LAB_DIR:/DroneLab  \
--v $DRONE_LAB_DIR/dockers/docker_home:/home/docker \
 -v `readlink -f ~`:/home/host \
 -v /tmp/.X11-unix:/tmp/.X11-unix \
 -v $PROJECT_FILES_DIR:/project_files \
@@ -37,3 +36,4 @@ unreal_engine_4 "/bin/bash"
 #--net host \
 #make posix_sitl_default jmavsim
 
+#-v $DRONE_LAB_DIR/dockers/docker_home:/home/docker \

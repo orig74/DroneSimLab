@@ -1,5 +1,7 @@
 # Base docker image
-FROM nvidia/cuda:10.1-base-ubuntu18.04
+#FROM nvidia/cuda:10.1-base-ubuntu18.04
+FROM nvidia/cuda:11.0-base
+ENV DEBIAN_FRONTEND noninteractive
 ENV NVIDIA_DRIVER_CAPABILITIES compute,graphics,utility
 
 RUN apt-get update && apt-get install -y --no-install-recommends wget
@@ -28,10 +30,10 @@ RUN apt-get update && apt-get install -y \
     tmux \
     software-properties-common \
     sudo \
-    python-pip \
     libgtk2.0-dev \
     pkg-config \
  && rm -rf /var/lib/apt/lists/*
+#python-pip \
 
 
 RUN echo "export PS1=\\\\\\\\w\\$" >> /etc/bash.bashrc
